@@ -41,7 +41,8 @@
 @synthesize lists;
 @synthesize navController,groupTableViewController,agtTableViewController;
 @synthesize delegate,allGrpInfoCashResponseStr,mAgtInfoCashResponseStr;
-
+@synthesize loadingOrigin,loadingLandscape;
+@synthesize ifLoading;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -141,6 +142,13 @@
     UIImage *startImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"media-playback-start" ofType:@"png"]];
     [pauseOrStartButton setImage:startImage forState:UIControlStateSelected];
 
+    loadingOrigin=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:
+                   UIActivityIndicatorViewStyleWhiteLarge];
+    loadingOrigin.center=CGPointMake(160,200);
+    loadingLandscape=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:
+                      UIActivityIndicatorViewStyleWhiteLarge];
+    loadingLandscape.center=CGPointMake(240,110);
+    ifLoading=YES;
 }
 
 
@@ -251,8 +259,30 @@
 */
 
 #pragma mark - download and update data
+-(void)showWaiting {
+    [loadingOrigin startAnimating];
+    [loadingLandscape startAnimating];
+    [self.originView addSubview:loadingOrigin];
+    [self.landscapeView addSubview:loadingLandscape];
+}
+//消除滚动轮指示器
+-(void)hideWaiting 
+{
+    [loadingOrigin stopAnimating];
+    [loadingLandscape stopAnimating];
+    [loadingOrigin removeFromSuperview];
+    [loadingLandscape removeFromSuperview];
+}
+
 - (void)requestData
 {
+    if (ifLoading) {
+        [self showWaiting];
+        NSLog(@"%d showWaing",ifLoading);
+        ifLoading=NO;
+    }
+    NSLog(@"%d ifLoading in requestData",ifLoading);
+    
     ASIHTTPRequest *allGrpInfoRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:allGrpInfoWebAddr]];
     [allGrpInfoRequest setDelegate:self];
     [allGrpInfoRequest startAsynchronous];    
@@ -286,7 +316,11 @@
         NSArray *tmpArray = [responseString JSONValue];
         if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
         {
-            
+            if (ifLoading==NO){
+                [self hideWaiting];
+                NSLog(@"hideWating");
+            }
+            NSLog(@"%d ifLoading in requestFinishded",ifLoading);          
         }
     }
 

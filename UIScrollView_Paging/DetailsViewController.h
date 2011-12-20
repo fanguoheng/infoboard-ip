@@ -66,7 +66,9 @@
 @property (nonatomic, retain) UINavigationController *navController;
 @property (nonatomic, retain) GroupTableViewController *groupTableViewController;
 @property (nonatomic, retain) AgtTableViewController *agtTableViewController;
-
+@property (nonatomic, retain) UIActivityIndicatorView *loadingOrigin;
+@property (nonatomic, retain) UIActivityIndicatorView *loadingLandscape;
+@property (nonatomic, readwrite) BOOL ifLoading;
 
 - (void)setAddrWithAddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil AddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet;

@@ -61,6 +61,9 @@
 
 @synthesize delegate,agtTotalInfoCashResponseStr,agtAverageInfoCashResponseStr;
 
+@synthesize loadingOrigin,loadingLandscape;
+@synthesize ifLoading;
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -164,7 +167,14 @@
     [pauseOrStartButton setImage:pauseImage forState:UIControlStateNormal];
     UIImage *startImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"media-playback-start" ofType:@"png"]];
     [pauseOrStartButton setImage:startImage forState:UIControlStateSelected];
-
+    
+    loadingOrigin=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:
+             UIActivityIndicatorViewStyleWhiteLarge];
+    loadingOrigin.center=CGPointMake(160,200);
+    loadingLandscape=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:
+                   UIActivityIndicatorViewStyleWhiteLarge];
+    loadingLandscape.center=CGPointMake(240,110);
+    ifLoading=YES;
 }
 
 
@@ -221,9 +231,30 @@
 
 
 #pragma mark - Download and Update Data
+-(void)showWaiting {
+    [loadingOrigin startAnimating];
+    [loadingLandscape startAnimating];
+    [self.originView addSubview:loadingOrigin];
+    [self.landscapeView addSubview:loadingLandscape];
+}
+//消除滚动轮指示器
+-(void)hideWaiting 
+{
+    [loadingOrigin stopAnimating];
+    [loadingLandscape stopAnimating];
+    [loadingOrigin removeFromSuperview];
+    [loadingLandscape removeFromSuperview];
+}
 
 - (void)requestData
 {
+    if (ifLoading) {
+        [self showWaiting];
+        NSLog(@"%d showWaing",ifLoading);
+        ifLoading=NO;
+    }
+    NSLog(@"%d ifLoading in requestData",ifLoading);
+    
     ASIHTTPRequest *agtTotalInfoRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:self.agtTotalInfoWebAddr]];
     [agtTotalInfoRequest setDelegate:self];
     [agtTotalInfoRequest startAsynchronous];
@@ -282,6 +313,12 @@
                     [formatter release];
                     [delegate willInfoBoardUpdateUIOnPage:timeString];
                 }
+                if (ifLoading==NO){
+                    [self hideWaiting];
+                    NSLog(@"hideWating");
+                }
+                NSLog(@"%d ifLoading in requestFinishded",ifLoading);
+                
                 self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
             }
         }

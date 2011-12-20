@@ -16,6 +16,8 @@
     if (self) {
         // Custom initialization
         dataDictArray = [[NSArray alloc]init];
+        self.view.backgroundColor=[UIColor clearColor];
+        self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     }
     return self;
 }

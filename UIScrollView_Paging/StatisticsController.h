@@ -88,7 +88,6 @@
     UIView *landscapeView;
     UIView *controlPadView;
     UISlider *refreshIntervalSlider;
-    
 }
 @property (nonatomic, assign) id <SDInfoBoardUpdateUI> delegate;
 @property (nonatomic,copy) NSString *agtTotalInfoCashResponseStr;
@@ -142,6 +141,10 @@
 @property (nonatomic, retain) IBOutlet UISlider *refreshIntervalSlider;
 @property (nonatomic, retain) IBOutlet UILabel *refreshIntervalLabel;
 @property (nonatomic, retain) IBOutlet UIButton *pauseOrStartButton;
+
+@property (nonatomic, retain) UIActivityIndicatorView *loadingOrigin;
+@property (nonatomic, retain) UIActivityIndicatorView *loadingLandscape;
+@property (nonatomic, readwrite) BOOL ifLoading;
 
 - (void)setAddrWithAddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil AddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet;
