@@ -110,7 +110,7 @@
     navController.delegate = self;
     //[navController.navigationBar setFrame:CGRectMake(navController.navigationBar.frame.origin.x, navController.navigationBar.frame.origin.x, navController.navigationBar.frame.size.width, navController.navigationBar.frame.size.height*0.618f)];
     navController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
-    [navController.view setFrame:CGRectMake(0.0f, 0.0f, 320.0f, 385.0f)];
+    [navController.view setFrame:CGRectMake(0.0f, 0.0f, 320.0f, 379.0f)];
     [self.view addSubview:navController.view];
     
     UIImage *pauseImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"media-playback-pause" ofType:@"png"]];
@@ -690,22 +690,17 @@
     if (viewController == rootTableViewController) {
         //NSString *rootWebAddr = [[NSString alloc ]initWithString:@"http://121.32.133.59:8502/FlexBoard/JsonFiles/UnusualInfo.json"];
         //NSString *rootWebAddr = [[NSString alloc ]initWithFormat:@"%@UnusualInfo%@",addrPrefix,addrPostfix];
-        self.webAddr = rootWebAddr;
-        [navController setNavigationBarHidden:YES animated:NO];
-        //firstLoad?nil:[self dataUpdateStart];
+        [navController setNavigationBarHidden:YES];
     }
     else
     {
-        [navController setNavigationBarHidden:NO animated:NO];
+        [navController setNavigationBarHidden:NO];
         [leafTableViewController setDataDictArray:nil];
         [leafTableViewController.tableView reloadData];
         navController.navigationBar.topItem.leftBarButtonItem.title = @"返回";
         [self requestData];
         self.webAddr = rootWebAddr;
-        //[self dataUpdatePause];
     }
-    //firstLoad = NO;
-
 }
 
 #pragma mark - touch and controlPad

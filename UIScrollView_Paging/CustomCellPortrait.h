@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-
 @interface CustomCellPortrait : UITableViewCell {
     
     UIImageView *groupIcon;
@@ -26,12 +25,10 @@
 
 @property (nonatomic,retain) IBOutlet UIImageView *groupIcon;
 @property (nonatomic,retain) IBOutlet UILabel *grpName;
-//@property (nonatomic,retain) IBOutlet UILabel *login;
 @property (nonatomic,retain) IBOutlet UILabel *transAgt;
 @property (nonatomic,retain) IBOutlet UILabel *agtAnswer;
 @property (nonatomic,retain) IBOutlet UILabel *answerRate;
-//@property (nonatomic,retain) IBOutlet UILabel *queueLen;
 @property (nonatomic,retain) IBOutlet UILabel *percentSign;
 
-
 @end
+

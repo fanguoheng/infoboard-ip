@@ -9,17 +9,25 @@
 #import "AgtTableViewController.h"
 
 @implementation AgtTableViewController
-@synthesize  dataDictArray;
+@synthesize  dataDictArray,shopId;
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
         dataDictArray = [[NSArray alloc]init];
+        self.view.backgroundColor = [UIColor clearColor];
+        self.tableView.backgroundColor = [UIColor clearColor];
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     }
     return self;
 }
-
+- (id)initWithStyle:(UITableViewStyle)style:shopId:(NSString*)shopIdSet
+{
+    [self initWithStyle:style];
+    self.shopId = shopIdSet;
+    return self;
+}
 - (void)didReceiveMemoryWarning
 {
     // Releases the view if it doesn't have a superview.
