@@ -211,6 +211,8 @@
     self.refreshIntervalSlider = nil;
     self.refreshIntervalLabel = nil;
     self.pauseOrStartButton = nil;
+    self.loadingOrigin =nil;
+    self.loadingLandscape =nil;
     
 }
 

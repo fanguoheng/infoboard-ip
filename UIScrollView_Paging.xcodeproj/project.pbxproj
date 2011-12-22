@@ -446,9 +446,9 @@
 				2C9F4902149059960040337E /* SDInfoBoardController.m */,
 				2CDA32F2149997D400138BD2 /* SDInfoBoardUIUpdate.h */,
 				048DBBCC1397104500A30AB5 /* Statistics */,
-				048DBBCA1397100E00A30AB5 /* RealtimeMonitor */,
-				2CE0F685146391AC00099316 /* UnusualInfo */,
 				2C0512961464305000AF5789 /* BussSearchInfo */,
+				2CE0F685146391AC00099316 /* UnusualInfo */,
+				048DBBCA1397100E00A30AB5 /* RealtimeMonitor */,
 				048DBBCB1397103000A30AB5 /* Details */,
 				04A017BD13961AA100B942E1 /* Supporting Files */,
 			);

@@ -276,8 +276,7 @@
                 NSString *timeString=[formatter stringFromDate: [NSDate date]];
                 [formatter release];
                 [delegate willInfoBoardUpdateUIOnPage:timeString];
-            }
-            
+            }                
             [groupTableViewController.tableView reloadData];
         }
     }
@@ -285,8 +284,12 @@
     {
         NSArray *tmpArray = [responseString JSONValue];
         if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
+<<<<<<< master
         {
             
+=======
+        {     
+>>>>>>> local
         }
     }
 
