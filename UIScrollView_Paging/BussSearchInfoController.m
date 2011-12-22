@@ -102,6 +102,7 @@
     loadingLandscape=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:
                       UIActivityIndicatorViewStyleWhiteLarge];
     loadingLandscape.center=CGPointMake(240,110);
+    [self createBarChartAndPiePlotInLandscapeView];
     ifLoading=YES;
 }
 

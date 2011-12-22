@@ -39,6 +39,8 @@
 @synthesize lists;
 @synthesize navController,groupTableViewController,agtTableViewController;
 @synthesize delegate,allGrpInfoCashResponseStr,mAgtInfoCashResponseStr;
+@synthesize loadingOrigin,loadingLandscape;
+@synthesize ifLoading;
 @synthesize allGrpInfoDictArray,magtInfoDictArray;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -251,6 +253,13 @@
 
 - (void)requestData
 {
+    if (ifLoading) {
+        [self showWaiting];
+        NSLog(@"%d showWaing",ifLoading);
+        ifLoading=NO;
+    }
+    NSLog(@"%d ifLoading in requestData",ifLoading);
+    
     ASIHTTPRequest *allGrpInfoRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:webAddr]];
     [allGrpInfoRequest setDelegate:self];
     [allGrpInfoRequest startAsynchronous];    
@@ -277,8 +286,11 @@
                     [formatter release];
                     [delegate willInfoBoardUpdateUIOnPage:timeString];
                 }
-                
-                [groupTableViewController.tableView reloadData];
+                if (ifLoading==NO){
+                    [self hideWaiting];
+                    NSLog(@"hideWating");
+                }
+                (self.view == originView)?[self updateOriginView:request]:[self updateLandscapeView:request];
             }
         }
     }
@@ -291,6 +303,7 @@
                 self.mAgtInfoCashResponseStr = responseString;
                 agtTableViewController.dataDictArray = tmpArray;
             }
+            NSLog(@"%d ifLoading in requestFinishded",ifLoading);          
         }
     }
 
@@ -306,7 +319,14 @@
 #pragma mark - UI Update Methods
 - (void) updateOriginView:(ASIHTTPRequest*)request
 {
-    [groupTableViewController.tableView reloadData];
+    if (!request) {
+        [((UITableViewController*)navController.topViewController).tableView reloadData];
+    }
+    else if ([request.url.absoluteString isEqualToString:allGrpInfoWebAddr] )
+    {
+        [groupTableViewController.tableView reloadData];
+    }
+    
 }
 - (void) updateLandscapeView:(ASIHTTPRequest*)request;
 {
