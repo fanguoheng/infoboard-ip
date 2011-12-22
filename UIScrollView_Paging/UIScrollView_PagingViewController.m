@@ -131,9 +131,9 @@
     if (df) {  
         hostAddr = [df objectForKey:@"hostaddr"];
         hostAddrTextField.text = hostAddr;
-        if ([hostAddr isEqualToString:@"172.16.23.70:8080"]) {
+        if ([hostAddr isEqualToString:@"172.16.23.80:8902"]) {
 
-            //hostAddr = [[NSString alloc]initWithFormat:@"http://172.16.23.70:8080/STMC/ScanData.json?methodName=GetClientPermission&shopId=0"];
+            //hostAddr = [[NSString alloc]initWithFormat:@"http://172.16.23.80:8902/STMC/ScanData.json?methodName=GetClientPermission&shopId=0"];
             addrPrefix = [[NSString alloc]initWithFormat:@"http://%@/STMC/ScanData.json?methodName=Get",hostAddr];            
             addrPostfix = [df valueForKey:@"addrpostfix"];
             CATransition *animation = [CATransition animation];
@@ -205,7 +205,7 @@
 
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
+{    
     //allowScrollChangePage = NO;
     //scrollView.pagingEnabled = NO;
     CGFloat scrollViewFrameWidth = scrollView.frame.size.width;
@@ -215,8 +215,7 @@
     
     if (toInterfaceOrientation == UIInterfaceOrientationPortrait)
     {
-        //NSLog(@"Portrait");
-                
+        //NSLog(@"Portrait");        
         for (NSInteger i=0; i<viewBoardControllersCount; i++) {
             [[viewBoardControllers objectAtIndex:i] setView:[[viewBoardControllers objectAtIndex:i] originView]];
             [[[viewBoardControllers objectAtIndex:i] view] setFrame:CGRectMake(scrollViewFrameWidth * i, 0.0f, scrollViewFrameWidth-kViewGap, scrollViewFrameHeight)];
@@ -246,7 +245,7 @@
     }
     
     else if(toInterfaceOrientation == UIInterfaceOrientationLandscapeRight | toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft)
-    {
+    {        
         //NSLog(@"Landscape");
         for (NSInteger i=0; i<viewBoardControllersCount; i++) {
             [[viewBoardControllers objectAtIndex:i] setView:[[viewBoardControllers objectAtIndex:i] landscapeView]];
@@ -299,9 +298,7 @@
         NSInteger page = floor(currentOffset / scrollViewFrameWidth - 0.5f) + 1.0f;
         pageControl.currentPage = page;
         navBar.topItem.title = [navBarTitles objectAtIndex:page];
-
     }
-
 
 }
 
@@ -342,7 +339,7 @@
     /*
     if([hostAddrTextField.text isEqualToString:@"172.16.23.70:8080"])
     {
-        NSString *shopListAddr = [[NSString alloc]initWithFormat:@"http://172.16.23.70:8080/STMC/ScanData.json?methodName=GetClientPermission&shopId=0"]; 
+        NSString *shopListAddr = [[NSString alloc]initWithFormat:@"http://172.16.23.80:8902/STMC/ScanData.json?methodName=GetClientPermission&shopId=0"]; 
         
         ASIHTTPRequest *allShopsRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:shopListAddr]];
         [shopListAddr release];
@@ -583,8 +580,11 @@
                                        userInfo:nil 
                                         repeats:NO];
         
-
-    
+    ((StatisticsController *)[viewBoardControllers objectAtIndex:0]).ifLoading=YES;
+    ((RealtimeMonitorController *)[viewBoardControllers objectAtIndex:1]).ifLoading=YES;
+    ((UnusualInfoController *)[viewBoardControllers objectAtIndex:2]).ifLoading=YES;
+    ((BussSearchInfoController *)[viewBoardControllers objectAtIndex:3]).ifLoading=YES;
+    ((DetailsViewController *)[viewBoardControllers objectAtIndex:4]).ifLoading=YES;
 }
 
 - (void)backToSettingView

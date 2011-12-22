@@ -139,6 +139,13 @@
     UIImage *startImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"media-playback-start" ofType:@"png"]];
     [pauseOrStartButton setImage:startImage forState:UIControlStateSelected];
 
+    loadingOrigin=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:
+                   UIActivityIndicatorViewStyleWhiteLarge];
+    loadingOrigin.center=CGPointMake(160,200);
+    loadingLandscape=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:
+                      UIActivityIndicatorViewStyleWhiteLarge];
+    loadingLandscape.center=CGPointMake(240,110);
+    ifLoading=YES;
 }
 
 
@@ -227,6 +234,21 @@
     return 44.0f;
 }
 #pragma mark - download and update data
+-(void)showWaiting {
+    [loadingOrigin startAnimating];
+    [loadingLandscape startAnimating];
+    [self.originView addSubview:loadingOrigin];
+    [self.landscapeView addSubview:loadingLandscape];
+}
+//消除滚动轮指示器
+-(void)hideWaiting 
+{
+    [loadingOrigin stopAnimating];
+    [loadingLandscape stopAnimating];
+    [loadingOrigin removeFromSuperview];
+    [loadingLandscape removeFromSuperview];
+}
+
 - (void)requestData
 {
     ASIHTTPRequest *allGrpInfoRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:webAddr]];
