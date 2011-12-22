@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-@protocol ClickableHeaderViewDelegate;//此类声明它自己实现了一个协议QQSectionHeaderViewDelegate。注意它塞一个视图类，而且包含一个遵守此协议的delegate成员
+@protocol ClickableHeaderViewDelegate;
 
 @interface ClickableView : UIView
 @property (nonatomic, retain) UILabel *titleLabel;
@@ -19,7 +19,7 @@
 -(id)initWithFrame:(CGRect)frame title:(NSString*)title section:(NSInteger)sectionNumber opened:(BOOL)isOpened delegate:(id<ClickableHeaderViewDelegate>)delegate;
 @end
 
-@protocol ClickableHeaderViewDelegate <NSObject> //协议QQSectionHeaderViewDelegate的实现
+@protocol ClickableHeaderViewDelegate <NSObject> 
 
 @optional
 -(void)sectionHeaderView:(ClickableView*)sectionHeaderView sectionClosed:(NSInteger)section;

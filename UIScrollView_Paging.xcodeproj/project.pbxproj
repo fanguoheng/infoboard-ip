@@ -73,6 +73,8 @@
 		2CCAA01414959C0700D3C8AD /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCAA00A14959C0700D3C8AD /* ASIInputStream.m */; };
 		2CCAA01514959C0700D3C8AD /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCAA00C14959C0700D3C8AD /* ASINetworkQueue.m */; };
 		2CCAA01814959CBC00D3C8AD /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCAA01714959CBC00D3C8AD /* Reachability.m */; };
+		2CCCB0DC14A06380006FC6FB /* AgtTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCCB0DB14A0637F006FC6FB /* AgtTableViewCell.m */; };
+		2CCCB0DF14A063CC006FC6FB /* AgtTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CCCB0DE14A063CC006FC6FB /* AgtTableViewCell.xib */; };
 		2CD4FD2214663B4A00667D58 /* media-playback-pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 2CD4FD2014663B4500667D58 /* media-playback-pause.png */; };
 		2CD4FD2314663B4A00667D58 /* media-playback-start.png in Resources */ = {isa = PBXBuildFile; fileRef = 2CD4FD2114663B4A00667D58 /* media-playback-start.png */; };
 		2CE0F6831463919600099316 /* UnusualInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE0F6811463919600099316 /* UnusualInfoController.m */; };
@@ -276,6 +278,9 @@
 		2CCAA00D14959C0700D3C8AD /* ASIProgressDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIProgressDelegate.h; sourceTree = "<group>"; };
 		2CCAA01614959CBC00D3C8AD /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		2CCAA01714959CBC00D3C8AD /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		2CCCB0DA14A0637F006FC6FB /* AgtTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgtTableViewCell.h; sourceTree = "<group>"; };
+		2CCCB0DB14A0637F006FC6FB /* AgtTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgtTableViewCell.m; sourceTree = "<group>"; };
+		2CCCB0DE14A063CC006FC6FB /* AgtTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AgtTableViewCell.xib; sourceTree = "<group>"; };
 		2CD4FD2014663B4500667D58 /* media-playback-pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "media-playback-pause.png"; sourceTree = "<group>"; };
 		2CD4FD2114663B4A00667D58 /* media-playback-start.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "media-playback-start.png"; sourceTree = "<group>"; };
 		2CDA32F2149997D400138BD2 /* SDInfoBoardUIUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDInfoBoardUIUpdate.h; sourceTree = "<group>"; };
@@ -375,6 +380,9 @@
 				2CF2F03A149EDC400052D73A /* AgtTableViewController.h */,
 				2CF2F03B149EDC400052D73A /* AgtTableViewController.m */,
 				2CF2F03C149EDC400052D73A /* AgtTableViewController.xib */,
+				2CCCB0DA14A0637F006FC6FB /* AgtTableViewCell.h */,
+				2CCCB0DB14A0637F006FC6FB /* AgtTableViewCell.m */,
+				2CCCB0DE14A063CC006FC6FB /* AgtTableViewCell.xib */,
 			);
 			name = Details;
 			sourceTree = "<group>";
@@ -714,6 +722,7 @@
 				2C9F0DAB149F2CE1007D37D3 /* carat-open.png in Resources */,
 				2C9F0DAC149F2CE1007D37D3 /* carat.png in Resources */,
 				2CE236A314A02448002E54C7 /* 201112191737.png in Resources */,
+				2CCCB0DF14A063CC006FC6FB /* AgtTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -760,6 +769,7 @@
 				2CF2F037149ED88D0052D73A /* GroupTableViewController.m in Sources */,
 				2CF2F03D149EDC400052D73A /* AgtTableViewController.m in Sources */,
 				2CACB546149F19B100C74BC1 /* ClickableView.m in Sources */,
+				2CCCB0DC14A06380006FC6FB /* AgtTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -838,7 +848,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UIScrollView_Paging/UIScrollView_Paging-Prefix.pch";
 				INFOPLIST_FILE = "UIScrollView_Paging/UIScrollView_Paging-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -863,7 +873,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UIScrollView_Paging/UIScrollView_Paging-Prefix.pch";
 				INFOPLIST_FILE = "UIScrollView_Paging/UIScrollView_Paging-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",

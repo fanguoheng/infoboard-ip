@@ -18,6 +18,8 @@
 @synthesize barChartViewLandscape,barChartLandscape,barPlotLandscape,barPlotData;
 @synthesize addrPrefix,addrPostfix;
 @synthesize delegate,cashResponseStr;
+@synthesize loadingOrigin,loadingLandscape;
+@synthesize ifLoading;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -110,7 +112,7 @@
     navController.delegate = self;
     //[navController.navigationBar setFrame:CGRectMake(navController.navigationBar.frame.origin.x, navController.navigationBar.frame.origin.x, navController.navigationBar.frame.size.width, navController.navigationBar.frame.size.height*0.618f)];
     navController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
-    [navController.view setFrame:CGRectMake(0.0f, 0.0f, 320.0f, 385.0f)];
+    [navController.view setFrame:CGRectMake(0.0f, 0.0f, 320.0f, 379.0f)];
     [self.view addSubview:navController.view];
     
     UIImage *pauseImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"media-playback-pause" ofType:@"png"]];
@@ -119,7 +121,13 @@
     [pauseOrStartButton setImage:startImage forState:UIControlStateSelected];
     
     [self createBarChartInLandscapeView];
-    
+    loadingOrigin=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:
+                   UIActivityIndicatorViewStyleWhiteLarge];
+    loadingOrigin.center=CGPointMake(160,200);
+    loadingLandscape=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:
+                      UIActivityIndicatorViewStyleWhiteLarge];
+    loadingLandscape.center=CGPointMake(240,110);
+    ifLoading=YES;  
 }
 
 - (void)viewDidUnload
@@ -164,9 +172,29 @@
         self.timer = nil;
     }
 }
-
+-(void)showWaiting {
+    [loadingOrigin startAnimating];
+    [loadingLandscape startAnimating];
+    [self.originView addSubview:loadingOrigin];
+    [self.landscapeView addSubview:loadingLandscape];
+}
+//消除滚动轮指示器
+-(void)hideWaiting 
+{
+    [loadingOrigin stopAnimating];
+    [loadingLandscape stopAnimating];
+    [loadingOrigin removeFromSuperview];
+    [loadingLandscape removeFromSuperview];
+}
 - (void)requestData
 {
+    if (ifLoading) {
+        [self showWaiting];
+        NSLog(@"%d showWaing",ifLoading);
+        ifLoading=NO;
+    }
+    NSLog(@"%d ifLoading in requestData",ifLoading);
+    
     ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:webAddr]];
     [request setDelegate:self];
     [request startAsynchronous];
@@ -242,6 +270,11 @@
                 self.dataDictArray = tmpArray;
                 [leafTableViewController setDataDictArray:dataDictArray];
             }
+            if (ifLoading==NO){
+                [self hideWaiting];
+                NSLog(@"hideWating");
+            }
+            NSLog(@"%d ifLoading in requestFinishded",ifLoading);
             self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
         }
     }
@@ -690,22 +723,17 @@
     if (viewController == rootTableViewController) {
         //NSString *rootWebAddr = [[NSString alloc ]initWithString:@"http://121.32.133.59:8502/FlexBoard/JsonFiles/UnusualInfo.json"];
         //NSString *rootWebAddr = [[NSString alloc ]initWithFormat:@"%@UnusualInfo%@",addrPrefix,addrPostfix];
-        self.webAddr = rootWebAddr;
-        [navController setNavigationBarHidden:YES animated:NO];
-        //firstLoad?nil:[self dataUpdateStart];
+        [navController setNavigationBarHidden:YES];
     }
     else
     {
-        [navController setNavigationBarHidden:NO animated:NO];
+        [navController setNavigationBarHidden:NO];
         [leafTableViewController setDataDictArray:nil];
         [leafTableViewController.tableView reloadData];
         navController.navigationBar.topItem.leftBarButtonItem.title = @"返回";
         [self requestData];
         self.webAddr = rootWebAddr;
-        //[self dataUpdatePause];
     }
-    //firstLoad = NO;
-
 }
 
 #pragma mark - touch and controlPad

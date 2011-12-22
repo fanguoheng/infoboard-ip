@@ -88,7 +88,6 @@
     UIView *landscapeView;
     UIView *controlPadView;
     UISlider *refreshIntervalSlider;
-    
 }
 @property (nonatomic, assign) id <SDInfoBoardUpdateUI> delegate;
 @property (nonatomic,copy) NSString *agtTotalInfoCashResponseStr;
