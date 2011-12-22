@@ -284,16 +284,8 @@
     {
         NSArray *tmpArray = [responseString JSONValue];
         if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
-<<<<<<< master
-        {
-            
-=======
-        {     
->>>>>>> local
-        }
-    }
-
     [responseString release];
+    }
 }
 
 - (void)requestFailed:(ASIHTTPRequest *)request
