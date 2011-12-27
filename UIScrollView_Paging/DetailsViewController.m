@@ -16,8 +16,13 @@
 
 @synthesize addrPrefix;
 @synthesize addrPostfix;
+<<<<<<< master
 @synthesize allGrpInfoWebAddr,mAgtInfoWebAddr;
 
+=======
+@synthesize allGrpInfoWebAddr,mAgtInfoWebAddr,agtCallInfoWebAddr,webAddr;
+@synthesize selectedGrpId;
+>>>>>>> local
 
 @synthesize timer,refreshInterval;
 
@@ -40,9 +45,14 @@
 @synthesize controlPadView,refreshIntervalLabel,refreshIntervalSlider,pauseOrStartButton;
 @synthesize lists;
 @synthesize navController,groupTableViewController,agtTableViewController;
-@synthesize delegate,allGrpInfoCashResponseStr,mAgtInfoCashResponseStr;
+@synthesize delegate,allGrpInfoCashResponseStr,mAgtInfoCashResponseStr,agtCallInfoCashResponseStr;
 @synthesize loadingOrigin,loadingLandscape;
 @synthesize ifLoading;
+<<<<<<< master
+=======
+@synthesize allGrpInfoDictArray,mAgtInfoDict;
+
+>>>>>>> local
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -55,6 +65,7 @@
         self.num2Str = [NSString stringWithFormat:@"%@",@"2"];
         allGrpInfoCashResponseStr = [[NSString alloc]init];
         mAgtInfoCashResponseStr = [[NSString alloc]init];
+        agtCallInfoCashResponseStr = [[NSString alloc]init];
         
         GroupTableViewController *_groupTableViewController = [[GroupTableViewController alloc]initWithStyle:UITableViewStylePlain];
         self.groupTableViewController = _groupTableViewController;
@@ -75,9 +86,21 @@
     //self.allGrpInfoWebAddr =   [[NSString alloc]initWithString:@"http://121.32.133.59:8502/FlexBoard/JsonFiles/AllGrpInfo.json"];
     self.addrPrefix = addrPrefixSet;
     self.addrPostfix = addrPostfixSet;
+<<<<<<< master
     //self.agtInfoWebAddr = [[NSString alloc ]initWithFormat:@"%@mAgtInfo%@",addrPrefix,addrPostfix];
     self.allGrpInfoWebAddr = [[NSString alloc ]initWithFormat:@"%@AllGrpInfo%@",addrPrefix,addrPostfix];
     //NSLog(@"%@",allGrpInfoWebAddr);
+=======
+    NSString *str1 = [[NSString alloc]initWithFormat:@"%@AllGrpInfo%@",addrPrefix,addrPostfix];
+    self.allGrpInfoWebAddr = str1;
+    [str1 release];
+    NSString *str2 = [[NSString alloc]initWithFormat:@"%@MAgtInfo%@",addrPrefix,addrPostfix];
+    self.mAgtInfoWebAddr = str2;
+    NSString *str3 = [[NSString alloc]initWithFormat:@"%@AgtCallInfo%@",addrPrefix,addrPostfix];
+    self.agtCallInfoWebAddr = str3;
+    self.webAddr = allGrpInfoWebAddr;
+    
+>>>>>>> local
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil AddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)AddrPostfixSet
 {
@@ -212,6 +235,7 @@
     CustomCellPortrait *cellPortrait = (CustomCellPortrait *)[tableView dequeueReusableCellWithIdentifier:CustomCellPortraitIdentifier];
     if (cellPortrait == nil)
     {
+<<<<<<< master
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"CustomCellPortrait" owner:self options:nil];
         for (id oneObject in nib)
                 if([oneObject isKindOfClass:[CustomCellPortrait class]])
@@ -237,6 +261,14 @@
     bgView.gradientColor = GradientColorBlack;
     [cellPortrait setBackgroundView:bgView];
     [bgView release];
+=======
+        [navController pushViewController:agtTableViewController animated:YES];
+        self.webAddr = mAgtInfoWebAddr;
+        [self requestData];
+        self.webAddr = allGrpInfoWebAddr;
+        self.selectedGrpId = [[groupTableViewController.dataDictArray objectAtIndex:indexPath.row]objectForKey:@"grpid"];
+    }
+>>>>>>> local
     
         return cellPortrait;
      
@@ -278,10 +310,10 @@
 {
     if (ifLoading) {
         [self showWaiting];
-        NSLog(@"%d showWaing",ifLoading);
+        //NSLog(@"%d showWaing",ifLoading);
         ifLoading=NO;
     }
-    NSLog(@"%d ifLoading in requestData",ifLoading);
+    //NSLog(@"%d ifLoading in requestData",ifLoading);
     
     ASIHTTPRequest *allGrpInfoRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:allGrpInfoWebAddr]];
     [allGrpInfoRequest setDelegate:self];
@@ -294,6 +326,7 @@
 {
     NSLog(@"SUCCEED");
     NSString *responseString = [[NSString alloc] initWithData:[request responseData] encoding:NSUTF8StringEncoding];    
+<<<<<<< master
     if (![request.url.absoluteString isEqualToString:allGrpInfoCashResponseStr]) {
         NSArray *tmpArray = [responseString JSONValue];
         if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]]) {
@@ -306,6 +339,28 @@
                 NSString *timeString=[formatter stringFromDate: [NSDate date]];
                 [formatter release];
                 [delegate willInfoBoardUpdateUIOnPage:timeString];
+=======
+    if ([request.url.absoluteString isEqualToString:allGrpInfoWebAddr]) {
+        if (![allGrpInfoCashResponseStr isEqualToString:responseString]) {
+            NSArray *tmpArray = [responseString JSONValue];
+            if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]]) {
+                self.allGrpInfoCashResponseStr = responseString;
+                self.allGrpInfoDictArray = tmpArray;
+                groupTableViewController.dataDictArray = tmpArray;
+                
+                if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:)]) {
+                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                    [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
+                    NSString *timeString=[formatter stringFromDate: [NSDate date]];
+                    [formatter release];
+                    [delegate willInfoBoardUpdateUIOnPage:timeString];
+                }
+                if (ifLoading==NO){
+                    [self hideWaiting];
+                    //NSLog(@"hideWating");
+                }
+                (self.view == originView)?[self updateOriginView:request]:[self updateLandscapeView:request];
+>>>>>>> local
             }
             
             [groupTableViewController.tableView reloadData];
@@ -313,14 +368,51 @@
     }
     else if (![request.url.absoluteString isEqualToString:mAgtInfoCashResponseStr])
     {
+<<<<<<< master
         NSArray *tmpArray = [responseString JSONValue];
         if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
         {
             if (ifLoading==NO){
                 [self hideWaiting];
                 NSLog(@"hideWating");
+=======
+        if (![mAgtInfoCashResponseStr isEqualToString:responseString]) {
+            NSArray *tmpArray = [responseString JSONValue];
+            if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
+            {
+                self.mAgtInfoCashResponseStr = responseString;
+                NSMutableDictionary *selectedAgtDict = [[NSMutableDictionary alloc]init ];
+                for (NSDictionary *anyAgt in tmpArray) {
+                    if ([[anyAgt objectForKey:@"agtlogongrps"] rangeOfString:selectedGrpId].length>0) {
+                        [selectedAgtDict setObject:anyAgt forKey:[anyAgt objectForKey:@"agtid"]];
+                    }
+                }
+                self.mAgtInfoDict = (NSDictionary*)selectedAgtDict;
+                self.webAddr = agtCallInfoWebAddr;
+                [self requestData];
+                self.webAddr = allGrpInfoWebAddr;
             }
-            NSLog(@"%d ifLoading in requestFinishded",ifLoading);          
+        }
+    }
+    else if ([request.url.absoluteString isEqualToString:agtCallInfoWebAddr])
+    {
+        if (![agtCallInfoCashResponseStr isEqualToString:responseString]) {
+            NSArray *tmpArray = [responseString JSONValue];
+            if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
+            {
+                self.agtCallInfoCashResponseStr = responseString;
+                for (NSDictionary *anyAgt in tmpArray) {
+                    if ([mAgtInfoDict objectForKey:[anyAgt objectForKey:@"agtid"]]) 
+                    {
+                        [[mAgtInfoDict objectForKey:[anyAgt objectForKey:@"agtid"]]setObject:[anyAgt objectForKey:@"agtanswerrate"] forKey:@"agtanswerrate"];
+                        [[mAgtInfoDict objectForKey:[anyAgt objectForKey:@"agtid"]]setObject:[anyAgt objectForKey:@"agtcallcnt"] forKey:@"agtcallcnt"];
+                    }
+                }
+                
+                agtTableViewController.dataDictArray = [mAgtInfoDict allValues];
+                (self.view == originView)?[self updateOriginView:request]:[self updateLandscapeView:request];
+>>>>>>> local
+            }
         }
     }
 
@@ -336,7 +428,22 @@
 #pragma mark - UI Update Methods
 - (void) updateOriginView:(ASIHTTPRequest*)request
 {
+<<<<<<< master
     [groupTableViewController.tableView reloadData];
+=======
+    if (!request) {
+        [((UITableViewController*)navController.topViewController).tableView reloadData];
+    }
+    else if ([request.url.absoluteString isEqualToString:allGrpInfoWebAddr] )
+    {
+        [groupTableViewController.tableView reloadData];
+    }
+    else if ([request.url.absoluteString isEqualToString:agtCallInfoWebAddr])
+    {
+        [agtTableViewController.tableView reloadData];
+    }
+    
+>>>>>>> local
 }
 - (void) updateLandscapeView:(ASIHTTPRequest*)request;
 {

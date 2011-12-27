@@ -250,10 +250,10 @@
 {
     if (ifLoading) {
         [self showWaiting];
-        NSLog(@"%d showWaing",ifLoading);
+        //NSLog(@"%d showWaing",ifLoading);
         ifLoading=NO;
     }
-    NSLog(@"%d ifLoading in requestData",ifLoading);
+    //NSLog(@"%d ifLoading in requestData",ifLoading);
     
     ASIHTTPRequest *agtTotalInfoRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:self.agtTotalInfoWebAddr]];
     [agtTotalInfoRequest setDelegate:self];
@@ -305,7 +305,20 @@
                     answerRate4Num += round(theTotalagtanswer*[[anyDic objectForKey:@"answerrate4"]floatValue]);
                 }
                 totalBoundNum = totalInboundNum + totalOutboundNum;
+                self.barPlotData = [NSArray arrayWithObjects:
+                                    [NSNumber numberWithInt:veryGoodNum],
+                                    [NSNumber numberWithInt:goodNum],
+                                    [NSNumber numberWithInt:generalNum],
+                                    [NSNumber numberWithInt:badNum],
+                                    [NSNumber numberWithInt:veryBadNum],
+                                    nil];
                 
+                self.answerRatePersent = [NSArray arrayWithObjects:
+                                          [NSNumber numberWithFloat:answerRate1Num/totalAgtAnswerNum],
+                                          [NSNumber numberWithFloat:answerRate2Num/totalAgtAnswerNum],
+                                          [NSNumber numberWithFloat:answerRate3Num/totalAgtAnswerNum],
+                                          [NSNumber numberWithFloat:answerRate4Num/totalAgtAnswerNum],
+                                          nil];
                 if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:)]) {
                     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                     [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
@@ -315,9 +328,9 @@
                 }
                 if (ifLoading==NO){
                     [self hideWaiting];
-                    NSLog(@"hideWating");
+                    //NSLog(@"hideWating");
                 }
-                NSLog(@"%d ifLoading in requestFinishded",ifLoading);
+                //NSLog(@"%d ifLoading in requestFinishded",ifLoading);
                 
                 self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
             }
@@ -785,20 +798,7 @@
             //self.agtAnswerRateLabel.textColor = [UIColor colorWithRed:0.8f green:0.0f blue:0.25f alpha:1.0f];
             //self.percentSign.textColor = [UIColor colorWithRed:0.8f green:0.0f blue:0.25f alpha:1.0f];
         }
-        self.barPlotData = [NSArray arrayWithObjects:
-                            [NSNumber numberWithInt:veryGoodNum],
-                            [NSNumber numberWithInt:goodNum],
-                            [NSNumber numberWithInt:generalNum],
-                            [NSNumber numberWithInt:badNum],
-                            [NSNumber numberWithInt:veryBadNum],
-                            nil];
-        
-        self.answerRatePersent = [NSArray arrayWithObjects:
-                                  [NSNumber numberWithFloat:answerRate1Num/totalTransAgtNum],
-                                  [NSNumber numberWithFloat:answerRate2Num/totalTransAgtNum],
-                                  [NSNumber numberWithFloat:answerRate3Num/totalTransAgtNum],
-                                  [NSNumber numberWithFloat:answerRate4Num/totalTransAgtNum],
-                                  nil];
+
         CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChart.defaultPlotSpace;
         plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f)];
         [barPlot reloadData];
@@ -869,20 +869,6 @@
             //self.agtAnswerRateLabel.textColor = [UIColor colorWithRed:0.8f green:0.0f blue:0.25f alpha:1.0f];
             //self.percentSign.textColor = [UIColor colorWithRed:0.8f green:0.0f blue:0.25f alpha:1.0f];
         }
-        self.barPlotData = [NSArray arrayWithObjects:
-                            [NSNumber numberWithInt:veryGoodNum],
-                            [NSNumber numberWithInt:goodNum],
-                            [NSNumber numberWithInt:generalNum],
-                            [NSNumber numberWithInt:badNum],
-                            [NSNumber numberWithInt:veryBadNum],
-                            nil];
-        
-        self.answerRatePersent = [NSArray arrayWithObjects:
-                                  [NSNumber numberWithFloat:answerRate1Num/totalTransAgtNum],
-                                  [NSNumber numberWithFloat:answerRate2Num/totalTransAgtNum],
-                                  [NSNumber numberWithFloat:answerRate3Num/totalTransAgtNum],
-                                  [NSNumber numberWithFloat:answerRate4Num/totalTransAgtNum],
-                                  nil];
         CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChart.defaultPlotSpace;
         plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f)];
         [barPlot reloadData];
@@ -929,20 +915,6 @@
 {
     //当nil==request时强制更新UI
     if (!request || [request.url.absoluteString isEqualToString:agtTotalInfoWebAddr]) {
-        self.barPlotData = [NSArray arrayWithObjects:
-                            [NSNumber numberWithInt:veryGoodNum],
-                            [NSNumber numberWithInt:goodNum],
-                            [NSNumber numberWithInt:generalNum],
-                            [NSNumber numberWithInt:badNum],
-                            [NSNumber numberWithInt:veryBadNum],
-                            nil];
-        
-        self.answerRatePersent = [NSArray arrayWithObjects:
-                                  [NSNumber numberWithFloat:answerRate1Num/totalAgtAnswerNum],
-                                  [NSNumber numberWithFloat:answerRate2Num/totalAgtAnswerNum],
-                                  [NSNumber numberWithFloat:answerRate3Num/totalAgtAnswerNum],
-                                  [NSNumber numberWithFloat:answerRate4Num/totalAgtAnswerNum],
-                                  nil];
         CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
         plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f)];
         [barPlotLandscape reloadData];

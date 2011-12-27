@@ -33,11 +33,20 @@
 @property (nonatomic, assign) id <SDInfoBoardUpdateUI> delegate;
 @property (nonatomic, copy) NSString* allGrpInfoCashResponseStr;
 @property (nonatomic, copy) NSString* mAgtInfoCashResponseStr;
+@property (nonatomic, copy) NSString* agtCallInfoCashResponseStr;
 @property (nonatomic, copy) NSString *addrPrefix;
 @property (nonatomic, copy) NSString *addrPostfix;
+<<<<<<< master
 @property (copy) NSString *mAgtInfoWebAddr;
 @property (copy) NSString *allGrpInfoWebAddr;
 
+=======
+@property (nonatomic, copy) NSString *webAddr;
+@property (nonatomic, copy) NSString *allGrpInfoWebAddr;
+@property (nonatomic, copy) NSString *mAgtInfoWebAddr;
+@property (nonatomic, copy) NSString *agtCallInfoWebAddr;
+@property (nonatomic, copy) NSString *selectedGrpId;
+>>>>>>> local
 @property (nonatomic, retain) NSTimer *timer;
 @property (nonatomic) NSInteger refreshInterval;
 
@@ -50,7 +59,12 @@
 @property (copy) NSString *workStatusStr;
 @property (copy) NSString *occupyStr;
 
+<<<<<<< master
 
+=======
+@property (nonatomic, retain) NSArray *allGrpInfoDictArray;
+@property (nonatomic, retain) NSDictionary *mAgtInfoDict;
+>>>>>>> local
 @property (copy) NSString *num0Str;
 @property (copy) NSString *num1Str;
 @property (copy) NSString *num2Str;

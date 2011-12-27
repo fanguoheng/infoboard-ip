@@ -7,6 +7,7 @@
 //
 
 #import "AgtTableViewController.h"
+#import "AgtTableViewCell.h"
 
 @implementation AgtTableViewController
 @synthesize  dataDictArray;
@@ -21,7 +22,15 @@
     }
     return self;
 }
+<<<<<<< master
 
+=======
+- (id)initWithStyle:(UITableViewStyle)style:shopId:(NSString*)shopIdSet
+{
+    [self initWithStyle:style];
+    return self;
+}
+>>>>>>> local
 - (void)didReceiveMemoryWarning
 {
     // Releases the view if it doesn't have a superview.
@@ -86,27 +95,36 @@
 {
 #warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 #warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    NSLog(@"%d",[dataDictArray count]);
+    return [dataDictArray count];
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier = @"AgtTableViewCell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    AgtTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"AgtTableViewCell" owner:self options:nil];
+        for (id oneObject in nib)
+            if([oneObject isKindOfClass:[AgtTableViewCell class]])
+                cell = (AgtTableViewCell *)oneObject;
     }
-    
     // Configure the cell...
-    
+    NSDictionary *agtDict = [dataDictArray objectAtIndex:indexPath.row];
+    cell.nameLabel.text = [agtDict objectForKey:@"name"];
+    cell.agtidLabel.text = [agtDict objectForKey:@"agtid"];
+    cell.agtcallcntLabel.text = [agtDict objectForKey:@"agtcallcnt"];
+    cell.agtanswerrateLabel.text = [agtDict objectForKey:@"agtanswerrate"];
+    cell.statusLabel.text = [agtDict objectForKey:@"status"];
     return cell;
 }
 

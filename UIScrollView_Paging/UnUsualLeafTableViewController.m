@@ -305,39 +305,6 @@
     }
 }
 
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    switch (self.view.tag) {
-                
-        case UnUsualLeafTableViewControllerSituationVeryBad:
-        case UnUsualLeafTableViewControllerSituationBad:
-        {
-            switch (section) {
-                case 0:
-                {
-                    return [NSString stringWithFormat:@"很不满意:%d",[[dataDictArray objectAtIndex:0] count]];
-                }
-                    break;
-                case 1:
-                {
-                    return [NSString stringWithFormat:@"不满意:%d",[[dataDictArray objectAtIndex:1] count]];
-                }
-                    break;
-                default:
-                    break;
-            }
-        }
-        case UnUsualLeafTableViewControllerSituationAgtLost:
-            return [[NSString alloc]initWithFormat:@"姓名                 工号  放弃数%d个",[dataDictArray count]];
-        default:
-            return nil;
-                
-    }
-
-}
-
-
 #pragma mark - UITableViewDelegate Methods
 /*
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -367,7 +334,7 @@
         case UnUsualLeafTableViewControllerSituationBad:
         {
             NSString *veryBadHeaderTitle = [[NSString alloc]initWithFormat:@"很不满意:%d",[[dataDictArray objectAtIndex:0] count]];
-            NSString *badHeaderTitle = [[NSString alloc]initWithFormat:@"很不满意:%d",[[dataDictArray objectAtIndex:1] count]];
+            NSString *badHeaderTitle = [[NSString alloc]initWithFormat:@"不满意:%d",[[dataDictArray objectAtIndex:1] count]];
             switch (section) {
                 case 0:
                 {

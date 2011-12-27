@@ -336,21 +336,6 @@
 #pragma mark - shops selection
 -(IBAction)requestAllShopsFromHostAddr:(id)sender
 {
-    /*
-    if([hostAddrTextField.text isEqualToString:@"172.16.23.70:8080"])
-    {
-        NSString *shopListAddr = [[NSString alloc]initWithFormat:@"http://172.16.23.80:8902/STMC/ScanData.json?methodName=GetClientPermission&shopId=0"]; 
-        
-        ASIHTTPRequest *allShopsRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:shopListAddr]];
-        [shopListAddr release];
-        [allShopsRequest setDelegate:self];
-        allShopsRequest.didFinishSelector = @selector(didFinishAllShopsRequest:);
-        allShopsRequest.didFailSelector = @selector(didFailAllShopsRequest:);
-        [allShopsRequest startAsynchronous];
-    }
-    else
-        [self didFailAllShopsRequest:nil];
-     */
     NSString *shopListAddr = [[NSString alloc]initWithFormat:@"http://%@/STMC/ScanData.json?methodName=GetClientPermission&shopId=0",hostAddrTextField.text]; 
     
     ASIHTTPRequest *allShopsRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:shopListAddr]];

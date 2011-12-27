@@ -190,10 +190,10 @@
 {
     if (ifLoading) {
         [self showWaiting];
-        NSLog(@"%d showWaing",ifLoading);
+        //NSLog(@"%d showWaing",ifLoading);
         ifLoading=NO;
     }
-    NSLog(@"%d ifLoading in requestData",ifLoading);
+    //NSLog(@"%d ifLoading in requestData",ifLoading);
     
     ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:webAddr]];
     [request setDelegate:self];
@@ -272,7 +272,7 @@
             }
             if (ifLoading==NO){
                 [self hideWaiting];
-                NSLog(@"hideWating");
+                //NSLog(@"hideWating");
             }
             NSLog(@"%d ifLoading in requestFinishded",ifLoading);
             self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
