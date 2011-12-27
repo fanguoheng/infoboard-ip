@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "SDInfoBoardUIUpdate.h"
+#import "DetailHeaderView.h"
 @class ASIHTTPRequest;
 @class GroupTableViewController;
 @class AgtTableViewController;
-@interface DetailsViewController : UIViewController <UITableViewDelegate,UINavigationControllerDelegate>{
+
+@interface DetailsViewController : UIViewController <UITableViewDelegate,UINavigationControllerDelegate,ClickableViewDelegate>{
     NSString *allGrpInfoWebAddr;
     NSString *agtInfoWebAddr;
     
@@ -20,10 +22,6 @@
     
     NSMutableArray *magtInfoDictArray;
     
-    NSString *num0Str;
-    NSString *num1Str;
-    NSString *num2Str;
-    
     UIView *originView;
     UIView *landscapeView;
     NSMutableArray *lists;
@@ -31,11 +29,14 @@
 @property (nonatomic, assign) id <SDInfoBoardUpdateUI> delegate;
 @property (nonatomic, copy) NSString* allGrpInfoCashResponseStr;
 @property (nonatomic, copy) NSString* mAgtInfoCashResponseStr;
+@property (nonatomic, copy) NSString* agtCallInfoCashResponseStr;
 @property (nonatomic, copy) NSString *addrPrefix;
 @property (nonatomic, copy) NSString *addrPostfix;
+
 @property (nonatomic, copy) NSString *webAddr;
-@property (nonatomic, copy) NSString *mAgtInfoWebAddr;
 @property (nonatomic, copy) NSString *allGrpInfoWebAddr;
+@property (nonatomic, copy) NSString *mAgtInfoWebAddr;
+@property (nonatomic, copy) NSString *agtCallInfoWebAddr;
 @property (nonatomic, copy) NSString *selectedGrpId;
 @property (nonatomic, retain) NSTimer *timer;
 @property (nonatomic) NSInteger refreshInterval;
@@ -46,11 +47,9 @@
 @property (copy) NSString *workStatusStr;
 @property (copy) NSString *occupyStr;
 
+
 @property (nonatomic, retain) NSArray *allGrpInfoDictArray;
-@property (nonatomic, retain) NSArray *magtInfoDictArray;
-@property (copy) NSString *num0Str;
-@property (copy) NSString *num1Str;
-@property (copy) NSString *num2Str;
+@property (nonatomic, retain) NSDictionary *mAgtInfoDict;
 
 @property (nonatomic, retain) IBOutlet UIView *originView;
 @property (nonatomic, retain) IBOutlet UIView *landscapeView;

@@ -75,6 +75,7 @@
 		2CCAA01814959CBC00D3C8AD /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCAA01714959CBC00D3C8AD /* Reachability.m */; };
 		2CCCB0DC14A06380006FC6FB /* AgtTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCCB0DB14A0637F006FC6FB /* AgtTableViewCell.m */; };
 		2CCCB0DF14A063CC006FC6FB /* AgtTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CCCB0DE14A063CC006FC6FB /* AgtTableViewCell.xib */; };
+		2CCFAC7C14A999D800883FF5 /* DetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCFAC7B14A999D700883FF5 /* DetailHeaderView.m */; };
 		2CD4FD2214663B4A00667D58 /* media-playback-pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 2CD4FD2014663B4500667D58 /* media-playback-pause.png */; };
 		2CD4FD2314663B4A00667D58 /* media-playback-start.png in Resources */ = {isa = PBXBuildFile; fileRef = 2CD4FD2114663B4A00667D58 /* media-playback-start.png */; };
 		2CE0F6831463919600099316 /* UnusualInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE0F6811463919600099316 /* UnusualInfoController.m */; };
@@ -88,6 +89,7 @@
 		2CF834F6146EA378004297A8 /* exit.png in Resources */ = {isa = PBXBuildFile; fileRef = 2CF834F5146EA378004297A8 /* exit.png */; };
 		2CF834F8146EA385004297A8 /* forwardGreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 2CF834F7146EA384004297A8 /* forwardGreen.png */; };
 		2CF834FA146EA515004297A8 /* 19-gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 2CF834F9146EA515004297A8 /* 19-gear.png */; };
+		43B61D5214A329AA00CCB52F /* BSTableHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 43B61D5114A329AA00CCB52F /* BSTableHeadView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -281,6 +283,8 @@
 		2CCCB0DA14A0637F006FC6FB /* AgtTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgtTableViewCell.h; sourceTree = "<group>"; };
 		2CCCB0DB14A0637F006FC6FB /* AgtTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgtTableViewCell.m; sourceTree = "<group>"; };
 		2CCCB0DE14A063CC006FC6FB /* AgtTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AgtTableViewCell.xib; sourceTree = "<group>"; };
+		2CCFAC7A14A999D700883FF5 /* DetailHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailHeaderView.h; sourceTree = "<group>"; };
+		2CCFAC7B14A999D700883FF5 /* DetailHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailHeaderView.m; sourceTree = "<group>"; };
 		2CD4FD2014663B4500667D58 /* media-playback-pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "media-playback-pause.png"; sourceTree = "<group>"; };
 		2CD4FD2114663B4A00667D58 /* media-playback-start.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "media-playback-start.png"; sourceTree = "<group>"; };
 		2CDA32F2149997D400138BD2 /* SDInfoBoardUIUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDInfoBoardUIUpdate.h; sourceTree = "<group>"; };
@@ -298,6 +302,8 @@
 		2CF834F5146EA378004297A8 /* exit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exit.png; sourceTree = "<group>"; };
 		2CF834F7146EA384004297A8 /* forwardGreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = forwardGreen.png; sourceTree = "<group>"; };
 		2CF834F9146EA515004297A8 /* 19-gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "19-gear.png"; sourceTree = "<group>"; };
+		43B61D5014A329AA00CCB52F /* BSTableHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSTableHeadView.h; sourceTree = "<group>"; };
+		43B61D5114A329AA00CCB52F /* BSTableHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSTableHeadView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -371,12 +377,14 @@
 				0489CF591397CD3B00C4C0BB /* DetailsViewController.h */,
 				0489CF5A1397CD3B00C4C0BB /* DetailsViewController.m */,
 				0489CF5B1397CD3B00C4C0BB /* DetailsViewController.xib */,
-				04B9855F143313EC00255AA5 /* CustomCellPortrait.h */,
-				04B98560143313EC00255AA5 /* CustomCellPortrait.m */,
-				04B985621433141800255AA5 /* CustomCellPortrait.xib */,
 				2CF2F034149ED88D0052D73A /* GroupTableViewController.h */,
 				2CF2F035149ED88D0052D73A /* GroupTableViewController.m */,
 				2CF2F036149ED88D0052D73A /* GroupTableViewController.xib */,
+				2CCFAC7A14A999D700883FF5 /* DetailHeaderView.h */,
+				2CCFAC7B14A999D700883FF5 /* DetailHeaderView.m */,
+				04B9855F143313EC00255AA5 /* CustomCellPortrait.h */,
+				04B98560143313EC00255AA5 /* CustomCellPortrait.m */,
+				04B985621433141800255AA5 /* CustomCellPortrait.xib */,
 				2CF2F03A149EDC400052D73A /* AgtTableViewController.h */,
 				2CF2F03B149EDC400052D73A /* AgtTableViewController.m */,
 				2CF2F03C149EDC400052D73A /* AgtTableViewController.xib */,
@@ -454,9 +462,9 @@
 				2C9F4902149059960040337E /* SDInfoBoardController.m */,
 				2CDA32F2149997D400138BD2 /* SDInfoBoardUIUpdate.h */,
 				048DBBCC1397104500A30AB5 /* Statistics */,
-				048DBBCA1397100E00A30AB5 /* RealtimeMonitor */,
-				2CE0F685146391AC00099316 /* UnusualInfo */,
 				2C0512961464305000AF5789 /* BussSearchInfo */,
+				2CE0F685146391AC00099316 /* UnusualInfo */,
+				048DBBCA1397100E00A30AB5 /* RealtimeMonitor */,
 				048DBBCB1397103000A30AB5 /* Details */,
 				04A017BD13961AA100B942E1 /* Supporting Files */,
 			);
@@ -615,6 +623,8 @@
 				2C051298146430B300AF5789 /* BussSearchInfoController.h */,
 				2C051299146430B300AF5789 /* BussSearchInfoController.m */,
 				2C05129A146430B300AF5789 /* BussSearchInfoController.xib */,
+				43B61D5014A329AA00CCB52F /* BSTableHeadView.h */,
+				43B61D5114A329AA00CCB52F /* BSTableHeadView.m */,
 			);
 			name = BussSearchInfo;
 			sourceTree = "<group>";
@@ -770,6 +780,8 @@
 				2CF2F03D149EDC400052D73A /* AgtTableViewController.m in Sources */,
 				2CACB546149F19B100C74BC1 /* ClickableView.m in Sources */,
 				2CCCB0DC14A06380006FC6FB /* AgtTableViewCell.m in Sources */,
+				43B61D5214A329AA00CCB52F /* BSTableHeadView.m in Sources */,
+				2CCFAC7C14A999D800883FF5 /* DetailHeaderView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

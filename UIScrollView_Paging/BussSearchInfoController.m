@@ -10,6 +10,7 @@
 #import "ASIAuthenticationDialog.h"
 #import "BussSearchInfoController.h"
 #import "CVTableCellBGView.h"
+#import "BSTableHeadView.h"
 
 @implementation BussSearchInfoController
 @synthesize addrPrefix;
@@ -28,7 +29,7 @@
         tableViewPortrait.showsVerticalScrollIndicator = NO;
         bussinessInfoCashResponseStr = [[NSString alloc]init ];
         bussSearchInfoCashResponseStr = [[NSString alloc]init];
-        
+       // self.tableViewPortrait.delegate=self;
     }
     return self;
 }
@@ -166,10 +167,10 @@
 {
     if (ifLoading) {
         [self showWaiting];
-        NSLog(@"%d showWaing",ifLoading);
+        //NSLog(@"%d showWaing",ifLoading);
         ifLoading=NO;
     }
-    NSLog(@"%d ifLoading in requestData",ifLoading);
+    //NSLog(@"%d ifLoading in requestData",ifLoading);
     
     ASIHTTPRequest *bussinessInfoRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:bussinessInfoWebAddr]];
     [bussinessInfoRequest setDelegate:self];
@@ -244,7 +245,7 @@
                 }
                 if (ifLoading==NO){
                     [self hideWaiting];
-                    NSLog(@"hideWating");
+                    //NSLog(@"hideWating");
                 }
                 NSLog(@"%d ifLoading in requestFinishded",ifLoading);
                 
@@ -308,30 +309,33 @@
 - (void)createBarChartAndPiePlotInLandscapeView 
 {
     // Create barChart from theme
-    barChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(0, 0, 183, 274)];
+    barChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(0.0, 0.0, 183.0, 263.0)];
     barChartViewLandscape.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin| UIViewAutoresizingFlexibleRightMargin;
     [self.landscapeView addSubview:self.barChartViewLandscape];
     barChartLandscape = [[CPTXYGraph alloc] initWithFrame:CGRectZero];
-	CPTTheme *barChartTheme = [CPTTheme themeNamed:kCPTStocksTheme];
-    [barChartLandscape applyTheme:barChartTheme];
+	//CPTTheme *barChartTheme = [CPTTheme themeNamed:kCPTDarkGradientTheme];
+    //[barChartLandscape applyTheme:barChartTheme];
 	CPTGraphHostingView *barChartHostingView = (CPTGraphHostingView *)self.barChartViewLandscape;
     barChartHostingView.hostedGraph = barChartLandscape;
     
     // Border
     barChartLandscape.plotAreaFrame.borderLineStyle = nil;
-    barChartLandscape.plotAreaFrame.cornerRadius = 15.0f;
+    barChartLandscape.plotAreaFrame.cornerRadius = 0.0f;
 	
     // Paddings
     barChartLandscape.paddingLeft = 0.0f;
     barChartLandscape.paddingRight = 0.0f;
-    barChartLandscape.paddingTop = 0.0f;
-    barChartLandscape.paddingBottom = .0f;
+    barChartLandscape.paddingTop = 10.0f;
+    barChartLandscape.paddingBottom = 0.0f;
 	
     barChartLandscape.plotAreaFrame.paddingLeft = 10.0;
 	barChartLandscape.plotAreaFrame.paddingTop = 10.0;
 	barChartLandscape.plotAreaFrame.paddingRight = 10.0;
 	barChartLandscape.plotAreaFrame.paddingBottom = 36.0;
-    
+    CPTMutableTextStyle *whiteText = [CPTMutableTextStyle textStyle];
+	whiteText.color = [CPTColor whiteColor];
+    barChartLandscape.titleTextStyle=whiteText;
+    barChartLandscape.title=@"业务数据";
     // Graph title
     /*
      barChart.title = @"客户满意度";
@@ -373,31 +377,31 @@
     //x.titleLocation = CPTDecimalFromFloat(5.0f);
 	//x.titleOffset = 15.0f;
 	
-    /*
+   
      // Define some custom labels for the data elements
-     x.labelRotation = M_PI/4;
+     //x.labelRotation = M_PI/4;
      x.labelingPolicy = CPTAxisLabelingPolicyNone;
-     x.labelOffset = -10.0f;
+     x.labelOffset = 5.0f;
      CPTMutableTextStyle *xLabelTextStyle = [CPTTextStyle textStyle];
      xLabelTextStyle.color = [CPTColor whiteColor];
      xLabelTextStyle.fontSize = 11.0f;
      xLabelTextStyle.textAlignment = CPTTextAlignmentRight;
      x.labelTextStyle = xLabelTextStyle;
-     NSArray *customTickLocations = [NSArray arrayWithObjects:[NSDecimalNumber numberWithFloat:0.2f], [NSDecimalNumber numberWithFloat:1.2f], [NSDecimalNumber numberWithFloat:2.2f], [NSDecimalNumber numberWithFloat:3.2f],[NSDecimalNumber numberWithFloat:4.2f], nil];
-     NSArray *xAxisLabels = [NSArray arrayWithObjects:@"非常满意", @"满   意", @"一   般", @"不   满", @"很不满意", nil];
+     NSArray *customTickLocations = [NSArray arrayWithObjects:[NSDecimalNumber numberWithFloat:0.0f], [NSDecimalNumber numberWithFloat:1.0f], [NSDecimalNumber numberWithFloat:2.0f], nil];
+     NSArray *xAxisLabels = [NSArray arrayWithObjects:@"下单量", @"投诉量", @"查单量", nil];
      NSUInteger labelLocation = 0;
      NSMutableArray *customLabels = [NSMutableArray arrayWithCapacity:[xAxisLabels count]];
      for (NSNumber *tickLocation in customTickLocations) {
      CPTAxisLabel *newLabel = [[CPTAxisLabel alloc] initWithText: [xAxisLabels objectAtIndex:labelLocation++] textStyle:x.labelTextStyle];
      newLabel.tickLocation = [tickLocation decimalValue];
      newLabel.offset = x.labelOffset + x.majorTickLength;
-     newLabel.rotation = M_PI/4;
+     //newLabel.rotation = M_PI/4;
      [customLabels addObject:newLabel];
      [newLabel release];
      }
      
      x.axisLabels =  [NSSet setWithArray:customLabels];
-     */
+    
     
 	CPTXYAxis *y = axisSet.yAxis;
     y.axisLineStyle = nil;
@@ -431,12 +435,12 @@
     
     
     //pieChart
-    pieChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(187,0,293,274)];
+    pieChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(187.0,0.0,293.0,263.0)];
     pieChartViewLandscape.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin| UIViewAutoresizingFlexibleRightMargin;
     [self.landscapeView addSubview:self.pieChartViewLandscape];
     pieChartLandscape = [[CPTXYGraph alloc] initWithFrame:CGRectZero];
-	CPTTheme *pieChartTheme = [CPTTheme themeNamed:kCPTStocksTheme];
-    [pieChartLandscape applyTheme:pieChartTheme];
+//	CPTTheme *pieChartTheme = [CPTTheme themeNamed:kCPTDarkGradientTheme];
+//    [pieChartLandscape applyTheme:pieChartTheme];
 	CPTGraphHostingView *pieChartHostingView = (CPTGraphHostingView *)self.pieChartViewLandscape;
     pieChartHostingView.hostedGraph = pieChartLandscape;
 	
@@ -444,9 +448,8 @@
 	pieChartLandscape.paddingTop = 0.0f;
 	pieChartLandscape.paddingRight = 0.0f;
 	pieChartLandscape.paddingBottom = 0.0f;
-	
 	pieChartLandscape.axisSet = nil;
-	
+    pieChartLandscape.plotAreaFrame.cornerRadius = 0.0f;	
     
     //pieChartLandscape.titleTextStyle.color = [CPTColor whiteColor];
     //pieChartLandscape.title = @"查单量";
@@ -506,24 +509,14 @@
                         [NSNumber numberWithInt:cuscompcntNum+sitcompcntNum],
                         [NSNumber numberWithInt:searchcntNum],
                         nil ];
-    /*
-    self.answerRatePersent = [NSArray arrayWithObjects:
-                              [NSNumber numberWithFloat:oatousuNum/searchcntNum],
-                              [NSNumber numberWithFloat:cuijianNum/searchcntNum],
-                              [NSNumber numberWithFloat:gaidizhiNum/searchcntNum],
-                              [NSNumber numberWithFloat:lipeiNum/searchcntNum],
-                              [NSNumber numberWithFloat:qitaNum/searchcntNum],
-                              [NSNumber numberWithFloat:tuijianNum/searchcntNum],
-                              [NSNumber numberWithFloat:zhengchangchadanNum/searchcntNum],
-                              [NSNumber numberWithFloat:chadanNum/searchcntNum],
-                              [NSNumber numberWithFloat:weifenleiNum/searchcntNum],
-                              nil];
-     */
     
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:2]intValue]*1.2f)];
     NSString *newPieTitle = [[NSString alloc]initWithFormat:@"查单量:%d",searchcntNum];
     pieChartLandscape.title = newPieTitle;
+    CPTMutableTextStyle *whiteText = [CPTMutableTextStyle textStyle];
+	whiteText.color = [CPTColor whiteColor];
+    pieChartLandscape.titleTextStyle=whiteText;
     [newPieTitle release];
     [barPlotLandscape reloadData];
     [pieChartLandscape reloadData];
@@ -561,13 +554,16 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
-        CVTableCellBGView *bgView = [[CVTableCellBGView alloc] init];
-        bgView.cellStyle = CellStyleMiddle;
-        bgView.gradientColor = GradientColorBlack;
-        [cell setBackgroundView:bgView];
-        [bgView release];
+        cell.backgroundColor=[UIColor clearColor];
+//        CVTableCellBGView *bgView = [[CVTableCellBGView alloc] init];
+//        bgView.cellStyle = CellStyleMiddle;
+//        bgView.gradientColor = GradientColorBlack;
+//        [cell setBackgroundView:bgView];
+//        [bgView release];
         cell.textLabel.textColor = [UIColor whiteColor];
+        cell.textLabel.backgroundColor=[UIColor clearColor];
         cell.detailTextLabel.textColor = [UIColor orangeColor];
+        cell.detailTextLabel.backgroundColor=[UIColor clearColor];
     }
     switch (indexPath.section) {
         case 0:
@@ -575,17 +571,17 @@
                 case 0:
                     cell.textLabel.text = [NSString stringWithFormat:@"下单量"];
                     //cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[bussinessInfoDataDict objectForKey:@"OrderCnt"]intValue]];
-                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",ordercntNum];
+                    cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:ordercntNum];
                     break;
                 case 1:
                     cell.textLabel.text = [NSString stringWithFormat:@"投诉量"];
                     //cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",([[bussinessInfoDataDict objectForKey:@"CusCompCnt"] intValue]+[[bussinessInfoDataDict objectForKey:@"SitCompCnt"]intValue])];
-                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",cuscompcntNum+sitcompcntNum];
+                    cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:(cuscompcntNum+sitcompcntNum)];
                     break;
                 case 2:
                     cell.textLabel.text = [NSString stringWithFormat:@"查单量"];
                     //cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[bussinessInfoDataDict objectForKey:@"SearchCnt"]intValue]];
-                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",searchcntNum];
+                    cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:searchcntNum];
                     break;
                 default:
                     break;
@@ -595,10 +591,8 @@
         {
             NSString *searchType = [[NSString alloc]initWithString:[[bussSearchInfoDataDictKeys sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:indexPath.row]];
             cell.textLabel.text = [searchType isEqualToString:@""]?@"暂无分类":searchType;
-            NSString *numStr = [[NSString alloc]initWithFormat:@"%d",[[bussSearchInfoDataDict objectForKey:searchType] intValue]];
-            cell.detailTextLabel.text = numStr;
+            cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:[[bussSearchInfoDataDict objectForKey:searchType] intValue]];
             [searchType release];
-            [numStr release];
             break;
         }
         default:
@@ -606,7 +600,20 @@
     }
     return cell;
 }
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
 
+    switch (section) {
+        case 0:
+            return [[[BSTableHeadView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableViewPortrait.frame.size.width,22.0) headStr:@"业务数据（个）"] autorelease];
+        case 1:
+            return [[[BSTableHeadView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableViewPortrait.frame.size.width,22.0) headStr:@"查单分类统计（个）"] autorelease];
+        default:
+            return nil;
+    }
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 22.0;
+}
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 2;
@@ -920,4 +927,29 @@
     
 }
 
+#pragma mark - utiles
+
+
+- (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number
+{
+    if (number < 1000) {
+        NSMutableString *resultString = [[NSMutableString alloc ]initWithFormat:@"%d", number];
+        return [resultString autorelease];
+    }
+    else
+    {
+        NSMutableString *resultString = [[NSMutableString alloc ]initWithFormat:@"%d,%d", number/1000, number%1000];
+        if ((number%1000)<10) 
+        {
+            NSRange range = [resultString rangeOfString:@","];
+            [resultString insertString:@"00" atIndex:range.location+1]; 
+        }
+        else if ((number%1000)<100) 
+        {
+            NSRange range = [resultString rangeOfString:@","];
+            [resultString insertString:@"0" atIndex:range.location+1]; 
+        }
+        return [resultString autorelease];
+    }
+}
 @end

@@ -86,112 +86,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-        /*
-    static NSString *CellIdentifier = @"UnusualLeafCell";
-    
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
-        CVTableCellBGView *bgView = [[CVTableCellBGView alloc] init];
-        bgView.cellStyle = CellStyleMiddle;
-        bgView.gradientColor = GradientColorBlack;
-        [cell setBackgroundView:bgView];
-        [bgView release];
-        cell.textLabel.textColor = [UIColor whiteColor];
-        cell.textLabel.backgroundColor = [UIColor clearColor];
-        cell.detailTextLabel.backgroundColor = [UIColor clearColor];
-        cell.detailTextLabel.textColor = [UIColor orangeColor];
-    }    
-
-    switch (self.view.tag) {
-        case UnUsualLeafTableViewControllerSituationVeryBad:
-        {
-            switch (indexPath.row) {
-                case 0:
-                {
-                    NSString *str = [[NSString alloc ]initWithString:@"工号"];
-                    cell.textLabel.text = str;
-                    [str release];
-                    NSString *idStr = [[NSString alloc ]initWithString:[[dataDictArray objectAtIndex:indexPath.section]objectForKey:@"id"]];
-                    cell.detailTextLabel.text = idStr;
-                    [idStr release];
-                    break;
-                }
-                case 1:
-                {
-                    NSString *str = [[NSString alloc ]initWithString:@"客户"];
-                    cell.textLabel.text = str;
-                    [str release];
-                    NSString *aniStr = [[NSString alloc ]initWithString:[[dataDictArray objectAtIndex:indexPath.section]objectForKey:@"ani"]];
-                    cell.detailTextLabel.text = aniStr;
-                    [aniStr release];
-                    break;
-                }
-                case 2:
-                {
-                    NSString *str = [[NSString alloc ]initWithString:@"时间"];
-                    cell.textLabel.text = str;
-                    [str release];
-                    NSString *tmStr = [[NSString alloc ]initWithString:[[dataDictArray objectAtIndex:indexPath.section]objectForKey:@"tm"]];
-                    cell.detailTextLabel.text = tmStr;
-                    [tmStr release];
-                    break;
-                }
-                default:
-                    break;
-            }
-        }
-            break;
-
-        case UnUsualLeafTableViewControllerSituationBad:
-            switch (indexPath.row) {
-                case 0:
-                {
-                    NSString *str = [[NSString alloc ]initWithString:@"组号"];
-                    cell.textLabel.text = str;
-                    [str release];
-                    NSString *idStr = [[NSString alloc ]initWithString:[[dataDictArray objectAtIndex:indexPath.section]objectForKey:@"id"]];
-                    cell.detailTextLabel.text = idStr;
-                    [idStr release];
-                    break;
-                }
-                case 1:
-                {
-                    NSString *str = [[NSString alloc ]initWithString:@"客户"];
-                    cell.textLabel.text = str;
-                    [str release];
-                    NSString *aniStr = [[NSString alloc ]initWithString:[[dataDictArray objectAtIndex:indexPath.section]objectForKey:@"ani"]];
-                    cell.detailTextLabel.text = aniStr;
-                    [aniStr release];
-                    break;
-                }
-                case 2:
-                {
-                    NSString *str = [[NSString alloc ]initWithString:@"时间"];
-                    cell.textLabel.text = str;
-                    [str release];
-                    NSString *tmStr = [[NSString alloc ]initWithString:[[dataDictArray objectAtIndex:indexPath.section]objectForKey:@"tm"]];
-                    cell.detailTextLabel.text = tmStr;
-                    [tmStr release];
-                    break;
-                }
-                default:
-                    break;
-            }
-            break;
-
-        case UnUsualLeafTableViewControllerSituationAgtLost:
-            //cell.textLabel.text = [NSString stringWithFormat:@"%@(工号%@)",[[dataDictArray objectAtIndex:indexPath.row] objectForKey:@"Name"],[[dataDictArray objectAtIndex:indexPath.row] objectForKey:@"AgtID"]];
-            cell.textLabel.text = [NSString stringWithFormat:@"%@(工号%@)",[[dataDictArray objectAtIndex:indexPath.row] objectForKey:@"name"],[[dataDictArray objectAtIndex:indexPath.row] objectForKey:@"agtid"]];
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%d个",//[[[dataDictArray objectAtIndex:indexPath.row] objectForKey:@"AgtLost"]intValue]];
-                [[[dataDictArray objectAtIndex:indexPath.row] objectForKey:@"agtlost"]intValue]];
-            break;
-        default:
-            break;
-    }
-    */
-    switch (self.view.tag) {
+          switch (self.view.tag) {
         case UnUsualLeafTableViewControllerSituationVeryBad:
         case UnUsualLeafTableViewControllerSituationBad:
         {
@@ -201,11 +96,13 @@
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
+                /*
                 CVTableCellBGView *bgView = [[CVTableCellBGView alloc] init];
                 bgView.cellStyle = CellStyleMiddle;
                 bgView.gradientColor = GradientColorBlack;
                 [cell setBackgroundView:bgView];
-                [bgView release];
+                [bgView release];*/
+                cell.backgroundColor = [UIColor clearColor];
                 cell.textLabel.textColor = [UIColor whiteColor];
                 cell.textLabel.backgroundColor = [UIColor clearColor];
                 cell.detailTextLabel.backgroundColor = [UIColor clearColor];
@@ -224,7 +121,7 @@
                 }
                 case 1:
                 {
-                    NSString *str = [[NSString alloc ]initWithString:@"工号"];
+                    NSString *str = [[NSString alloc ]initWithString:@"组号"];
                     cell.textLabel.text = str;
                     [str release];
                     NSString *idStr = [[NSString alloc ]initWithString:[[[dataDictArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row/5]objectForKey:@"id"]];
@@ -271,15 +168,19 @@
                 for (id oneObject in nib)
                     if([oneObject isKindOfClass:[agtLostTableViewCell class]])
                         cell = (agtLostTableViewCell *)oneObject;
+                /*
                 CVTableCellBGView *bgView = [[CVTableCellBGView alloc] init];
                 bgView.cellStyle = CellStyleMiddle;
                 bgView.gradientColor = GradientColorBlack;
-                [cell setBackgroundView:bgView];
+                [cell setBackgroundView:bgView];*/
+                cell.backgroundColor = [UIColor clearColor];
             }
             //cell.textLabel.text = [NSString stringWithFormat:@"%@(工号%@)",[[dataDictArray objectAtIndex:indexPath.row] objectForKey:@"Name"],[[dataDictArray objectAtIndex:indexPath.row] objectForKey:@"AgtID"]];
             cell.nameLabel.text = [[dataDictArray objectAtIndex:indexPath.row] objectForKey:@"name"];
              cell.agtIdLabel.text=[[dataDictArray objectAtIndex:indexPath.row] objectForKey:@"agtid"];
-            cell.agtLostLabel.text = [NSString stringWithFormat:@"%d个",                                         [[[dataDictArray objectAtIndex:indexPath.row] objectForKey:@"agtlost"]intValue]];
+            NSMutableString *agtLostStr = [self mutableStringWithCommaConvertFromInteger:[[[dataDictArray objectAtIndex:indexPath.row] objectForKey:@"agtlost"]intValue]];
+            [agtLostStr appendString:@"个"];
+            cell.agtLostLabel.text = agtLostStr;
             return cell;
             }
         default:
@@ -304,39 +205,6 @@
             return 0;
     }
 }
-
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    switch (self.view.tag) {
-                
-        case UnUsualLeafTableViewControllerSituationVeryBad:
-        case UnUsualLeafTableViewControllerSituationBad:
-        {
-            switch (section) {
-                case 0:
-                {
-                    return [NSString stringWithFormat:@"很不满意:%d",[[dataDictArray objectAtIndex:0] count]];
-                }
-                    break;
-                case 1:
-                {
-                    return [NSString stringWithFormat:@"不满意:%d",[[dataDictArray objectAtIndex:1] count]];
-                }
-                    break;
-                default:
-                    break;
-            }
-        }
-        case UnUsualLeafTableViewControllerSituationAgtLost:
-            return [[NSString alloc]initWithFormat:@"姓名                 工号  放弃数%d个",[dataDictArray count]];
-        default:
-            return nil;
-                
-    }
-
-}
-
 
 #pragma mark - UITableViewDelegate Methods
 /*
@@ -366,8 +234,13 @@
         case UnUsualLeafTableViewControllerSituationVeryBad:
         case UnUsualLeafTableViewControllerSituationBad:
         {
-            NSString *veryBadHeaderTitle = [[NSString alloc]initWithFormat:@"很不满意:%d",[[dataDictArray objectAtIndex:0] count]];
-            NSString *badHeaderTitle = [[NSString alloc]initWithFormat:@"很不满意:%d",[[dataDictArray objectAtIndex:1] count]];
+            NSMutableString *veryBadHeaderTitle = [self mutableStringWithCommaConvertFromInteger:[[dataDictArray objectAtIndex:0] count]];
+            [veryBadHeaderTitle insertString:@"很不满意 "atIndex:0];
+            [veryBadHeaderTitle appendString:@"个"];
+            //;[[NSString alloc]initWithFormat:@"很不满意:%d",[[dataDictArray objectAtIndex:0] count]];
+            NSMutableString *badHeaderTitle = [self mutableStringWithCommaConvertFromInteger:[[dataDictArray objectAtIndex:1] count]];
+            [badHeaderTitle insertString:@"不满意 " atIndex:0];
+            [badHeaderTitle appendString:@"个"];
             switch (section) {
                 case 0:
                 {
@@ -403,5 +276,31 @@
 {
     0==section?(sectionVeryBadOpend=YES):(sectionBadOpend=YES);
     [self.tableView reloadData];
+}
+
+#pragma mark - utiles
+
+
+- (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number
+{
+    if (number < 1000) {
+        NSMutableString *resultString = [[NSMutableString alloc ]initWithFormat:@"%d", number];
+        return [resultString autorelease];
+    }
+    else
+    {
+        NSMutableString *resultString = [[NSMutableString alloc ]initWithFormat:@"%d,%d", number/1000, number%1000];
+        if ((number%1000)<10) 
+        {
+            NSRange range = [resultString rangeOfString:@","];
+            [resultString insertString:@"00" atIndex:range.location+1]; 
+        }
+        else if ((number%1000)<100) 
+        {
+            NSRange range = [resultString rangeOfString:@","];
+            [resultString insertString:@"0" atIndex:range.location+1]; 
+        }
+        return [resultString autorelease];
+    }
 }
 @end

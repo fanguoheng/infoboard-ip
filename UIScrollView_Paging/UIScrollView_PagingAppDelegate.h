@@ -11,7 +11,6 @@
 @class UIScrollView_PagingViewController;
 
 @interface UIScrollView_PagingAppDelegate : NSObject <UIApplicationDelegate> {
-
     Reachability  *hostReach;
 }
 

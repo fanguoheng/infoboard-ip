@@ -28,11 +28,11 @@
         // Custom initialization
         cashResponseStr = [[NSString alloc]init];
         //navController.delegate = self;
-        UnUsualRootTableViewController *_rootTableViewController = [[UnUsualRootTableViewController alloc]initWithStyle:UITableViewStylePlain dataDictArray:nil delegate:self];
+        UnUsualRootTableViewController *_rootTableViewController = [[UnUsualRootTableViewController alloc]initWithStyle:UITableViewStyleGrouped dataDictArray:nil delegate:self];
         self.rootTableViewController = _rootTableViewController;
         [_rootTableViewController release];
         
-        UnUsualLeafTableViewController *_unUsualLeafVeryBadTableViewController = [[UnUsualLeafTableViewController alloc ]initWithStyle:UITableViewStylePlain dataDictArray:nil Tag:0];
+        UnUsualLeafTableViewController *_unUsualLeafVeryBadTableViewController = [[UnUsualLeafTableViewController alloc ]initWithStyle:UITableViewStyleGrouped dataDictArray:nil Tag:0];
         self.leafTableViewController = _unUsualLeafVeryBadTableViewController;
         [_unUsualLeafVeryBadTableViewController release];
     }
@@ -190,10 +190,10 @@
 {
     if (ifLoading) {
         [self showWaiting];
-        NSLog(@"%d showWaing",ifLoading);
+        //NSLog(@"%d showWaing",ifLoading);
         ifLoading=NO;
     }
-    NSLog(@"%d ifLoading in requestData",ifLoading);
+    //NSLog(@"%d ifLoading in requestData",ifLoading);
     
     ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:webAddr]];
     [request setDelegate:self];
@@ -272,7 +272,7 @@
             }
             if (ifLoading==NO){
                 [self hideWaiting];
-                NSLog(@"hideWating");
+                //NSLog(@"hideWating");
             }
             NSLog(@"%d ifLoading in requestFinishded",ifLoading);
             self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
@@ -291,20 +291,20 @@
 {
     
     // Create barChart from theme
-    barChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(185, 0, 295, 274)];
+    barChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(185.0, 0.0, 295.0, 263.0)];
     barChartViewLandscape.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin| UIViewAutoresizingFlexibleRightMargin;
     //barChartViewLandscape.allowPinchScaling = YES;
     [self.landscapeView addSubview:self.barChartViewLandscape];
     barChartLandscape = [[CPTXYGraph alloc] initWithFrame:CGRectZero];
-	CPTTheme *barChartTheme = [CPTTheme themeNamed:kCPTStocksTheme];
-    [barChartLandscape applyTheme:barChartTheme];
+//	CPTTheme *barChartTheme = [CPTTheme themeNamed:kCPTDarkGradientTheme];
+//    [barChartLandscape applyTheme:barChartTheme];
 	CPTGraphHostingView *barChartHostingView = (CPTGraphHostingView *)self.barChartViewLandscape;
     barChartHostingView.hostedGraph = barChartLandscape;
     
     // Border
     barChartLandscape.plotAreaFrame.borderLineStyle = nil;
     barChartLandscape.plotAreaFrame.cornerRadius = 0.0f;
-	
+
     // Paddings
     barChartLandscape.paddingLeft = 0.0f;
     barChartLandscape.paddingRight = 0.0f;
@@ -442,6 +442,7 @@
     barPlotLandscape.barWidth = CPTDecimalFromFloat(0.618f); // bar is 50% of the available space
 	barPlotLandscape.barCornerRadius = 5.0f;
     barPlotLandscape.identifier = @"BarPlotLandscape";
+
     [barChartLandscape addPlot:barPlotLandscape toPlotSpace:plotSpace];
     
 }
@@ -730,7 +731,7 @@
         [navController setNavigationBarHidden:NO];
         [leafTableViewController setDataDictArray:nil];
         [leafTableViewController.tableView reloadData];
-        navController.navigationBar.topItem.leftBarButtonItem.title = @"返回";
+        //navController.navigationBar.topItem.leftBarButtonItem.title = @"返回";
         [self requestData];
         self.webAddr = rootWebAddr;
     }
@@ -809,5 +810,6 @@
     theButton.selected = !theButton.selected;
     theButton.selected?[self dataUpdatePause]:[self dataUpdateStart];
 }
+
 
 @end

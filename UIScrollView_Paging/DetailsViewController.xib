@@ -47,7 +47,6 @@
 						<int key="NSvFlags">274</int>
 						<string key="NSFrameSize">{320, 379}</string>
 						<reference key="NSSuperview" ref="895811920"/>
-						<reference key="NSNextKeyView"/>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<object class="NSCustomResource" key="IBUIImage">
@@ -58,7 +57,7 @@
 				</object>
 				<string key="NSFrameSize">{320, 379}</string>
 				<reference key="NSSuperview"/>
-				<reference key="NSNextKeyView"/>
+				<reference key="NSNextKeyView" ref="6313851"/>
 				<object class="NSColor" key="IBUIBackgroundColor" id="575692662">
 					<int key="NSColorSpace">1</int>
 					<bytes key="NSRGB">MCAwIDAAA</bytes>
@@ -68,7 +67,7 @@
 			<object class="IBUIView" id="103760218">
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
-				<string key="NSFrameSize">{480, 274}</string>
+				<string key="NSFrameSize">{480, 262}</string>
 				<reference key="NSSuperview"/>
 				<reference key="IBUIBackgroundColor" ref="575692662"/>
 				<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">

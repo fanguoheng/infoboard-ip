@@ -13,6 +13,6 @@
 @property (nonatomic, retain) NSArray *dataDictArray;
 
 - (id)initWithStyle:(UITableViewStyle)style dataDictArray:(NSArray*)dataDictArraySet delegate:(id<UITableViewDelegate>)delegateSet;
-
+- (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number;
 @end
 

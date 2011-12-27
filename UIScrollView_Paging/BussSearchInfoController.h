@@ -70,4 +70,5 @@
 - (IBAction)pauseOrStart:(id)sender;
 
 - (void)createBarChartAndPiePlotInLandscapeView;
+- (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number;
 @end

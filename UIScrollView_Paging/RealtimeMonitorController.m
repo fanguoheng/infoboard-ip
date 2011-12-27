@@ -214,10 +214,10 @@
     //NSLog(@"updateRealtimeMonitorData");
     if (ifLoading) {
         [self showWaiting];
-        NSLog(@"%d showWaing",ifLoading);
+        //NSLog(@"%d showWaing",ifLoading);
         ifLoading=NO;
     }
-    NSLog(@"%d ifLoading in requestData",ifLoading);
+    //NSLog(@"%d ifLoading in requestData",ifLoading);
     
     ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:self.webAddr]];
     [request setDelegate:self];
@@ -257,6 +257,7 @@
                 
                 inboundNum += [[anyDic objectForKey:@"inbound"]intValue];
                 outboundNum += [[anyDic objectForKey:@"outbound"]intValue];
+                
                 queueNum += [[anyDic objectForKey:@"infoqueue"]intValue];
                 ringAgtNum += [[anyDic objectForKey:@"ringagt"]intValue];
                 pauseAgtNum += [[anyDic objectForKey:@"pauseagt"]intValue];
@@ -267,6 +268,14 @@
             }
             totalBoundNum = totalInboundNum + totalOutboundNum;
             
+            self.barPlotData = [NSArray arrayWithObjects:
+                                [NSNumber numberWithInt:pauseAgtNum],
+                                [NSNumber numberWithInt:occupyAgtNum],
+                                [NSNumber numberWithInt:talkingAgtNum],
+                                [NSNumber numberWithInt:ringAgtNum],
+                                [NSNumber numberWithInt:idleAgtNum],
+                                nil];
+            
             if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:)]) {
                 NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                 [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
@@ -276,7 +285,7 @@
             }
             if (ifLoading==NO){
                 [self hideWaiting];
-                NSLog(@"hideWating");
+                //NSLog(@"hideWating");
             }
             NSLog(@"%d ifLoading in requestFinishded",ifLoading);
             
@@ -349,13 +358,7 @@
     inboundLabel.text = [self mutableStringWithCommaConvertFromInteger:inboundNum];
     outboundLabel.text = [self mutableStringWithCommaConvertFromInteger:outboundNum];
     queueLabel.text = [self mutableStringWithCommaConvertFromInteger:queueNum];
-    self.barPlotData = [NSArray arrayWithObjects:
-                        [NSNumber numberWithInt:idleAgtNum],
-                        [NSNumber numberWithInt:ringAgtNum],
-                        [NSNumber numberWithInt:talkingAgtNum],
-                        [NSNumber numberWithInt:occupyAgtNum],
-                        [NSNumber numberWithInt:pauseAgtNum],
-                        nil];
+
     
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChart.defaultPlotSpace;
      @try{plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f)];}
@@ -368,13 +371,6 @@
  
 - (void)updateLandscapeView:(ASIHTTPRequest *)request
 {
-    self.barPlotData = [NSArray arrayWithObjects:
-                        [NSNumber numberWithInt:occupyAgtNum],
-                        [NSNumber numberWithInt:talkingAgtNum],
-                        [NSNumber numberWithInt:idleAgtNum], 
-                        [NSNumber numberWithInt:pauseAgtNum],
-                        [NSNumber numberWithInt:ringAgtNum],
-                        nil];
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
     @try{plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f)];}
     @catch (NSException *e) {
@@ -545,13 +541,13 @@
 {
 
     // Create barChart from theme
-    self.barChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(185.0f, 0.0f, 295.0f, 274.0f)];
+    self.barChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(185.0f, 0.0f, 295.0f, 263.0f)];
     barChartViewLandscape.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin| UIViewAutoresizingFlexibleRightMargin;
     //barChartViewLandscape.allowPinchScaling = YES;
     [self.landscapeView addSubview:self.barChartViewLandscape];
     barChartLandscape = [[CPTXYGraph alloc] initWithFrame:CGRectZero];
-	CPTTheme *barChartTheme = [CPTTheme themeNamed:kCPTStocksTheme];
-    [barChartLandscape applyTheme:barChartTheme];
+//	CPTTheme *barChartTheme = [CPTTheme themeNamed:kCPTDarkGradientTheme];
+//    [barChartLandscape applyTheme:barChartTheme];
 	CPTGraphHostingView *barChartHostingView = (CPTGraphHostingView *)self.barChartViewLandscape;
     barChartHostingView.hostedGraph = barChartLandscape;
     

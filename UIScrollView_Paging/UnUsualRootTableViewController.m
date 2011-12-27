@@ -81,12 +81,17 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
+        
+        /*
         CVTableCellBGView *bgView = [[CVTableCellBGView alloc] init];
         bgView.cellStyle = CellStyleMiddle;
         bgView.gradientColor = GradientColorBlack;
         [cell setBackgroundView:bgView];
-        [bgView release];
+        [bgView release];*/
+        cell.backgroundColor = [UIColor clearColor];
+        cell.textLabel.backgroundColor = [UIColor clearColor];
         cell.textLabel.textColor = [UIColor whiteColor];
+        cell.detailTextLabel.textColor = [UIColor clearColor];
         cell.detailTextLabel.textColor = [UIColor orangeColor];
     }
     //此时cell != nil
@@ -97,14 +102,12 @@
                     cell.textLabel.text = [NSString stringWithFormat:@"很不满意"];
                     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                     //cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[[dataDictArray objectAtIndex:0] objectForKey:@"VeryBad"]intValue]];
-                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[[dataDictArray objectAtIndex:0] objectForKey:@"verybad"]intValue]];
-                    break;
+                    cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:[[[dataDictArray objectAtIndex:0] objectForKey:@"verybad"]intValue]];                    break;
                 case 1:
                     cell.textLabel.text = [NSString stringWithFormat:@"不满意"];
                     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                     //cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[[dataDictArray objectAtIndex:0] objectForKey:@"Bad"]intValue]];
-                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[[dataDictArray objectAtIndex:0] objectForKey:@"bad"]intValue]];
-                    break;
+                    cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:[[[dataDictArray objectAtIndex:0] objectForKey:@"bad"]intValue]];                    break;
                 default:
                     break;
             }
@@ -114,11 +117,10 @@
                 case 0:
                     cell.textLabel.text = [NSString stringWithFormat:@"丢失数"];
                     cell.accessoryType = UITableViewCellAccessoryNone;
-                    cell.detailTextLabel.frame = CGRectMake(cell.detailTextLabel.frame.origin.x-40.0f, cell.detailTextLabel.frame.origin.y, cell.detailTextLabel.frame.size.width, cell.detailTextLabel.frame.size.height);
+                    //cell.detailTextLabel.frame = CGRectMake(cell.detailTextLabel.frame.origin.x-40.0f, cell.detailTextLabel.frame.origin.y, cell.detailTextLabel.frame.size.width, cell.detailTextLabel.frame.size.height);
                     //cell.accessoryView = [[[UIView alloc]init] autorelease];
                     //cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[[dataDictArray objectAtIndex:0 ] objectForKey:@"LostCnt"]intValue]];
-                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[[dataDictArray objectAtIndex:0 ] objectForKey:@"lostcnt"]intValue]];
-                    break;
+                    cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:[[[dataDictArray objectAtIndex:0 ] objectForKey:@"lostcnt"]intValue]];                    break;
                 case 1:
                     cell.textLabel.text = [NSString stringWithFormat:@"丢失率"];
                     cell.accessoryType = UITableViewCellAccessoryNone;
@@ -136,35 +138,30 @@
                     cell.textLabel.text = [NSString stringWithFormat:@"座席主动放弃"];
                     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                     //cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[[dataDictArray objectAtIndex:0] objectForKey:@"AgtLost"]intValue]];
-                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[[dataDictArray objectAtIndex:0] objectForKey:@"agtlost"]intValue]];
-                    break;
+                    cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:[[[dataDictArray objectAtIndex:0] objectForKey:@"agtlost"]intValue]];                    break;
                 case 1:
                     cell.textLabel.text = [NSString stringWithFormat:@"客户主动挂机"];
                     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                     //cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[[dataDictArray objectAtIndex:0] objectForKey:@"CusLost"]intValue]];
-                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[[dataDictArray objectAtIndex:0] objectForKey:@"cuslost"]intValue]];
-                    break;
+                    cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:[[[dataDictArray objectAtIndex:0] objectForKey:@"cuslost"]intValue]];                    break;
                 case 2:
                     cell.textLabel.text = [NSString stringWithFormat:@"电话队列排满"];
                     cell.accessoryType = UITableViewCellAccessoryNone;
                     //cell.accessoryView = [[[UIView alloc]init] autorelease];
                     //cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[[dataDictArray objectAtIndex:0] objectForKey:@"SysLost"]intValue]];
-                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[[dataDictArray objectAtIndex:0] objectForKey:@"syslost"]intValue]];
-                    break;
+                    cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:[[[dataDictArray objectAtIndex:0] objectForKey:@"syslost"]intValue]];                    break;
                 case 3:
                     cell.textLabel.text = [NSString stringWithFormat:@"无在线座席"];
                     cell.accessoryType = UITableViewCellAccessoryNone;
                     //cell.accessoryView = [[[UIView alloc]init] autorelease];
                     //cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[[dataDictArray objectAtIndex:0] objectForKey:@"OffLost"]intValue]];
-                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[[dataDictArray objectAtIndex:0] objectForKey:@"offlost"]intValue]];
-                    break;
+                    cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:[[[dataDictArray objectAtIndex:0] objectForKey:@"offlost"]intValue]];                    break;
                 case 4:
                     cell.textLabel.text = [NSString stringWithFormat:@"其他"];
                     cell.accessoryType = UITableViewCellAccessoryNone;
                     //cell.accessoryView = [[[UIView alloc]init] autorelease];
                     //cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[[dataDictArray objectAtIndex:0] objectForKey:@"OthLost"]intValue]];
-                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[[dataDictArray objectAtIndex:0] objectForKey:@"othlost"]intValue]];
-                    break;
+                    cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:[[[dataDictArray objectAtIndex:0] objectForKey:@"othlost"]intValue]];                    break;
                 default:
                     break;
             }
@@ -196,6 +193,31 @@
     }
 }
 
+#pragma mark - utiles
+
+
+- (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number
+{
+    if (number < 1000) {
+        NSMutableString *resultString = [[NSMutableString alloc ]initWithFormat:@"%d", number];
+        return [resultString autorelease];
+    }
+    else
+    {
+        NSMutableString *resultString = [[NSMutableString alloc ]initWithFormat:@"%d,%d", number/1000, number%1000];
+        if ((number%1000)<10) 
+        {
+            NSRange range = [resultString rangeOfString:@","];
+            [resultString insertString:@"00" atIndex:range.location+1]; 
+        }
+        else if ((number%1000)<100) 
+        {
+            NSRange range = [resultString rangeOfString:@","];
+            [resultString insertString:@"0" atIndex:range.location+1]; 
+        }
+        return [resultString autorelease];
+    }
+}
 
 
 @end

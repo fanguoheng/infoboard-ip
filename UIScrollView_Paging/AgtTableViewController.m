@@ -7,9 +7,10 @@
 //
 
 #import "AgtTableViewController.h"
+#import "AgtTableViewCell.h"
 
 @implementation AgtTableViewController
-@synthesize  dataDictArray,shopId;
+@synthesize  dataDictArray,statusArray;
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -18,14 +19,14 @@
         dataDictArray = [[NSArray alloc]init];
         self.view.backgroundColor = [UIColor clearColor];
         self.tableView.backgroundColor = [UIColor clearColor];
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        //self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        statusArray = [[NSArray alloc]initWithObjects:@"空闲", @"暂停", @"振铃", @"通话", @"处理", @"未知", nil];
     }
     return self;
 }
 - (id)initWithStyle:(UITableViewStyle)style:shopId:(NSString*)shopIdSet
 {
     [self initWithStyle:style];
-    self.shopId = shopIdSet;
     return self;
 }
 - (void)didReceiveMemoryWarning
@@ -38,6 +39,7 @@
 - (void)dealloc
 {
     [dataDictArray release];
+    [statusArray release];
     [super dealloc];
 }
 #pragma mark - View lifecycle
@@ -92,27 +94,38 @@
 {
 #warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 #warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    NSLog(@"%d",[dataDictArray count]);
+    return [dataDictArray count];
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier = @"AgtTableViewCell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    AgtTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"AgtTableViewCell" owner:self options:nil];
+        for (id oneObject in nib)
+            if([oneObject isKindOfClass:[AgtTableViewCell class]])
+                cell = (AgtTableViewCell *)oneObject;
     }
-    
     // Configure the cell...
-    
+    NSDictionary *agtDict = [dataDictArray objectAtIndex:indexPath.row];
+    cell.nameLabel.text = [agtDict objectForKey:@"name"];
+    cell.agtidLabel.text = [agtDict objectForKey:@"agtid"];
+    cell.agtcallcntLabel.text = [self mutableStringWithCommaConvertFromInteger:[[agtDict objectForKey:@"agtcallcnt"]intValue]];
+    NSString *agtanswerrateStr = [[NSString alloc]initWithFormat:@"%d%%",(NSInteger)[[agtDict objectForKey:@"agtanswerrate"] floatValue]*100];
+    cell.agtanswerrateLabel.text = agtanswerrateStr;
+    [agtanswerrateStr release];
+    cell.statusLabel.text = [statusArray objectAtIndex:[[agtDict objectForKey:@"status"]intValue]-1];
     return cell;
 }
 
@@ -167,6 +180,30 @@
      [self.navigationController pushViewController:detailViewController animated:YES];
      [detailViewController release];
      */
+}
+
+#pragma mark - string format methods
+- (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number
+{
+    if (number < 1000) {
+        NSMutableString *resultString = [[NSMutableString alloc ]initWithFormat:@"%d", number];
+        return [resultString autorelease];
+    }
+    else
+    {
+        NSMutableString *resultString = [[NSMutableString alloc ]initWithFormat:@"%d,%d", number/1000, number%1000];
+        if ((number%1000)<10) 
+        {
+            NSRange range = [resultString rangeOfString:@","];
+            [resultString insertString:@"00" atIndex:range.location+1]; 
+        }
+        else if ((number%1000)<100) 
+        {
+            NSRange range = [resultString rangeOfString:@","];
+            [resultString insertString:@"0" atIndex:range.location+1]; 
+        }
+        return [resultString autorelease];
+    }
 }
 
 @end

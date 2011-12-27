@@ -21,4 +21,5 @@ typedef enum {
 @property (nonatomic, readwrite) bool sectionBadOpend;
 - (id)initWithStyle:(UITableViewStyle)style dataDictArray:(NSArray*)dataDictArraySet Tag:(UnUsualLeafTableViewControllerSituation)situation;
 
+- (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number;
 @end

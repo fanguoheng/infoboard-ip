@@ -100,7 +100,7 @@
     [unusualInfoController release];
     [bussSearchInfoController release];
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    //self.view.backgroundColor = [UIColor whiteColor];
     scrollView.contentSize = CGSizeMake(scrollViewFrameWidth * viewBoardControllersCount, scrollViewFrameHeight);
     scrollView.alpha = 0.0f;
     
@@ -203,19 +203,19 @@
     return allowRotationLanscape?interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown:interfaceOrientation == UIInterfaceOrientationPortrait;
 }
 
-
+UIInterfaceOrientation temp;
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {    
     //allowScrollChangePage = NO;
     //scrollView.pagingEnabled = NO;
+    temp =toInterfaceOrientation;
+    CGFloat currentOffsetX = scrollView.contentOffset.x;
     CGFloat scrollViewFrameWidth = scrollView.frame.size.width;
     CGFloat scrollViewFrameHeight = scrollView.frame.size.height;
-    CGFloat currentOffsetX = scrollView.contentOffset.x;
-    scrollView.contentSize = CGSizeMake(scrollViewFrameWidth * viewBoardControllersCount, scrollViewFrameHeight);
-    
+    scrollView.contentSize = CGSizeMake(scrollViewFrameWidth * viewBoardControllersCount, scrollViewFrameHeight);    
     if (toInterfaceOrientation == UIInterfaceOrientationPortrait)
     {
-        //NSLog(@"Portrait");        
+        //NSLog(@"Portrait");
         for (NSInteger i=0; i<viewBoardControllersCount; i++) {
             [[viewBoardControllers objectAtIndex:i] setView:[[viewBoardControllers objectAtIndex:i] originView]];
             [[[viewBoardControllers objectAtIndex:i] view] setFrame:CGRectMake(scrollViewFrameWidth * i, 0.0f, scrollViewFrameWidth-kViewGap, scrollViewFrameHeight)];
@@ -233,23 +233,16 @@
             [scrollView setContentOffset:CGPointMake(1360.0f, 0.0f) animated:NO];
         }
         [[viewBoardControllers objectAtIndex:pageControl.currentPage] updateOriginView:nil];
-         
         [[viewBoardFrontViews objectAtIndex:pageControl.currentPage] setAlpha:0.0f];
-        
-        //半透明度渐变动画 
-        [[[viewBoardControllers objectAtIndex:pageControl.currentPage]view ] setAlpha:0.0f];
-        [UIView beginAnimations:@"animationLandscapeViewFadeIn" context:nil]; 
-        [UIView setAnimationDuration:0.35f]; 
-        [[[viewBoardControllers objectAtIndex:pageControl.currentPage] view] setAlpha:1.0f];
-        [UIView commitAnimations];
+        [[[viewBoardControllers objectAtIndex:pageControl.currentPage]view ] setAlpha:0.0f];       
     }
     
-    else if(toInterfaceOrientation == UIInterfaceOrientationLandscapeRight | toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft)
+    else if(toInterfaceOrientation == UIInterfaceOrientationLandscapeRight ||toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft)
     {        
         //NSLog(@"Landscape");
         for (NSInteger i=0; i<viewBoardControllersCount; i++) {
             [[viewBoardControllers objectAtIndex:i] setView:[[viewBoardControllers objectAtIndex:i] landscapeView]];
-            [[[viewBoardControllers objectAtIndex:i] view] setFrame:CGRectMake(scrollViewFrameWidth * i, 0.0f, scrollViewFrameWidth-kViewGap, scrollViewFrameHeight)];
+            [[[viewBoardControllers objectAtIndex:i] view] setFrame:CGRectMake(scrollViewFrameWidth * i, 1.0f, scrollViewFrameWidth-kViewGap, scrollViewFrameHeight)];
             //NSLog(@"lanscapeView %d -> %f %f %f %f",i,[[viewBoardControllers objectAtIndex:i] view].frame.origin.x,[[viewBoardControllers objectAtIndex:i] view].frame.origin.y,[[viewBoardControllers objectAtIndex:i] view].frame.size.width,[[viewBoardControllers objectAtIndex:i] view].frame.size.height);
         }
         if (currentOffsetX<160.0f) {
@@ -266,19 +259,38 @@
         [[viewBoardControllers objectAtIndex:pageControl.currentPage] updateLandscapeView:nil];
         //半透明度渐变动画 
         [[[viewBoardControllers objectAtIndex:pageControl.currentPage]view ] setAlpha:0.0f];
-        [UIView beginAnimations:@"animationLandscapeViewFadeIn" context:nil]; 
-        [UIView setAnimationDuration:1.8f]; 
-        [[[viewBoardControllers objectAtIndex:pageControl.currentPage] view] setAlpha:1.0f];
-        [UIView commitAnimations];
     }
 }
 
-/*
+
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-    scrollView.pagingEnabled = YES;
+
+    if (temp == UIInterfaceOrientationLandscapeRight || temp == UIInterfaceOrientationLandscapeLeft)
+    {        
+        [UIView beginAnimations:@"animationLandscapeViewFadeIn" context:nil]; 
+        [UIView setAnimationDuration:0.35f]; 
+        [[[viewBoardControllers objectAtIndex:pageControl.currentPage] view] setAlpha:1.0f];
+        [UIView commitAnimations];
+        [scrollView setFrame:CGRectMake(0.0, 1.0, 500.0, 263.0)];
+        [navBar removeFromSuperview];}
+    else if(temp==UIInterfaceOrientationPortrait)
+    {  
+        //半透明度渐变动画 
+        [UIView beginAnimations:@"animationLandscapeViewFadeIn" context:nil]; 
+        [UIView setAnimationDuration:0.35f]; 
+        [[[viewBoardControllers objectAtIndex:pageControl.currentPage] view] setAlpha:1.0f];
+        [UIView commitAnimations];  
+        
+        [scrollView setFrame:CGRectMake(0.0, 44.0, 340.0, 379.0)];
+        [navBar setFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
+        [self.view addSubview:navBar];
+    }
+    CGFloat scrollViewFrameWidth = scrollView.frame.size.width;
+    CGFloat scrollViewFrameHeight = scrollView.frame.size.height;
+    scrollView.contentSize = CGSizeMake(scrollViewFrameWidth * viewBoardControllersCount, scrollViewFrameHeight);   
 }
-*/
+
 #pragma mark - Scroll and pagecontrol paging
 
 
@@ -336,21 +348,6 @@
 #pragma mark - shops selection
 -(IBAction)requestAllShopsFromHostAddr:(id)sender
 {
-    /*
-    if([hostAddrTextField.text isEqualToString:@"172.16.23.70:8080"])
-    {
-        NSString *shopListAddr = [[NSString alloc]initWithFormat:@"http://172.16.23.80:8902/STMC/ScanData.json?methodName=GetClientPermission&shopId=0"]; 
-        
-        ASIHTTPRequest *allShopsRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:shopListAddr]];
-        [shopListAddr release];
-        [allShopsRequest setDelegate:self];
-        allShopsRequest.didFinishSelector = @selector(didFinishAllShopsRequest:);
-        allShopsRequest.didFailSelector = @selector(didFailAllShopsRequest:);
-        [allShopsRequest startAsynchronous];
-    }
-    else
-        [self didFailAllShopsRequest:nil];
-     */
     NSString *shopListAddr = [[NSString alloc]initWithFormat:@"http://%@/STMC/ScanData.json?methodName=GetClientPermission&shopId=0",hostAddrTextField.text]; 
     
     ASIHTTPRequest *allShopsRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:shopListAddr]];
@@ -396,6 +393,7 @@
         self.provinces = [[NSMutableArray alloc]initWithArray:[provincesShops allKeys]];
         NSString *nationwideShopsStr = [[NSString alloc]initWithString:@"全国"];
         [provinces insertObject:nationwideShopsStr atIndex:0];
+        [nationwideShopsStr release];
         NSString *nationwideShopsID = [[NSString alloc]initWithString:@"all"];
         NSString *nationwideShopsName = [[NSString alloc]initWithString:@"全国所有站点"];
 
@@ -529,7 +527,7 @@
 #pragma mark - viewBoards Manage
 - (void) loadAllViewBoardsWithAddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet
 {
-    pageControl.backgroundColor = [UIColor whiteColor];
+    //pageControl.backgroundColor = [UIColor whiteColor];
     //self.view.backgroundColor = [UIColor whiteColor];
     scrollView.alpha = 1.0f;
     for (id anyViewBoardController in viewBoardControllers) {
@@ -569,9 +567,9 @@
     
     [UIView beginAnimations:@"animationScrollviewWhite" context:nil];
     [UIView setAnimationDuration:0.7f]; 
-    self.view.backgroundColor = [UIColor whiteColor];
-    scrollView.backgroundColor = [UIColor whiteColor];
-    pageControl.backgroundColor = [UIColor whiteColor];
+    //self.view.backgroundColor = [UIColor whiteColor];
+    //scrollView.backgroundColor = [UIColor whiteColor];
+    //pageControl.backgroundColor = [UIColor whiteColor];
     allViewsPicView.alpha = 1.0f;
     [UIView commitAnimations];
     [NSTimer scheduledTimerWithTimeInterval:0.8f
@@ -607,9 +605,9 @@
     [UIView beginAnimations:@"animationScrollviewDark" context:nil]; 
     [UIView setAnimationDuration:0.6f];
     allViewsPicView.alpha = 0.0f;
-    self.view.backgroundColor = [UIColor darkGrayColor];
-    scrollView.backgroundColor = [UIColor darkTextColor];
-    pageControl.backgroundColor = [UIColor darkTextColor];
+    //self.view.backgroundColor = [UIColor darkGrayColor];
+    //scrollView.backgroundColor = [UIColor darkTextColor];
+    //pageControl.backgroundColor = [UIColor darkTextColor];
     [UIView commitAnimations];
     Float32 scrollViewFrameWidth = scrollView.frame.size.width;
     Float32 scrollViewFrameHeight = scrollView.frame.size.height;

@@ -54,7 +54,6 @@
 				</array>
 				<string key="NSFrameSize">{320, 379}</string>
 				<reference key="NSSuperview"/>
-				<reference key="NSNextKeyView"/>
 				<object class="NSColor" key="IBUIBackgroundColor" id="286252709">
 					<int key="NSColorSpace">1</int>
 					<bytes key="NSRGB">MCAwIDAAA</bytes>
@@ -64,7 +63,7 @@
 			<object class="IBUIView" id="823407570">
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
-				<string key="NSFrameSize">{480, 274}</string>
+				<string key="NSFrameSize">{480, 262}</string>
 				<reference key="NSSuperview"/>
 				<reference key="IBUIBackgroundColor" ref="286252709"/>
 				<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">

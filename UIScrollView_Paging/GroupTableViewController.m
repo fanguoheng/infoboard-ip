@@ -118,18 +118,18 @@
     cellPortrait.grpName.text = [grpDict objectForKey:@"grpname"];
     cellPortrait.grpName.textColor = answerRateColor;
     //cellPortrait.login.text = [NSString stringWithFormat:@"%d",[[grpDict objectForKey:@"login"]intValue]];
-    cellPortrait.transAgt.text = [NSString stringWithFormat:@"%d",[[grpDict objectForKey:@"transagt"]intValue]];
-    cellPortrait.agtAnswer.text = [NSString stringWithFormat:@"%d",[[grpDict objectForKey:@"agtanswer"]intValue]];
+    cellPortrait.transAgt.text = [self mutableStringWithCommaConvertFromInteger:[[grpDict objectForKey:@"transagt"]intValue]];
+    cellPortrait.agtAnswer.text = [self mutableStringWithCommaConvertFromInteger:[[grpDict objectForKey:@"agtanswer"]intValue]];
     cellPortrait.answerRate.text = [NSString stringWithFormat:@"%d",(NSInteger)(answerRate*100)];
     cellPortrait.answerRate.textColor = answerRateColor;
     cellPortrait.percentSign.textColor = answerRateColor;
     //cellPortrait.queueLen.text = [NSString stringWithFormat:@"%d",[[grpDict objectForKey:@"queuelen"]intValue]];
-    
+    /*
     CVTableCellBGView *bgView = [[CVTableCellBGView alloc] init];
     bgView.cellStyle = CellStyleMiddle;
     bgView.gradientColor = GradientColorBlack;
     [cellPortrait setBackgroundView:bgView];
-    [bgView release];
+    [bgView release];*/
     
     return cellPortrait;
 
@@ -173,4 +173,28 @@
     return YES;
 }
 */
+
+#pragma mark - string format methods
+- (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number
+{
+    if (number < 1000) {
+        NSMutableString *resultString = [[NSMutableString alloc ]initWithFormat:@"%d", number];
+        return [resultString autorelease];
+    }
+    else
+    {
+        NSMutableString *resultString = [[NSMutableString alloc ]initWithFormat:@"%d,%d", number/1000, number%1000];
+        if ((number%1000)<10) 
+        {
+            NSRange range = [resultString rangeOfString:@","];
+            [resultString insertString:@"00" atIndex:range.location+1]; 
+        }
+        else if ((number%1000)<100) 
+        {
+            NSRange range = [resultString rangeOfString:@","];
+            [resultString insertString:@"0" atIndex:range.location+1]; 
+        }
+        return [resultString autorelease];
+    }
+}
 @end

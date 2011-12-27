@@ -10,5 +10,6 @@
 
 @interface AgtTableViewController : UITableViewController
 @property (nonatomic,retain) NSArray *dataDictArray;
-@property (nonatomic,copy) NSString *shopId;
+@property (nonatomic,retain) NSArray *statusArray;
+- (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number;
 @end
