@@ -11,16 +11,14 @@
 @class ASIHTTPRequest;
 @class GroupTableViewController;
 @class AgtTableViewController;
-@interface DetailsViewController : UIViewController {
+@interface DetailsViewController : UIViewController <UITableViewDelegate,UINavigationControllerDelegate>{
     NSString *allGrpInfoWebAddr;
     NSString *agtInfoWebAddr;
     
     NSTimer *timer;
     NSInteger refreshInterval;
     
-    NSMutableArray *agtInfoDictArray;
-    
-    NSMutableArray *allGrpInfoDictArray;
+    NSMutableArray *magtInfoDictArray;
     
     NSString *num0Str;
     NSString *num1Str;
@@ -49,9 +47,6 @@
 >>>>>>> local
 @property (nonatomic, retain) NSTimer *timer;
 @property (nonatomic) NSInteger refreshInterval;
-
-//@property (nonatomic, retain) NSArray *allGrpInfoDictArray;
-
 
 @property (copy) NSString *workStatusResultStr;
 @property (copy) NSString *loginStr;

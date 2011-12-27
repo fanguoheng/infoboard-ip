@@ -545,13 +545,13 @@
 {
 
     // Create barChart from theme
-    self.barChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(185.0f, 0.0f, 295.0f, 274.0f)];
+    self.barChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(185.0f, 0.0f, 295.0f, 220.0f)];
     barChartViewLandscape.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin| UIViewAutoresizingFlexibleRightMargin;
     //barChartViewLandscape.allowPinchScaling = YES;
     [self.landscapeView addSubview:self.barChartViewLandscape];
     barChartLandscape = [[CPTXYGraph alloc] initWithFrame:CGRectZero];
-	CPTTheme *barChartTheme = [CPTTheme themeNamed:kCPTStocksTheme];
-    [barChartLandscape applyTheme:barChartTheme];
+//	CPTTheme *barChartTheme = [CPTTheme themeNamed:kCPTDarkGradientTheme];
+//    [barChartLandscape applyTheme:barChartTheme];
 	CPTGraphHostingView *barChartHostingView = (CPTGraphHostingView *)self.barChartViewLandscape;
     barChartHostingView.hostedGraph = barChartLandscape;
     

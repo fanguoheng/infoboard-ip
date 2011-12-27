@@ -26,8 +26,6 @@
 
 @synthesize timer,refreshInterval;
 
-//@synthesize agtInfoDictArray;
-//@synthesize allGrpInfoDictArray;
 
 @synthesize workStatusResultStr;
 @synthesize loginStr;
@@ -67,13 +65,9 @@
         mAgtInfoCashResponseStr = [[NSString alloc]init];
         agtCallInfoCashResponseStr = [[NSString alloc]init];
         
-        GroupTableViewController *_groupTableViewController = [[GroupTableViewController alloc]initWithStyle:UITableViewStylePlain];
-        self.groupTableViewController = _groupTableViewController;
-        [_groupTableViewController release];
-        AgtTableViewController *_agtTableViewController = [[AgtTableViewController alloc]initWithStyle:UITableViewStylePlain];
-        self.agtTableViewController = _agtTableViewController;
-        [_agtTableViewController release];
-    
+        groupTableViewController  = [[GroupTableViewController alloc]initWithStyle:UITableViewStylePlain];
+        groupTableViewController.tableView.delegate = self;
+        agtTableViewController = [[AgtTableViewController alloc]initWithStyle:UITableViewStylePlain];    
         
     }
     return self;
@@ -153,11 +147,10 @@
     UINavigationController *_navController = [[UINavigationController alloc ]initWithRootViewController:groupTableViewController];
     self.navController = _navController;
     [_navController release];
-    //navController.delegate = self;
-    //[navController.navigationBar setFrame:CGRectMake(navController.navigationBar.frame.origin.x, navController.navigationBar.frame.origin.x, navController.navigationBar.frame.size.width, navController.navigationBar.frame.size.height*0.618f)];
+    navController.delegate = self;
     navController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
     navController.navigationBar.topItem.title =@"组名   转座席量 接通量 接通率";
-    [navController.view setFrame:CGRectMake(0.0f, 00.0f, 320.0f, 385.0f)];
+    [navController.view setFrame:CGRectMake(0.0f, 00.0f, 320.0f, 379.0f)];
     [self.view addSubview:navController.view];
     
     UIImage *pauseImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"media-playback-pause" ofType:@"png"]];
@@ -215,19 +208,12 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-/*
-#pragma mark - Table View Data Source Methods
+
+#pragma mark - Table View
 
 
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-  
-    return [allGrpInfoDictArray count];
-}
-
-
-- (UITableViewCell *)tableView:(UITableView *)tableView
-         cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
 
 
@@ -270,10 +256,7 @@
     }
 >>>>>>> local
     
-        return cellPortrait;
-     
 }
-
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -288,8 +271,10 @@
     [title release];
     [messageShow release];
 }
-*/
-
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 44.0f;
+}
 #pragma mark - download and update data
 -(void)showWaiting {
     [loadingOrigin startAnimating];
@@ -315,7 +300,7 @@
     }
     //NSLog(@"%d ifLoading in requestData",ifLoading);
     
-    ASIHTTPRequest *allGrpInfoRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:allGrpInfoWebAddr]];
+    ASIHTTPRequest *allGrpInfoRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:webAddr]];
     [allGrpInfoRequest setDelegate:self];
     [allGrpInfoRequest startAsynchronous];    
 }
@@ -362,11 +347,9 @@
                 (self.view == originView)?[self updateOriginView:request]:[self updateLandscapeView:request];
 >>>>>>> local
             }
-            
-            [groupTableViewController.tableView reloadData];
         }
     }
-    else if (![request.url.absoluteString isEqualToString:mAgtInfoCashResponseStr])
+    else if ([request.url.absoluteString isEqualToString:mAgtInfoWebAddr])
     {
 <<<<<<< master
         NSArray *tmpArray = [responseString JSONValue];
@@ -454,6 +437,22 @@
 {
     groupTableViewController.dataDictArray = nil;
     [groupTableViewController.tableView reloadData];
+}
+
+#pragma mark - UINavigationControllerDelegate
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if (viewController == groupTableViewController) {
+        [navigationController setNavigationBarHidden:YES];
+    }
+    else
+    {
+        [navigationController setNavigationBarHidden:NO];
+        navController.navigationBar.topItem.leftBarButtonItem.title = @"返回";
+        [self requestData];
+        self.webAddr = allGrpInfoWebAddr;
+    }
 }
 #pragma mark - touch and controlPad
 - (IBAction)showControlPadView:(id)sender

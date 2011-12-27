@@ -13,17 +13,17 @@
 
 @interface StatisticsController : UIViewController<UIActionSheetDelegate,CPTPieChartDataSource, CPTPieChartDelegate, CPTPlotDataSource>
 {
-    CPTGraphHostingView *barChartView;   
-    CPTXYGraph *barChart;
-    CPTBarPlot *barPlot;
-    CPTGraphHostingView *barChartViewLandscape;   
+    CPTGraphHostingView *barChartView; //一个装一个柱状图或者饼图 
+    CPTXYGraph *barChart;//xy背景图，表格
+    CPTBarPlot *barPlot;//柱状
+    CPTGraphHostingView *barChartViewLandscape;  
     CPTXYGraph *barChartLandscape;
     CPTBarPlot *barPlotLandscape;
     NSArray *barPlotData;
     
     CPTGraphHostingView *pieChartView;
     CPTXYGraph *pieChart;
-    CPTPieChart *piePlot;
+    CPTPieChart *piePlot;//chart饼图
     CPTGraphHostingView *pieChartViewLandscape;
     CPTXYGraph *pieChartLandscape;
     CPTPieChart *piePlotLandscape;

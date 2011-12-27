@@ -221,6 +221,8 @@
     self.refreshIntervalSlider = nil;
     self.refreshIntervalLabel = nil;
     self.pauseOrStartButton = nil;
+    self.loadingOrigin =nil;
+    self.loadingLandscape =nil;
     
 }
 
@@ -556,12 +558,12 @@
     // Add pie chart
     self.piePlot = [[CPTPieChart alloc] init];
     piePlot.dataSource = self;
-	piePlot.pieRadius = 58.0;
+	piePlot.pieRadius = 61.0;
     piePlot.labelOffset = -25.0f;
     piePlot.identifier = @"PiePlot";
 	piePlot.startAngle = 0.0f;
 	piePlot.sliceDirection = CPTPieDirectionCounterClockwise;
-	piePlot.centerAnchor = CGPointMake(0.5, 0.5);
+	piePlot.centerAnchor = CGPointMake(0.5, 0.45);
 	piePlot.borderLineStyle = barLineStyle;//[CPTLineStyle lineStyle];
     // Overlay gradient for pie chart
     CPTGradient *overlayGradient = [[[CPTGradient alloc] init]autorelease];
@@ -578,29 +580,35 @@
 - (void)createBarChartAndPiePlotInLandscapeView 
 {
     // Create barChart from theme
-    self.barChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(0, 0, 238, 274)];
+    self.barChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(0, 0, 238, 263)];
     barChartViewLandscape.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin| UIViewAutoresizingFlexibleRightMargin;
     [self.landscapeView addSubview:self.barChartViewLandscape];
     barChartLandscape = [[CPTXYGraph alloc] initWithFrame:CGRectZero];
-	CPTTheme *barChartTheme = [CPTTheme themeNamed:kCPTStocksTheme];
-    [barChartLandscape applyTheme:barChartTheme];
+//	CPTTheme *barChartTheme = [CPTTheme themeNamed:kCPTDarkGradientTheme];
+//    CPTTheme 统计图主题
+//    [barChartLandscape applyTheme:barChartTheme];
 	CPTGraphHostingView *barChartHostingView = (CPTGraphHostingView *)self.barChartViewLandscape;
     barChartHostingView.hostedGraph = barChartLandscape;
     
     // Border
     barChartLandscape.plotAreaFrame.borderLineStyle = nil;
-    barChartLandscape.plotAreaFrame.cornerRadius = 15.0f;
+    barChartLandscape.plotAreaFrame.cornerRadius = 0.0f;
 	
     // Paddings
-    barChartLandscape.paddingLeft = 0.0f;
+    barChartLandscape.paddingLeft = 0.0f;//容器与表格层的间隔，标题写在表格层上，背景图也是在表格层上
     barChartLandscape.paddingRight = 0.0f;
-    barChartLandscape.paddingTop = 0.0f;
+    barChartLandscape.paddingTop = 10.0f;
     barChartLandscape.paddingBottom = .0f;
 	
-    barChartLandscape.plotAreaFrame.paddingLeft = 10.0;
+    barChartLandscape.plotAreaFrame.paddingLeft = 10.0;//表格层与柱状图形层的间隔
 	barChartLandscape.plotAreaFrame.paddingTop = 10.0;
 	barChartLandscape.plotAreaFrame.paddingRight = 10.0;
 	barChartLandscape.plotAreaFrame.paddingBottom = 36.0;
+    barChartLandscape.title = @"客户满意度";
+    CPTMutableTextStyle *whiteText = [CPTMutableTextStyle textStyle];
+	whiteText.color = [CPTColor whiteColor];
+	pieChart.titleTextStyle = whiteText;
+    barChartLandscape.titleTextStyle=whiteText;
     
     // Graph title
     /*
@@ -617,15 +625,18 @@
 	// Add plot space for horizontal bar charts
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
     //plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat(90.0f)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)] objectAtIndex:4] intValue]*1.2f)];//y轴的数值范围
+    //compare：默认排序方式，从小到大
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat(5.0f)];
     
     // Create grid line styles
     CPTMutableLineStyle *majorGridLineStyle = [CPTMutableLineStyle lineStyle];
+    //主要线条
     majorGridLineStyle.lineWidth = 1.0f;
     majorGridLineStyle.lineColor = [[CPTColor whiteColor] colorWithAlphaComponent:0.2f];
     
     CPTMutableLineStyle *minorGridLineStyle = [CPTMutableLineStyle lineStyle];
+    //次要线条
     minorGridLineStyle.lineWidth = 1.0f;
     minorGridLineStyle.lineColor = [[CPTColor whiteColor] colorWithAlphaComponent:0.1f];    
     
@@ -639,15 +650,16 @@
     x.minorTickLineStyle = nil;
     x.majorIntervalLength = CPTDecimalFromString(@"1");
     x.orthogonalCoordinateDecimal = CPTDecimalFromString(@"0");
+    //x轴上的标签文字离x轴线的距离
 	//x.title = nil;//@"X Axis";
     //x.titleLocation = CPTDecimalFromFloat(5.0f);
 	//x.titleOffset = 15.0f;
 	
     
 	// Define some custom labels for the data elements
-	x.labelRotation = M_PI/4;
-	x.labelingPolicy = CPTAxisLabelingPolicyNone;
-    x.labelOffset = -10.0f;
+	x.labelRotation = M_PI/4;//x轴文字旋转的角度
+	x.labelingPolicy = CPTAxisLabelingPolicyNone;//x轴不画标签并且不画格线
+    x.labelOffset = -10.0f;//自定义的标签离x轴的距离
     CPTMutableTextStyle *xLabelTextStyle = [CPTTextStyle textStyle];
     xLabelTextStyle.color = [CPTColor whiteColor];
     xLabelTextStyle.fontSize = 11.0f;
@@ -659,8 +671,8 @@
     NSMutableArray *customLabels = [NSMutableArray arrayWithCapacity:[xAxisLabels count]];
     for (NSNumber *tickLocation in customTickLocations) {
         CPTAxisLabel *newLabel = [[CPTAxisLabel alloc] initWithText: [xAxisLabels objectAtIndex:labelLocation++] textStyle:x.labelTextStyle];
-        newLabel.tickLocation = [tickLocation decimalValue];
-        newLabel.offset = x.labelOffset + x.majorTickLength;
+        newLabel.tickLocation = [tickLocation decimalValue];//返回浮点数
+        newLabel.offset = x.labelOffset + x.majorTickLength;//两个标签之间的数值间隔
         newLabel.rotation = M_PI/4;
         [customLabels addObject:newLabel];
         [newLabel release];
@@ -698,30 +710,31 @@
     //barPlot.barOffset = CPTDecimalFromFloat(0.5f);
     barPlotLandscape.identifier = @"BarPlot";
     [barChartLandscape addPlot:barPlotLandscape toPlotSpace:plotSpace];
-    
-    
+    //CPTMutableTextStyle *whiteText = [CPTMutableTextStyle textStyle];
+	//whiteText.color = [CPTColor whiteColor];
     //pieChart
-    pieChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(242,0,238,274)];
+    pieChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(242,0,238,263)];
     pieChartViewLandscape.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin| UIViewAutoresizingFlexibleRightMargin;
     [self.landscapeView addSubview:self.pieChartViewLandscape];
     pieChartLandscape = [[CPTXYGraph alloc] initWithFrame:CGRectZero];
-	CPTTheme *pieChartTheme = [CPTTheme themeNamed:kCPTStocksTheme];
-    [pieChartLandscape applyTheme:pieChartTheme];
+//	CPTTheme *pieChartTheme = [CPTTheme themeNamed:kCPTDarkGradientTheme];
+//    [pieChartLandscape applyTheme:pieChartTheme];
 	CPTGraphHostingView *pieChartHostingView = (CPTGraphHostingView *)self.pieChartViewLandscape;
     pieChartHostingView.hostedGraph = pieChartLandscape;
 	
     pieChartLandscape.paddingLeft = 0.0f;
-	pieChartLandscape.paddingTop = 0.0f;
+	pieChartLandscape.paddingTop = 10.0f;
 	pieChartLandscape.paddingRight = 0.0f;
 	pieChartLandscape.paddingBottom = 0.0f;
 	
 	pieChartLandscape.axisSet = nil;
-	
-    /*
-     pieChart.titleTextStyle.color = [CPTColor whiteColor];
-     pieChart.title = @"从呼叫到接听服务";
+	pieChartLandscape.title=@"接听效率";
+ 	pieChartLandscape.titleTextStyle = whiteText;
+    pieChartLandscape.plotAreaFrame.cornerRadius = 0.0f;
+//     pieChart.titleTextStyle.color = [CPTColor whiteColor];
+     //pieChart.title = @"从呼叫到接听服务";
      //pieChart.titleDisplacement = CGPointMake(70, 0);
-     */
+     
     
     // Add pie chart
     self.piePlotLandscape = [[CPTPieChart alloc] init];
@@ -733,6 +746,7 @@
 	piePlotLandscape.sliceDirection = CPTPieDirectionCounterClockwise;
 	piePlotLandscape.centerAnchor = CGPointMake(0.5, 0.5);
 	piePlotLandscape.borderLineStyle = barLineStyle;
+    //piePlotLandscape.title=@"客户满意度";
     //piePlotLandscape.borderLineStyle = barLineStyle;
     
     // Overlay gradient for pie chart
@@ -744,11 +758,12 @@
     piePlotLandscape.overlayFill = [CPTFill fillWithGradient:overlayGradient];
     //[overlayGradient release];
 	piePlotLandscape.delegate = self;
+
     [pieChartLandscape addPlot:piePlotLandscape];
     [piePlotLandscape release];
     
-    /*
-     // Add legend
+  
+     /*// Add legend
      //CPTLegend *theLegend = [CPTLegend legendWithGraph:pieChartLandscape];
      CPTLegend *theLegend = [[CPTLegend alloc ]initWithGraph:pieChartLandscape];
      theLegend.numberOfColumns = 2;
@@ -760,8 +775,7 @@
      pieChartLandscape.legend = theLegend;
      
      //pieChartLandscape.legendAnchor = CPTRectAnchorRight;
-     pieChartLandscape.legendDisplacement = CGPointMake(0.0, 20.0);
-     */
+     pieChartLandscape.legendDisplacement = CGPointMake(0.0, 20.0);*/
 }
 -(void)updateOriginView:(ASIHTTPRequest *)request
 {
