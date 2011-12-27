@@ -242,7 +242,7 @@ UIInterfaceOrientation temp;
         //NSLog(@"Landscape");
         for (NSInteger i=0; i<viewBoardControllersCount; i++) {
             [[viewBoardControllers objectAtIndex:i] setView:[[viewBoardControllers objectAtIndex:i] landscapeView]];
-            [[[viewBoardControllers objectAtIndex:i] view] setFrame:CGRectMake(scrollViewFrameWidth * i, 0.0f, scrollViewFrameWidth-kViewGap, scrollViewFrameHeight)];
+            [[[viewBoardControllers objectAtIndex:i] view] setFrame:CGRectMake(scrollViewFrameWidth * i, 1.0f, scrollViewFrameWidth-kViewGap, scrollViewFrameHeight)];
             //NSLog(@"lanscapeView %d -> %f %f %f %f",i,[[viewBoardControllers objectAtIndex:i] view].frame.origin.x,[[viewBoardControllers objectAtIndex:i] view].frame.origin.y,[[viewBoardControllers objectAtIndex:i] view].frame.size.width,[[viewBoardControllers objectAtIndex:i] view].frame.size.height);
         }
         if (currentOffsetX<160.0f) {
@@ -272,7 +272,7 @@ UIInterfaceOrientation temp;
         [UIView setAnimationDuration:0.35f]; 
         [[[viewBoardControllers objectAtIndex:pageControl.currentPage] view] setAlpha:1.0f];
         [UIView commitAnimations];
-        [scrollView setFrame:CGRectMake(0.0, 0.0, 500.0, 263.0)];
+        [scrollView setFrame:CGRectMake(0.0, 1.0, 500.0, 263.0)];
         [navBar removeFromSuperview];}
     else if(temp==UIInterfaceOrientationPortrait)
     {  
@@ -393,6 +393,7 @@ UIInterfaceOrientation temp;
         self.provinces = [[NSMutableArray alloc]initWithArray:[provincesShops allKeys]];
         NSString *nationwideShopsStr = [[NSString alloc]initWithString:@"全国"];
         [provinces insertObject:nationwideShopsStr atIndex:0];
+        [nationwideShopsStr release];
         NSString *nationwideShopsID = [[NSString alloc]initWithString:@"all"];
         NSString *nationwideShopsName = [[NSString alloc]initWithString:@"全国所有站点"];
 

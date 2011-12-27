@@ -10,6 +10,5 @@
 
 @interface BSTableHeadView : UIView
 @property (nonatomic, retain) UILabel *headLabel;
-@property (nonatomic, copy) NSString *headStr;
 - (id)initWithFrame:(CGRect)frame headStr:(NSString *)str;
 @end

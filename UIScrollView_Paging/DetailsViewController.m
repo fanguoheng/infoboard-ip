@@ -16,13 +16,8 @@
 
 @synthesize addrPrefix;
 @synthesize addrPostfix;
-<<<<<<< master
-@synthesize allGrpInfoWebAddr,mAgtInfoWebAddr;
-
-=======
 @synthesize allGrpInfoWebAddr,mAgtInfoWebAddr,agtCallInfoWebAddr,webAddr;
 @synthesize selectedGrpId;
->>>>>>> local
 
 @synthesize timer,refreshInterval;
 
@@ -33,11 +28,6 @@
 @synthesize workStatusStr;
 @synthesize occupyStr;
 
-@synthesize num0Str;
-@synthesize num1Str;
-@synthesize num2Str;
-
-
 @synthesize originView;
 @synthesize landscapeView;
 @synthesize controlPadView,refreshIntervalLabel,refreshIntervalSlider,pauseOrStartButton;
@@ -46,28 +36,23 @@
 @synthesize delegate,allGrpInfoCashResponseStr,mAgtInfoCashResponseStr,agtCallInfoCashResponseStr;
 @synthesize loadingOrigin,loadingLandscape;
 @synthesize ifLoading;
-<<<<<<< master
-=======
+
 @synthesize allGrpInfoDictArray,mAgtInfoDict;
 
->>>>>>> local
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
         self.lists = [[NSMutableArray alloc] init];
-        
-        self.num0Str = [NSString stringWithFormat:@"%@",@"0"];
-        self.num1Str = [NSString stringWithFormat:@"%@",@"1"];
-        self.num2Str = [NSString stringWithFormat:@"%@",@"2"];
         allGrpInfoCashResponseStr = [[NSString alloc]init];
         mAgtInfoCashResponseStr = [[NSString alloc]init];
         agtCallInfoCashResponseStr = [[NSString alloc]init];
         
-        groupTableViewController  = [[GroupTableViewController alloc]initWithStyle:UITableViewStylePlain];
+        groupTableViewController  = [[GroupTableViewController alloc]initWithStyle:UITableViewStyleGrouped];
         groupTableViewController.tableView.delegate = self;
-        agtTableViewController = [[AgtTableViewController alloc]initWithStyle:UITableViewStylePlain];    
+        agtTableViewController = [[AgtTableViewController alloc]initWithStyle:UITableViewStyleGrouped];    
         
     }
     return self;
@@ -80,11 +65,7 @@
     //self.allGrpInfoWebAddr =   [[NSString alloc]initWithString:@"http://121.32.133.59:8502/FlexBoard/JsonFiles/AllGrpInfo.json"];
     self.addrPrefix = addrPrefixSet;
     self.addrPostfix = addrPostfixSet;
-<<<<<<< master
-    //self.agtInfoWebAddr = [[NSString alloc ]initWithFormat:@"%@mAgtInfo%@",addrPrefix,addrPostfix];
-    self.allGrpInfoWebAddr = [[NSString alloc ]initWithFormat:@"%@AllGrpInfo%@",addrPrefix,addrPostfix];
-    //NSLog(@"%@",allGrpInfoWebAddr);
-=======
+
     NSString *str1 = [[NSString alloc]initWithFormat:@"%@AllGrpInfo%@",addrPrefix,addrPostfix];
     self.allGrpInfoWebAddr = str1;
     [str1 release];
@@ -94,7 +75,6 @@
     self.agtCallInfoWebAddr = str3;
     self.webAddr = allGrpInfoWebAddr;
     
->>>>>>> local
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil AddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)AddrPostfixSet
 {
@@ -149,7 +129,7 @@
     [_navController release];
     navController.delegate = self;
     navController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
-    navController.navigationBar.topItem.title =@"组名   转座席量 接通量 接通率";
+    navController.navigationBar.topItem.title =@"返回";
     [navController.view setFrame:CGRectMake(0.0f, 00.0f, 320.0f, 379.0f)];
     [self.view addSubview:navController.view];
     
@@ -211,53 +191,59 @@
 
 #pragma mark - Table View
 
-
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+        
+    NSString *headerTitle = [[NSString alloc]initWithFormat:@"座席组监控: %d个",[allGrpInfoDictArray count]];
+    return [[[DetailHeaderView alloc] initWithFrame:CGRectMake(0.0, 0.0, groupTableViewController.tableView.frame.size.width, 22.0) title:headerTitle delegate:self] autorelease];
+    [headerTitle release];
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 22.0;
+}
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-
-
-    static NSString *CustomCellPortraitIdentifier = @"CustomCellPortraitIdentifier";
-    CustomCellPortrait *cellPortrait = (CustomCellPortrait *)[tableView dequeueReusableCellWithIdentifier:CustomCellPortraitIdentifier];
-    if (cellPortrait == nil)
-    {
-<<<<<<< master
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"CustomCellPortrait" owner:self options:nil];
-        for (id oneObject in nib)
-                if([oneObject isKindOfClass:[CustomCellPortrait class]])
-                    cellPortrait = (CustomCellPortrait *)oneObject;
-    } 
-
-    NSDictionary *grpDict =  [allGrpInfoDictArray objectAtIndex:indexPath.row];
-    float answerRate = [[grpDict objectForKey:@"answerrate"]floatValue];
-    UIColor *answerRateColor = [UIColor colorWithRed:(1.0f-answerRate) green:answerRate blue:0.25f alpha:1.0f];
-    cellPortrait.groupIcon.backgroundColor = answerRateColor;
-    cellPortrait.grpName.text = [grpDict objectForKey:@"grpname"];
-    cellPortrait.grpName.textColor = answerRateColor;
-    //cellPortrait.login.text = [NSString stringWithFormat:@"%d",[[grpDict objectForKey:@"login"]intValue]];
-    cellPortrait.transAgt.text = [NSString stringWithFormat:@"%d",[[grpDict objectForKey:@"transagt"]intValue]];
-    cellPortrait.agtAnswer.text = [NSString stringWithFormat:@"%d",[[grpDict objectForKey:@"agtanswer"]intValue]];
-    cellPortrait.answerRate.text = [NSString stringWithFormat:@"%d",(NSInteger)(answerRate*100)];
-    cellPortrait.answerRate.textColor = answerRateColor;
-    cellPortrait.percentSign.textColor = answerRateColor;
-    //cellPortrait.queueLen.text = [NSString stringWithFormat:@"%d",[[grpDict objectForKey:@"queuelen"]intValue]];
+    if ([addrPostfix hasSuffix:@"all"] || [addrPostfix hasSuffix:@"*"]) {
+        NSString *title = [[NSString alloc]initWithString:@"提示"];
+        NSString *messageShow = [[NSString alloc]initWithString:@"抱歉，查看全国或某省(市、自治区)所有站点时无法查看站点座席列表"];
+        UIAlertView *alertView = [[UIAlertView alloc ]initWithTitle:title message:messageShow delegate:nil cancelButtonTitle:@"我知道了" otherButtonTitles:nil, nil];
         
-    CVTableCellBGView *bgView = [[CVTableCellBGView alloc] init];
-    bgView.cellStyle = CellStyleMiddle;
-    bgView.gradientColor = GradientColorBlack;
-    [cellPortrait setBackgroundView:bgView];
-    [bgView release];
-=======
+        [alertView show];
+        [alertView release];
+        [title release];
+        [messageShow release];
+    }
+    else
+    {
         [navController pushViewController:agtTableViewController animated:YES];
         self.webAddr = mAgtInfoWebAddr;
         [self requestData];
         self.webAddr = allGrpInfoWebAddr;
         self.selectedGrpId = [[groupTableViewController.dataDictArray objectAtIndex:indexPath.row]objectForKey:@"grpid"];
     }
->>>>>>> local
     
 }
-
+- (void) viewClicked
+{
+    if ([addrPostfix hasSuffix:@"all"] || [addrPostfix hasSuffix:@"*"]) {
+        NSString *title = [[NSString alloc]initWithString:@"提示"];
+        NSString *messageShow = [[NSString alloc]initWithString:@"抱歉，查看全国或某省(市、自治区)所有站点时无法查看站点座席列表"];
+        UIAlertView *alertView = [[UIAlertView alloc ]initWithTitle:title message:messageShow delegate:nil cancelButtonTitle:@"我知道了" otherButtonTitles:nil, nil];
+        
+        [alertView show];
+        [alertView release];
+        [title release];
+        [messageShow release];
+    }
+    else
+    {
+        [navController pushViewController:agtTableViewController animated:YES];
+        self.webAddr = mAgtInfoWebAddr;
+        [self requestData];
+        self.webAddr = allGrpInfoWebAddr;
+        self.selectedGrpId = @"_ALLGROUPS_";
+    }
+}
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -271,10 +257,8 @@
     [title release];
     [messageShow release];
 }
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 44.0f;
-}
+
+
 #pragma mark - download and update data
 -(void)showWaiting {
     [loadingOrigin startAnimating];
@@ -311,20 +295,6 @@
 {
     NSLog(@"SUCCEED");
     NSString *responseString = [[NSString alloc] initWithData:[request responseData] encoding:NSUTF8StringEncoding];    
-<<<<<<< master
-    if (![request.url.absoluteString isEqualToString:allGrpInfoCashResponseStr]) {
-        NSArray *tmpArray = [responseString JSONValue];
-        if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]]) {
-            self.allGrpInfoCashResponseStr = responseString;
-            groupTableViewController.dataDictArray = tmpArray;
-            
-            if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:)]) {
-                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
-                NSString *timeString=[formatter stringFromDate: [NSDate date]];
-                [formatter release];
-                [delegate willInfoBoardUpdateUIOnPage:timeString];
-=======
     if ([request.url.absoluteString isEqualToString:allGrpInfoWebAddr]) {
         if (![allGrpInfoCashResponseStr isEqualToString:responseString]) {
             NSArray *tmpArray = [responseString JSONValue];
@@ -342,23 +312,13 @@
                 }
                 if (ifLoading==NO){
                     [self hideWaiting];
-                    //NSLog(@"hideWating");
                 }
                 (self.view == originView)?[self updateOriginView:request]:[self updateLandscapeView:request];
->>>>>>> local
             }
         }
     }
     else if ([request.url.absoluteString isEqualToString:mAgtInfoWebAddr])
     {
-<<<<<<< master
-        NSArray *tmpArray = [responseString JSONValue];
-        if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
-        {
-            if (ifLoading==NO){
-                [self hideWaiting];
-                NSLog(@"hideWating");
-=======
         if (![mAgtInfoCashResponseStr isEqualToString:responseString]) {
             NSArray *tmpArray = [responseString JSONValue];
             if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
@@ -366,11 +326,15 @@
                 self.mAgtInfoCashResponseStr = responseString;
                 NSMutableDictionary *selectedAgtDict = [[NSMutableDictionary alloc]init ];
                 for (NSDictionary *anyAgt in tmpArray) {
-                    if ([[anyAgt objectForKey:@"agtlogongrps"] rangeOfString:selectedGrpId].length>0) {
+                    if ([selectedGrpId isEqualToString:@"_ALLGROUPS_"]) {
+                        [selectedAgtDict setObject:anyAgt forKey:[anyAgt objectForKey:@"agtid"]];
+                    }
+                    else if ([[anyAgt objectForKey:@"agtlogongrps"] rangeOfString:selectedGrpId].length>0) {
                         [selectedAgtDict setObject:anyAgt forKey:[anyAgt objectForKey:@"agtid"]];
                     }
                 }
                 self.mAgtInfoDict = (NSDictionary*)selectedAgtDict;
+                //NSLog(@"mAgtInfoDict count: %d",[[mAgtInfoDict allKeys] count]);
                 self.webAddr = agtCallInfoWebAddr;
                 [self requestData];
                 self.webAddr = allGrpInfoWebAddr;
@@ -391,10 +355,10 @@
                         [[mAgtInfoDict objectForKey:[anyAgt objectForKey:@"agtid"]]setObject:[anyAgt objectForKey:@"agtcallcnt"] forKey:@"agtcallcnt"];
                     }
                 }
-                
-                agtTableViewController.dataDictArray = [mAgtInfoDict allValues];
+                NSArray *keys = [[mAgtInfoDict allKeys] sortedArrayUsingSelector:@selector(compare:)];
+                NSLog(@"mAgtInfoDict count: %d",[keys count]);
+                agtTableViewController.dataDictArray = [mAgtInfoDict objectsForKeys:keys notFoundMarker:@"NEVERTOBEUSED"];
                 (self.view == originView)?[self updateOriginView:request]:[self updateLandscapeView:request];
->>>>>>> local
             }
         }
     }
@@ -411,9 +375,6 @@
 #pragma mark - UI Update Methods
 - (void) updateOriginView:(ASIHTTPRequest*)request
 {
-<<<<<<< master
-    [groupTableViewController.tableView reloadData];
-=======
     if (!request) {
         [((UITableViewController*)navController.topViewController).tableView reloadData];
     }
@@ -426,7 +387,6 @@
         [agtTableViewController.tableView reloadData];
     }
     
->>>>>>> local
 }
 - (void) updateLandscapeView:(ASIHTTPRequest*)request;
 {
@@ -444,6 +404,8 @@
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
     if (viewController == groupTableViewController) {
+        agtTableViewController.dataDictArray = nil;
+        [agtTableViewController.tableView reloadData];
         [navigationController setNavigationBarHidden:YES];
     }
     else

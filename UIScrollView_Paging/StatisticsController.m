@@ -580,7 +580,7 @@
 - (void)createBarChartAndPiePlotInLandscapeView 
 {
     // Create barChart from theme
-    self.barChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(0, 0, 238, 263)];
+    self.barChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(0, 0, 238.0, 263.0)];
     barChartViewLandscape.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin| UIViewAutoresizingFlexibleRightMargin;
     [self.landscapeView addSubview:self.barChartViewLandscape];
     barChartLandscape = [[CPTXYGraph alloc] initWithFrame:CGRectZero];
@@ -659,14 +659,14 @@
 	// Define some custom labels for the data elements
 	x.labelRotation = M_PI/4;//x轴文字旋转的角度
 	x.labelingPolicy = CPTAxisLabelingPolicyNone;//x轴不画标签并且不画格线
-    x.labelOffset = -10.0f;//自定义的标签离x轴的距离
+    x.labelOffset = -8.0f;//自定义的标签离x轴的距离
     CPTMutableTextStyle *xLabelTextStyle = [CPTTextStyle textStyle];
     xLabelTextStyle.color = [CPTColor whiteColor];
     xLabelTextStyle.fontSize = 11.0f;
     xLabelTextStyle.textAlignment = CPTTextAlignmentRight;
     x.labelTextStyle = xLabelTextStyle;
     NSArray *customTickLocations = [NSArray arrayWithObjects:[NSDecimalNumber numberWithFloat:0.2f], [NSDecimalNumber numberWithFloat:1.2f], [NSDecimalNumber numberWithFloat:2.2f], [NSDecimalNumber numberWithFloat:3.2f],[NSDecimalNumber numberWithFloat:4.2f], nil];
-    NSArray *xAxisLabels = [NSArray arrayWithObjects:@"非常满意", @"满   意", @"一   般", @"不   满", @"很不满意", nil];
+    NSArray *xAxisLabels = [NSArray arrayWithObjects:@"很 满 意", @"满   意", @"一   般", @"不   满", @"很不满意", nil];
     NSUInteger labelLocation = 0;
     NSMutableArray *customLabels = [NSMutableArray arrayWithCapacity:[xAxisLabels count]];
     for (NSNumber *tickLocation in customTickLocations) {
@@ -1022,7 +1022,7 @@
     }
 	else if ([plot.identifier isEqual:@"PiePlotLandscape"])
     {   
-        NSArray *array = [NSArray arrayWithObjects:[NSString stringWithFormat:@"少于5秒"],[NSString stringWithFormat:@"5 - 10秒"],[NSString stringWithFormat:@"10-15秒"],[NSString stringWithFormat:@"多于15秒"], nil];
+        NSArray *array = [NSArray arrayWithObjects:[NSString stringWithFormat:@"小于5秒"],[NSString stringWithFormat:@" 5 - 10秒"],[NSString stringWithFormat:@" 10-15秒"],[NSString stringWithFormat:@"大于15秒"], nil];
         
         CPTTextLayer *label = [[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%@   \n   %0.1f%%",[array objectAtIndex:index],[[answerRatePersent objectAtIndex:index]floatValue]*100]];
         CPTMutableTextStyle *textStyle = [label.textStyle mutableCopy];
@@ -1173,7 +1173,7 @@
  pieChart.title = [NSString stringWithFormat:@"Selected index: %lu", index];
  }
  */
-#pragma mark - other
+#pragma mark - utiles
 
 
 - (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number

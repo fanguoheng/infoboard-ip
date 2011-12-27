@@ -10,7 +10,6 @@
 
 @implementation BSTableHeadView
 @synthesize headLabel;
-@synthesize headStr;
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -26,6 +25,12 @@
     [self initWithFrame:frame];
     headLabel.text=str;
     return self;
+}
+
+- (void)dealloc
+{
+    [headLabel release];
+    [super dealloc];
 }
 /*
 // Only override drawRect: if you perform custom drawing.

@@ -63,7 +63,7 @@
 			<object class="IBUIView" id="823407570">
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
-				<string key="NSFrameSize">{480, 263}</string>
+				<string key="NSFrameSize">{480, 262}</string>
 				<reference key="NSSuperview"/>
 				<reference key="IBUIBackgroundColor" ref="286252709"/>
 				<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
@@ -73,7 +73,7 @@
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
 			<object class="IBUIView" id="226538503">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">319</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUISlider" id="831924092">
@@ -243,6 +243,7 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{320, 44}</string>
+				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="219830610"/>
 				<string key="NSReuseIdentifierKey">_NS:196</string>
 				<object class="NSColor" key="IBUIBackgroundColor">

@@ -309,7 +309,7 @@
 - (void)createBarChartAndPiePlotInLandscapeView 
 {
     // Create barChart from theme
-    barChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(0, 0, 183, 263)];
+    barChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(0.0, 0.0, 183.0, 263.0)];
     barChartViewLandscape.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin| UIViewAutoresizingFlexibleRightMargin;
     [self.landscapeView addSubview:self.barChartViewLandscape];
     barChartLandscape = [[CPTXYGraph alloc] initWithFrame:CGRectZero];
@@ -435,7 +435,7 @@
     
     
     //pieChart
-    pieChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(187,0,293,263)];
+    pieChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(187.0,0.0,293.0,263.0)];
     pieChartViewLandscape.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin| UIViewAutoresizingFlexibleRightMargin;
     [self.landscapeView addSubview:self.pieChartViewLandscape];
     pieChartLandscape = [[CPTXYGraph alloc] initWithFrame:CGRectZero];
@@ -509,19 +509,6 @@
                         [NSNumber numberWithInt:cuscompcntNum+sitcompcntNum],
                         [NSNumber numberWithInt:searchcntNum],
                         nil ];
-    /*
-    self.answerRatePersent = [NSArray arrayWithObjects:
-                              [NSNumber numberWithFloat:oatousuNum/searchcntNum],
-                              [NSNumber numberWithFloat:cuijianNum/searchcntNum],
-                              [NSNumber numberWithFloat:gaidizhiNum/searchcntNum],
-                              [NSNumber numberWithFloat:lipeiNum/searchcntNum],
-                              [NSNumber numberWithFloat:qitaNum/searchcntNum],
-                              [NSNumber numberWithFloat:tuijianNum/searchcntNum],
-                              [NSNumber numberWithFloat:zhengchangchadanNum/searchcntNum],
-                              [NSNumber numberWithFloat:chadanNum/searchcntNum],
-                              [NSNumber numberWithFloat:weifenleiNum/searchcntNum],
-                              nil];
-     */
     
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:2]intValue]*1.2f)];
@@ -584,17 +571,17 @@
                 case 0:
                     cell.textLabel.text = [NSString stringWithFormat:@"下单量"];
                     //cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[bussinessInfoDataDict objectForKey:@"OrderCnt"]intValue]];
-                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",ordercntNum];
+                    cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:ordercntNum];
                     break;
                 case 1:
                     cell.textLabel.text = [NSString stringWithFormat:@"投诉量"];
                     //cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",([[bussinessInfoDataDict objectForKey:@"CusCompCnt"] intValue]+[[bussinessInfoDataDict objectForKey:@"SitCompCnt"]intValue])];
-                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",cuscompcntNum+sitcompcntNum];
+                    cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:(cuscompcntNum+sitcompcntNum)];
                     break;
                 case 2:
                     cell.textLabel.text = [NSString stringWithFormat:@"查单量"];
                     //cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[[bussinessInfoDataDict objectForKey:@"SearchCnt"]intValue]];
-                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",searchcntNum];
+                    cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:searchcntNum];
                     break;
                 default:
                     break;
@@ -604,10 +591,8 @@
         {
             NSString *searchType = [[NSString alloc]initWithString:[bussSearchInfoDataDictKeys objectAtIndex:indexPath.row]];
             cell.textLabel.text = [searchType isEqualToString:@""]?@"暂无分类":searchType;
-            NSString *numStr = [[NSString alloc]initWithFormat:@"%d",[[bussSearchInfoDataDict objectForKey:searchType] intValue]];
-            cell.detailTextLabel.text = numStr;
+            cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:[[bussSearchInfoDataDict objectForKey:searchType] intValue]];
             [searchType release];
-            [numStr release];
             break;
         }
         default:
@@ -622,6 +607,8 @@
             return [[[BSTableHeadView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableViewPortrait.frame.size.width,22.0) headStr:@"业务数据（个）"] autorelease];
         case 1:
             return [[[BSTableHeadView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableViewPortrait.frame.size.width,22.0) headStr:@"查单分类统计（个）"] autorelease];
+        default:
+            return nil;
     }
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -940,4 +927,29 @@
     
 }
 
+#pragma mark - utiles
+
+
+- (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number
+{
+    if (number < 1000) {
+        NSMutableString *resultString = [[NSMutableString alloc ]initWithFormat:@"%d", number];
+        return [resultString autorelease];
+    }
+    else
+    {
+        NSMutableString *resultString = [[NSMutableString alloc ]initWithFormat:@"%d,%d", number/1000, number%1000];
+        if ((number%1000)<10) 
+        {
+            NSRange range = [resultString rangeOfString:@","];
+            [resultString insertString:@"00" atIndex:range.location+1]; 
+        }
+        else if ((number%1000)<100) 
+        {
+            NSRange range = [resultString rangeOfString:@","];
+            [resultString insertString:@"0" atIndex:range.location+1]; 
+        }
+        return [resultString autorelease];
+    }
+}
 @end

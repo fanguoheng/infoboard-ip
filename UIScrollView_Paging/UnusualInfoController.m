@@ -28,11 +28,11 @@
         // Custom initialization
         cashResponseStr = [[NSString alloc]init];
         //navController.delegate = self;
-        UnUsualRootTableViewController *_rootTableViewController = [[UnUsualRootTableViewController alloc]initWithStyle:UITableViewStylePlain dataDictArray:nil delegate:self];
+        UnUsualRootTableViewController *_rootTableViewController = [[UnUsualRootTableViewController alloc]initWithStyle:UITableViewStyleGrouped dataDictArray:nil delegate:self];
         self.rootTableViewController = _rootTableViewController;
         [_rootTableViewController release];
         
-        UnUsualLeafTableViewController *_unUsualLeafVeryBadTableViewController = [[UnUsualLeafTableViewController alloc ]initWithStyle:UITableViewStylePlain dataDictArray:nil Tag:0];
+        UnUsualLeafTableViewController *_unUsualLeafVeryBadTableViewController = [[UnUsualLeafTableViewController alloc ]initWithStyle:UITableViewStyleGrouped dataDictArray:nil Tag:0];
         self.leafTableViewController = _unUsualLeafVeryBadTableViewController;
         [_unUsualLeafVeryBadTableViewController release];
     }
@@ -291,7 +291,7 @@
 {
     
     // Create barChart from theme
-    barChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(185, 0, 295, 263)];
+    barChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(185.0, 0.0, 295.0, 263.0)];
     barChartViewLandscape.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin| UIViewAutoresizingFlexibleRightMargin;
     //barChartViewLandscape.allowPinchScaling = YES;
     [self.landscapeView addSubview:self.barChartViewLandscape];
@@ -731,7 +731,7 @@
         [navController setNavigationBarHidden:NO];
         [leafTableViewController setDataDictArray:nil];
         [leafTableViewController.tableView reloadData];
-        navController.navigationBar.topItem.leftBarButtonItem.title = @"返回";
+        //navController.navigationBar.topItem.leftBarButtonItem.title = @"返回";
         [self requestData];
         self.webAddr = rootWebAddr;
     }
@@ -810,5 +810,6 @@
     theButton.selected = !theButton.selected;
     theButton.selected?[self dataUpdatePause]:[self dataUpdateStart];
 }
+
 
 @end
