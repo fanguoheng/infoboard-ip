@@ -593,7 +593,7 @@
             break;
         case 1:
         {
-            NSString *searchType = [[NSString alloc]initWithString:[bussSearchInfoDataDictKeys objectAtIndex:indexPath.row]];
+            NSString *searchType = [[NSString alloc]initWithString:[[bussSearchInfoDataDictKeys sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:indexPath.row]];
             cell.textLabel.text = [searchType isEqualToString:@""]?@"暂无分类":searchType;
             NSString *numStr = [[NSString alloc]initWithFormat:@"%d",[[bussSearchInfoDataDict objectForKey:searchType] intValue]];
             cell.detailTextLabel.text = numStr;
@@ -655,7 +655,7 @@
         if ( index >= [bussSearchInfoDataDictKeys count] ) return nil;
         
         if ( fieldEnum == CPTPieChartFieldSliceWidth ) {
-            return [bussSearchInfoDataDict objectForKey:[bussSearchInfoDataDictKeys objectAtIndex:index]];
+            return [bussSearchInfoDataDict objectForKey:[[bussSearchInfoDataDictKeys sortedArrayUsingSelector:@selector(compare:)] objectAtIndex:index]];
         }
         else {
             return [NSNumber numberWithInt:index];
