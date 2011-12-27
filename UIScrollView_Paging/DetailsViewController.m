@@ -271,28 +271,43 @@
 {
     NSLog(@"SUCCEED");
     NSString *responseString = [[NSString alloc] initWithData:[request responseData] encoding:NSUTF8StringEncoding];    
-    if (![request.url.absoluteString isEqualToString:allGrpInfoCashResponseStr]) {
-        NSArray *tmpArray = [responseString JSONValue];
-        if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]]) {
-            self.allGrpInfoCashResponseStr = responseString;
-            groupTableViewController.dataDictArray = tmpArray;
-            
-            if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:)]) {
-                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
-                NSString *timeString=[formatter stringFromDate: [NSDate date]];
-                [formatter release];
-                [delegate willInfoBoardUpdateUIOnPage:timeString];
-            }                
-            [groupTableViewController.tableView reloadData];
+    if ([request.url.absoluteString isEqualToString:allGrpInfoWebAddr]) {
+        if (![allGrpInfoCashResponseStr isEqualToString:responseString]) {
+            NSArray *tmpArray = [responseString JSONValue];
+            if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]]) {
+                self.allGrpInfoCashResponseStr = responseString;
+                self.allGrpInfoDictArray = tmpArray;
+                groupTableViewController.dataDictArray = tmpArray;
+                
+                if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:)]) {
+                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                    [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
+                    NSString *timeString=[formatter stringFromDate: [NSDate date]];
+                    [formatter release];
+                    [delegate willInfoBoardUpdateUIOnPage:timeString];
+                }
+                if (ifLoading==NO){
+                    [self hideWaiting];
+                    NSLog(@"hideWating");
+                }
+                (self.view == originView)?[self updateOriginView:request]:[self updateLandscapeView:request];
+            }
         }
     }
     else if ([request.url.absoluteString isEqualToString:mAgtInfoWebAddr])
     {
-        NSArray *tmpArray = [responseString JSONValue];
-        if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
-    [responseString release];
+        if (![mAgtInfoCashResponseStr isEqualToString:responseString]) {
+            NSArray *tmpArray = [responseString JSONValue];
+            if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
+            {
+                self.mAgtInfoCashResponseStr = responseString;
+                agtTableViewController.dataDictArray = tmpArray;
+            }
+            NSLog(@"%d ifLoading in requestFinishded",ifLoading);          
+        }
     }
+
+    [responseString release];
 }
 
 - (void)requestFailed:(ASIHTTPRequest *)request

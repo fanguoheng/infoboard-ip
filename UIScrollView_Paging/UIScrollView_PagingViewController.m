@@ -100,7 +100,7 @@
     [unusualInfoController release];
     [bussSearchInfoController release];
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    //self.view.backgroundColor = [UIColor whiteColor];
     scrollView.contentSize = CGSizeMake(scrollViewFrameWidth * viewBoardControllersCount, scrollViewFrameHeight);
     scrollView.alpha = 0.0f;
     
@@ -203,19 +203,19 @@
     return allowRotationLanscape?interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown:interfaceOrientation == UIInterfaceOrientationPortrait;
 }
 
-
+UIInterfaceOrientation temp;
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {    
     //allowScrollChangePage = NO;
     //scrollView.pagingEnabled = NO;
+    temp =toInterfaceOrientation;
+    CGFloat currentOffsetX = scrollView.contentOffset.x;
     CGFloat scrollViewFrameWidth = scrollView.frame.size.width;
     CGFloat scrollViewFrameHeight = scrollView.frame.size.height;
-    CGFloat currentOffsetX = scrollView.contentOffset.x;
-    scrollView.contentSize = CGSizeMake(scrollViewFrameWidth * viewBoardControllersCount, scrollViewFrameHeight);
-    
+    scrollView.contentSize = CGSizeMake(scrollViewFrameWidth * viewBoardControllersCount, scrollViewFrameHeight);    
     if (toInterfaceOrientation == UIInterfaceOrientationPortrait)
     {
-        //NSLog(@"Portrait");        
+        //NSLog(@"Portrait");
         for (NSInteger i=0; i<viewBoardControllersCount; i++) {
             [[viewBoardControllers objectAtIndex:i] setView:[[viewBoardControllers objectAtIndex:i] originView]];
             [[[viewBoardControllers objectAtIndex:i] view] setFrame:CGRectMake(scrollViewFrameWidth * i, 0.0f, scrollViewFrameWidth-kViewGap, scrollViewFrameHeight)];
@@ -233,18 +233,11 @@
             [scrollView setContentOffset:CGPointMake(1360.0f, 0.0f) animated:NO];
         }
         [[viewBoardControllers objectAtIndex:pageControl.currentPage] updateOriginView:nil];
-         
         [[viewBoardFrontViews objectAtIndex:pageControl.currentPage] setAlpha:0.0f];
-        
-        //半透明度渐变动画 
-        [[[viewBoardControllers objectAtIndex:pageControl.currentPage]view ] setAlpha:0.0f];
-        [UIView beginAnimations:@"animationLandscapeViewFadeIn" context:nil]; 
-        [UIView setAnimationDuration:0.35f]; 
-        [[[viewBoardControllers objectAtIndex:pageControl.currentPage] view] setAlpha:1.0f];
-        [UIView commitAnimations];
+        [[[viewBoardControllers objectAtIndex:pageControl.currentPage]view ] setAlpha:0.0f];       
     }
     
-    else if(toInterfaceOrientation == UIInterfaceOrientationLandscapeRight | toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft)
+    else if(toInterfaceOrientation == UIInterfaceOrientationLandscapeRight ||toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft)
     {        
         //NSLog(@"Landscape");
         for (NSInteger i=0; i<viewBoardControllersCount; i++) {
@@ -266,19 +259,38 @@
         [[viewBoardControllers objectAtIndex:pageControl.currentPage] updateLandscapeView:nil];
         //半透明度渐变动画 
         [[[viewBoardControllers objectAtIndex:pageControl.currentPage]view ] setAlpha:0.0f];
-        [UIView beginAnimations:@"animationLandscapeViewFadeIn" context:nil]; 
-        [UIView setAnimationDuration:1.8f]; 
-        [[[viewBoardControllers objectAtIndex:pageControl.currentPage] view] setAlpha:1.0f];
-        [UIView commitAnimations];
     }
 }
 
-/*
+
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-    scrollView.pagingEnabled = YES;
+
+    if (temp == UIInterfaceOrientationLandscapeRight || temp == UIInterfaceOrientationLandscapeLeft)
+    {        
+        [UIView beginAnimations:@"animationLandscapeViewFadeIn" context:nil]; 
+        [UIView setAnimationDuration:0.35f]; 
+        [[[viewBoardControllers objectAtIndex:pageControl.currentPage] view] setAlpha:1.0f];
+        [UIView commitAnimations];
+        [scrollView setFrame:CGRectMake(0.0, 0.0, 500.0, 263.0)];
+        [navBar removeFromSuperview];}
+    else if(temp==UIInterfaceOrientationPortrait)
+    {  
+        //半透明度渐变动画 
+        [UIView beginAnimations:@"animationLandscapeViewFadeIn" context:nil]; 
+        [UIView setAnimationDuration:0.35f]; 
+        [[[viewBoardControllers objectAtIndex:pageControl.currentPage] view] setAlpha:1.0f];
+        [UIView commitAnimations];  
+        
+        [scrollView setFrame:CGRectMake(0.0, 44.0, 340.0, 379.0)];
+        [navBar setFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
+        [self.view addSubview:navBar];
+    }
+    CGFloat scrollViewFrameWidth = scrollView.frame.size.width;
+    CGFloat scrollViewFrameHeight = scrollView.frame.size.height;
+    scrollView.contentSize = CGSizeMake(scrollViewFrameWidth * viewBoardControllersCount, scrollViewFrameHeight);   
 }
-*/
+
 #pragma mark - Scroll and pagecontrol paging
 
 
@@ -529,7 +541,7 @@
 #pragma mark - viewBoards Manage
 - (void) loadAllViewBoardsWithAddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet
 {
-    pageControl.backgroundColor = [UIColor whiteColor];
+    //pageControl.backgroundColor = [UIColor whiteColor];
     //self.view.backgroundColor = [UIColor whiteColor];
     scrollView.alpha = 1.0f;
     for (id anyViewBoardController in viewBoardControllers) {
@@ -569,9 +581,9 @@
     
     [UIView beginAnimations:@"animationScrollviewWhite" context:nil];
     [UIView setAnimationDuration:0.7f]; 
-    self.view.backgroundColor = [UIColor whiteColor];
-    scrollView.backgroundColor = [UIColor whiteColor];
-    pageControl.backgroundColor = [UIColor whiteColor];
+    //self.view.backgroundColor = [UIColor whiteColor];
+    //scrollView.backgroundColor = [UIColor whiteColor];
+    //pageControl.backgroundColor = [UIColor whiteColor];
     allViewsPicView.alpha = 1.0f;
     [UIView commitAnimations];
     [NSTimer scheduledTimerWithTimeInterval:0.8f
@@ -607,9 +619,9 @@
     [UIView beginAnimations:@"animationScrollviewDark" context:nil]; 
     [UIView setAnimationDuration:0.6f];
     allViewsPicView.alpha = 0.0f;
-    self.view.backgroundColor = [UIColor darkGrayColor];
-    scrollView.backgroundColor = [UIColor darkTextColor];
-    pageControl.backgroundColor = [UIColor darkTextColor];
+    //self.view.backgroundColor = [UIColor darkGrayColor];
+    //scrollView.backgroundColor = [UIColor darkTextColor];
+    //pageControl.backgroundColor = [UIColor darkTextColor];
     [UIView commitAnimations];
     Float32 scrollViewFrameWidth = scrollView.frame.size.width;
     Float32 scrollViewFrameHeight = scrollView.frame.size.height;

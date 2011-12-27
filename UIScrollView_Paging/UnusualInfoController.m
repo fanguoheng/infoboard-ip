@@ -291,20 +291,20 @@
 {
     
     // Create barChart from theme
-    barChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(185, 0, 295, 274)];
+    barChartViewLandscape = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(185, 0, 295, 263)];
     barChartViewLandscape.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin| UIViewAutoresizingFlexibleRightMargin;
     //barChartViewLandscape.allowPinchScaling = YES;
     [self.landscapeView addSubview:self.barChartViewLandscape];
     barChartLandscape = [[CPTXYGraph alloc] initWithFrame:CGRectZero];
-	CPTTheme *barChartTheme = [CPTTheme themeNamed:kCPTStocksTheme];
-    [barChartLandscape applyTheme:barChartTheme];
+//	CPTTheme *barChartTheme = [CPTTheme themeNamed:kCPTDarkGradientTheme];
+//    [barChartLandscape applyTheme:barChartTheme];
 	CPTGraphHostingView *barChartHostingView = (CPTGraphHostingView *)self.barChartViewLandscape;
     barChartHostingView.hostedGraph = barChartLandscape;
     
     // Border
     barChartLandscape.plotAreaFrame.borderLineStyle = nil;
     barChartLandscape.plotAreaFrame.cornerRadius = 0.0f;
-	
+
     // Paddings
     barChartLandscape.paddingLeft = 0.0f;
     barChartLandscape.paddingRight = 0.0f;
@@ -442,6 +442,7 @@
     barPlotLandscape.barWidth = CPTDecimalFromFloat(0.618f); // bar is 50% of the available space
 	barPlotLandscape.barCornerRadius = 5.0f;
     barPlotLandscape.identifier = @"BarPlotLandscape";
+
     [barChartLandscape addPlot:barPlotLandscape toPlotSpace:plotSpace];
     
 }
