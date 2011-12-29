@@ -30,7 +30,6 @@
 
 @synthesize originView;
 @synthesize landscapeView;
-@synthesize controlPadView,refreshIntervalLabel,refreshIntervalSlider,pauseOrStartButton;
 @synthesize lists;
 @synthesize navController,groupTableViewController,agtTableViewController;
 @synthesize delegate,allGrpInfoCashResponseStr,mAgtInfoCashResponseStr,agtCallInfoCashResponseStr;
@@ -122,7 +121,6 @@
     {
         refreshInterval = 60;
     }
-    [controlPadView setFrame:CGRectMake(0.0f, 30.0f, 320.0f, 44.0f)];
     
     UINavigationController *_navController = [[UINavigationController alloc ]initWithRootViewController:groupTableViewController];
     self.navController = _navController;
@@ -133,10 +131,6 @@
     [navController.view setFrame:CGRectMake(0.0f, 00.0f, 320.0f, 379.0f)];
     [self.view addSubview:navController.view];
     
-    UIImage *pauseImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"media-playback-pause" ofType:@"png"]];
-    [pauseOrStartButton setImage:pauseImage forState:UIControlStateNormal];
-    UIImage *startImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"media-playback-start" ofType:@"png"]];
-    [pauseOrStartButton setImage:startImage forState:UIControlStateSelected];
 
     loadingOrigin=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:
                    UIActivityIndicatorViewStyleWhiteLarge];
@@ -293,7 +287,6 @@
 
 - (void)requestFinished:(ASIHTTPRequest*)request
 {
-    NSLog(@"SUCCEED");
     NSString *responseString = [[NSString alloc] initWithData:[request responseData] encoding:NSUTF8StringEncoding];    
     if ([request.url.absoluteString isEqualToString:allGrpInfoWebAddr]) {
         if (![allGrpInfoCashResponseStr isEqualToString:responseString]) {
@@ -319,6 +312,8 @@
     }
     else if ([request.url.absoluteString isEqualToString:mAgtInfoWebAddr])
     {
+        self.webAddr = agtCallInfoWebAddr;
+        [self requestData];
         if (![mAgtInfoCashResponseStr isEqualToString:responseString]) {
             NSArray *tmpArray = [responseString JSONValue];
             if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
@@ -334,15 +329,12 @@
                     }
                 }
                 self.mAgtInfoDict = (NSDictionary*)selectedAgtDict;
-                //NSLog(@"mAgtInfoDict count: %d",[[mAgtInfoDict allKeys] count]);
-                self.webAddr = agtCallInfoWebAddr;
-                [self requestData];
-                self.webAddr = allGrpInfoWebAddr;
             }
         }
     }
     else if ([request.url.absoluteString isEqualToString:agtCallInfoWebAddr])
     {
+        self.webAddr = allGrpInfoWebAddr;
         if (![agtCallInfoCashResponseStr isEqualToString:responseString]) {
             NSArray *tmpArray = [responseString JSONValue];
             if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
@@ -368,8 +360,7 @@
 
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
-    NSLog(@"FAILED");
-    //NSError *error = [request error];
+    [request startAsynchronous];
 }
 
 #pragma mark - UI Update Methods
@@ -413,60 +404,7 @@
         [navigationController setNavigationBarHidden:NO];
         navController.navigationBar.topItem.leftBarButtonItem.title = @"返回";
         [self requestData];
-        self.webAddr = allGrpInfoWebAddr;
     }
-}
-#pragma mark - touch and controlPad
-- (IBAction)showControlPadView:(id)sender
-{
-    UIButton *tietleButton = (UIButton *)sender;
-    tietleButton.selected = !tietleButton.selected;
-    if(tietleButton.selected)
-    {
-       
-        refreshIntervalSlider.value = refreshInterval;
-        NSString *refreshIntervalStr = [[NSString alloc]initWithFormat:@"%d", refreshInterval];
-        refreshIntervalLabel.text = refreshIntervalStr;
-        [refreshIntervalStr release];
-        [self.view addSubview:controlPadView];
-    }
-    else
-    {
-        
-        NSUserDefaults *df = [NSUserDefaults standardUserDefaults];  
-        if (df) {  
-            NSNumber *_refreshInterval = [[NSNumber alloc]initWithInt:refreshInterval];
-            [df setObject:_refreshInterval forKey:@"detailsviewinterval"]; 
-            [_refreshInterval release];
-            [df synchronize];  
-        }  
-        [controlPadView removeFromSuperview];
-    }
-}
-
-- (IBAction)sliderChanged:(id)sender
-{
-    UISlider *theSlider = (UISlider *)sender;
-    refreshInterval = round(theSlider.value); 
-    NSString *_refreshIntervalStr = [[NSString alloc]initWithFormat:@"%d", refreshInterval];
-    refreshIntervalLabel.text = _refreshIntervalStr;
-    [_refreshIntervalStr release];
-    [self dataUpdatePause];
-    self.timer=[NSTimer scheduledTimerWithTimeInterval:refreshInterval
-                                                target:self 
-                                              selector:@selector(requestData) 
-                                              userInfo:nil 
-                                               repeats:YES]; 
-}
-- (IBAction)refresh:(id)sender{
-    [self dataUpdatePause];
-    [self dataUpdateStart];
-}
-- (IBAction)pauseOrStart:(id)sender{
-    UIButton *theButton = (UIButton *)sender;
-    theButton.selected = !theButton.selected;
-    theButton.selected?[self dataUpdatePause]:[self dataUpdateStart];
-    
 }
 
 @end

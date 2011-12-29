@@ -15,7 +15,7 @@
 @implementation BussSearchInfoController
 @synthesize addrPrefix;
 @synthesize addrPostfix;
-@synthesize bussinessInfoWebAddr,bussSearchInfoWebAddr,timer,refreshInterval,cashDict_1,bussSearchInfoDataDictKeys, bussinessInfoDataDict,bussSearchInfoDataDict,originView,landscapeView,tableViewPortrait,controlPadView,refreshIntervalSlider,refreshIntervalLabel,pauseOrStartButton;
+@synthesize bussinessInfoWebAddr,bussSearchInfoWebAddr,timer,refreshInterval,cashDict_1,bussSearchInfoDataDictKeys, bussinessInfoDataDict,bussSearchInfoDataDict,originView,landscapeView,tableViewPortrait;
 @synthesize barChartViewLandscape,barChartLandscape,barPlotLandscape,barPlotData,pieChartViewLandscape,pieChartLandscape,piePlotLandscape,answerRatePersent;
 @synthesize delegate,bussinessInfoCashResponseStr,bussSearchInfoCashResponseStr;
 @synthesize loadingOrigin,loadingLandscape;
@@ -68,9 +68,6 @@
     [timer release];
     [originView release];
     [landscapeView release];
-    [controlPadView release];
-    [refreshIntervalSlider release];
-    [refreshIntervalLabel release];
     [pieChartViewLandscape release];
     
     [super dealloc];
@@ -90,12 +87,7 @@
     {
         refreshInterval = 60;
     }
-    [controlPadView setFrame:CGRectMake(0.0f, 30.0f, 320.0f, 44.0f)];
-    
-    UIImage *pauseImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"media-playback-pause" ofType:@"png"]];
-    [pauseOrStartButton setImage:pauseImage forState:UIControlStateNormal];
-    UIImage *startImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"media-playback-start" ofType:@"png"]];
-    [pauseOrStartButton setImage:startImage forState:UIControlStateSelected];
+
     
     loadingOrigin=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:
                    UIActivityIndicatorViewStyleWhiteLarge];
@@ -115,10 +107,6 @@
     self.originView = nil;
     self.landscapeView = nil;
     self.tableViewPortrait = nil;
-    self.controlPadView = nil;
-    self.refreshIntervalSlider = nil;
-    self.refreshIntervalLabel = nil;
-    self.pauseOrStartButton = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -296,8 +284,7 @@
 
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
-    //[timer invalidate];
-    //timer = nil;
+    [request startAsynchronous];
 }
 
 #pragma mark - UI Updata Methods
@@ -351,7 +338,7 @@
 	// Add plot space for horizontal bar charts
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
     //plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat(90.0f)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:2]intValue]*1.2f)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:2]intValue]*1.2f+1.0)];
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat(3.0f)];
     
     // Create grid line styles
@@ -511,7 +498,7 @@
                         nil ];
     
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:2]intValue]*1.2f)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:2]intValue]*1.2f+1.0)];
     NSString *newPieTitle = [[NSString alloc]initWithFormat:@"查单量:%d",searchcntNum];
     pieChartLandscape.title = newPieTitle;
     CPTMutableTextStyle *whiteText = [CPTMutableTextStyle textStyle];
@@ -654,6 +641,8 @@
                 
 			case CPTBarPlotFieldBarTip:
 				return  [barPlotData objectAtIndex:index];
+            default:
+                return nil;
 
 		}
         
@@ -851,80 +840,6 @@
 */
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-}
-
-#pragma mark - touch and controlPad
-- (IBAction)showControlPadView:(id)sender
-{
-    UIButton *tietleButton = (UIButton *)sender;
-    tietleButton.selected = !tietleButton.selected;
-    if(tietleButton.selected)
-    {
-        /*
-         CATransition *animation = [CATransition animation];
-         animation.duration = 1.0f;
-         animation.timingFunction = UIViewAnimationCurveEaseInOut;
-         //设置上面4种动画效果使用CATransiton可以设置4种动画效果，分别为：kCATransitionFade渐渐消失;kCATransitionMoveIn覆盖进入;kCATransitionPush推出;kCATransitionReveal与MoveIn相反;
-         animation.type = kCATransitionFade;
-         //设置动画的方向，有四种，分别为kCATransitionFromRight、kCATransitionFromLeft、kCATransitionFromTop、kCATransitionFromBottom
-         animation.subtype = kCATransitionFromBottom;
-         */
-        //[self.controlPadView.layer addAnimation:animation forKey:@"animationAppear"];
-        
-        refreshIntervalSlider.value = refreshInterval;
-        NSString *refreshIntervalStr = [[NSString alloc]initWithFormat:@"%d", refreshInterval];
-        refreshIntervalLabel.text = refreshIntervalStr;
-        [refreshIntervalStr release];
-        //[controlPadView setFrame:CGRectMake(0.0f, 30.0f, 320.0f, 44.0f)];
-        [self.view addSubview:controlPadView];
-    }
-    else
-    {
-        /*
-         CATransition *animation = [CATransition animation];
-         animation.duration = 0.5f;
-         animation.timingFunction = UIViewAnimationCurveEaseInOut;
-         //设置上面4种动画效果使用CATransiton可以设置4种动画效果，分别为：kCATransitionFade;//渐渐消失kCATransitionMoveIn;//覆盖进入kCATransitionPush;//推出kCATransitionReveal;//与MoveIn相反
-         animation.type = kCATransitionMoveIn;
-         //设置动画的方向，有四种，分别为kCATransitionFromRight、kCATransitionFromLeft、kCATransitionFromTop、kCATransitionFromBottom
-         animation.subtype = kCATransitionFromTop; 
-         [self.controlPadView.layer addAnimation:animation forKey:@"animationDissappear"];
-         */
-        
-        NSUserDefaults *df = [NSUserDefaults standardUserDefaults];  
-        if (df) {  
-            NSNumber *_refreshInterval = [[NSNumber alloc]initWithInt:refreshInterval];
-            [df setObject:_refreshInterval forKey:@"busssearchinterval"]; 
-            [_refreshInterval release];
-            [df synchronize];  
-        }  
-        [controlPadView removeFromSuperview];
-    }
-}
-
-- (IBAction)sliderChanged:(id)sender
-{
-    UISlider *theSlider = (UISlider *)sender;
-    refreshInterval = round(theSlider.value);   
-    NSString *_refreshIntervalStr = [[NSString alloc]initWithFormat:@"%d", refreshInterval];
-    refreshIntervalLabel.text = _refreshIntervalStr;
-    [_refreshIntervalStr release];
-    self.timer=[NSTimer scheduledTimerWithTimeInterval:refreshInterval
-                                                target:self 
-                                              selector:@selector(requestData) 
-                                              userInfo:nil 
-                                               repeats:YES]; 
-}
-
-- (IBAction)refresh:(id)sender{
-    [self dataUpdatePause];
-    [self dataUpdateStart];
-}
-- (IBAction)pauseOrStart:(id)sender{
-    UIButton *theButton = (UIButton *)sender;
-    theButton.selected = !theButton.selected;
-    theButton.selected?[self dataUpdatePause]:[self dataUpdateStart];
-    
 }
 
 #pragma mark - utiles

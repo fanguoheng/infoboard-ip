@@ -57,7 +57,6 @@
 
 @synthesize originView;
 @synthesize landscapeView;
-@synthesize controlPadView,refreshIntervalSlider,refreshIntervalLabel,pauseOrStartButton;
 
 @synthesize delegate,agtTotalInfoCashResponseStr,agtAverageInfoCashResponseStr;
 
@@ -117,10 +116,6 @@
     [lastAvrWorkDurLabel release];
     [originView release];
     [landscapeView release];
-    [controlPadView release];
-    [refreshIntervalSlider release];
-    [refreshIntervalLabel release];
-    [pauseOrStartButton release];
     
     [barChartView release];
     [barChart release];
@@ -159,14 +154,8 @@
     {
         refreshInterval = 60;
     }
-    [controlPadView setFrame:CGRectMake(0.0f, 30.0f, 320.0f, 44.0f)];
     [self createBarChartAndPiePlotInOriginView];
     [self createBarChartAndPiePlotInLandscapeView];
-    
-    UIImage *pauseImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"media-playback-pause" ofType:@"png"]];
-    [pauseOrStartButton setImage:pauseImage forState:UIControlStateNormal];
-    UIImage *startImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"media-playback-start" ofType:@"png"]];
-    [pauseOrStartButton setImage:startImage forState:UIControlStateSelected];
     
     loadingOrigin=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:
              UIActivityIndicatorViewStyleWhiteLarge];
@@ -217,10 +206,6 @@
     self.lastAvrWorkDurLabel = nil;
     self.originView = nil;
     self.landscapeView = nil;
-    self.controlPadView = nil;
-    self.refreshIntervalSlider = nil;
-    self.refreshIntervalLabel = nil;
-    self.pauseOrStartButton = nil;
     self.loadingOrigin =nil;
     self.loadingLandscape =nil;
     
@@ -441,7 +426,7 @@
 }
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
-    //NSError *error = [request error];
+    [request startAsynchronous];
     
 }
 
@@ -486,7 +471,7 @@
 	// Add plot space for horizontal bar charts
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChart.defaultPlotSpace;
     //plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat(50.0f)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f+1.0)];
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat(5.0f)];
     
     
@@ -625,7 +610,7 @@
 	// Add plot space for horizontal bar charts
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
     //plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat(90.0f)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)] objectAtIndex:4] intValue]*1.2f)];//y轴的数值范围
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)] objectAtIndex:4] intValue]*1.2f+1.0)];//y轴的数值范围
     //compare：默认排序方式，从小到大
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat(5.0f)];
     
@@ -666,7 +651,7 @@
     xLabelTextStyle.textAlignment = CPTTextAlignmentRight;
     x.labelTextStyle = xLabelTextStyle;
     NSArray *customTickLocations = [NSArray arrayWithObjects:[NSDecimalNumber numberWithFloat:0.2f], [NSDecimalNumber numberWithFloat:1.2f], [NSDecimalNumber numberWithFloat:2.2f], [NSDecimalNumber numberWithFloat:3.2f],[NSDecimalNumber numberWithFloat:4.2f], nil];
-    NSArray *xAxisLabels = [NSArray arrayWithObjects:@"很 满 意", @"满   意", @"一   般", @"不   满", @"很不满意", nil];
+    NSArray *xAxisLabels = [NSArray arrayWithObjects:@"很 满 意", @"满   意", @"一   般", @"不 满 意", @"很不满意", nil];
     NSUInteger labelLocation = 0;
     NSMutableArray *customLabels = [NSMutableArray arrayWithCapacity:[xAxisLabels count]];
     for (NSNumber *tickLocation in customTickLocations) {
@@ -814,7 +799,7 @@
         }
 
         CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChart.defaultPlotSpace;
-        plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f)];
+        plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f+1.0)];
         [barPlot reloadData];
         [piePlot reloadData];
         
@@ -884,7 +869,7 @@
             //self.percentSign.textColor = [UIColor colorWithRed:0.8f green:0.0f blue:0.25f alpha:1.0f];
         }
         CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChart.defaultPlotSpace;
-        plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f)];
+        plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f+1.0)];
         [barPlot reloadData];
         [piePlot reloadData];
     }
@@ -930,8 +915,8 @@
     //当nil==request时强制更新UI
     if (!request || [request.url.absoluteString isEqualToString:agtTotalInfoWebAddr]) {
         CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
-        plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f)];
-        [barPlotLandscape reloadData];
+        plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f+1.0)];
+        [barChartLandscape reloadData];
         [piePlotLandscape reloadData];
     }
 }
@@ -981,6 +966,8 @@
                 
 			case CPTBarPlotFieldBarTip:
 				return  [barPlotData objectAtIndex:index];
+            default:
+                return nil;
 
 		}
         
@@ -1031,6 +1018,8 @@
         [textStyle release];
         return [label autorelease];
     }
+    else
+        return nil;
 
 }
 
@@ -1167,12 +1156,32 @@
     return [NSString stringWithFormat:@"Pie Slice %u", index];
 }
 */
-/*
+-(void)barPlot:(CPTBarPlot *)plot barWasSelectedAtRecordIndex:(NSUInteger)index
+{
+    if ([plot.identifier isEqual:@"PiePlotLandscape"])
+    {
+        switch (index) {
+            case 3:
+            {
+                
+            }
+                break;
+            case 4:
+            {
+                
+            }
+                break;
+            default:
+                break;
+        }
+    }
+
+}
  -(void)pieChart:(CPTPieChart *)plot sliceWasSelectedAtRecordIndex:(NSUInteger)index
  {
- pieChart.title = [NSString stringWithFormat:@"Selected index: %lu", index];
+ //pieChart.title = [NSString stringWithFormat:@"Selected index: %lu", index];
  }
- */
+ 
 #pragma mark - utiles
 
 
@@ -1199,86 +1208,5 @@
     }
 }
 
-/*
-- (void)frontViewSelected
-{
-    NSLog(@"frontViewSelected");
-    frontView.selected = YES;
-}
-*/
 
-#pragma mark - controlPad
-- (IBAction)showControlPadView:(id)sender
-{
-    UIButton *tietleButton = (UIButton *)sender;
-    tietleButton.selected = !tietleButton.selected;
-    if(tietleButton.selected)
-    {
-        /*
-         CATransition *animation = [CATransition animation];
-         animation.duration = 1.0f;
-         animation.timingFunction = UIViewAnimationCurveEaseInOut;
-         //设置上面4种动画效果使用CATransiton可以设置4种动画效果，分别为：kCATransitionFade渐渐消失;kCATransitionMoveIn覆盖进入;kCATransitionPush推出;kCATransitionReveal与MoveIn相反;
-         animation.type = kCATransitionFade;
-         //设置动画的方向，有四种，分别为kCATransitionFromRight、kCATransitionFromLeft、kCATransitionFromTop、kCATransitionFromBottom
-         animation.subtype = kCATransitionFromBottom;
-         */
-        //[self.controlPadView.layer addAnimation:animation forKey:@"animationAppear"];
-        
-        refreshIntervalSlider.value = refreshInterval;
-        NSString *refreshIntervalStr = [[NSString alloc]initWithFormat:@"%d", refreshInterval];
-        refreshIntervalLabel.text = refreshIntervalStr;
-        [refreshIntervalStr release];
-        //[controlPadView setFrame:CGRectMake(0.0f, 30.0f, 320.0f, 44.0f)];
-        [self.view addSubview:controlPadView];
-    }
-    else
-    {
-        /*
-         CATransition *animation = [CATransition animation];
-         animation.duration = 0.5f;
-         animation.timingFunction = UIViewAnimationCurveEaseInOut;
-         //设置上面4种动画效果使用CATransiton可以设置4种动画效果，分别为：kCATransitionFade;//渐渐消失kCATransitionMoveIn;//覆盖进入kCATransitionPush;//推出kCATransitionReveal;//与MoveIn相反
-         animation.type = kCATransitionMoveIn;
-         //设置动画的方向，有四种，分别为kCATransitionFromRight、kCATransitionFromLeft、kCATransitionFromTop、kCATransitionFromBottom
-         animation.subtype = kCATransitionFromTop; 
-         [self.controlPadView.layer addAnimation:animation forKey:@"animationDissappear"];
-         */
-        
-        NSUserDefaults *df = [NSUserDefaults standardUserDefaults];  
-        if (df) {  
-            NSNumber *_refreshInterval = [[NSNumber alloc]initWithInt:refreshInterval];
-            [df setObject:_refreshInterval forKey:@"statisticsinterval"]; 
-            [_refreshInterval release];
-            [df synchronize];  
-        }  
-        [controlPadView removeFromSuperview];
-    }
-}
-
-- (IBAction)sliderChanged:(id)sender
-{
-    UISlider *theSlider = (UISlider *)sender;
-    refreshInterval = round(theSlider.value); 
-    NSString *_refreshIntervalStr = [[NSString alloc]initWithFormat:@"%d", refreshInterval];
-    refreshIntervalLabel.text = _refreshIntervalStr;
-    [_refreshIntervalStr release];
-    [self dataUpdatePause];
-    self.timer=[NSTimer scheduledTimerWithTimeInterval:refreshInterval
-                                                target:self 
-                                              selector:@selector(requestData) 
-                                              userInfo:nil 
-                                               repeats:YES]; 
-}
-
-- (IBAction)refresh:(id)sender{
-    [self dataUpdatePause];
-    [self dataUpdateStart];
-}
-- (IBAction)pauseOrStart:(id)sender{
-    UIButton *theButton = (UIButton *)sender;
-    theButton.selected = !theButton.selected;
-    theButton.selected?[self dataUpdatePause]:[self dataUpdateStart];
-    
-}
 @end

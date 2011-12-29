@@ -14,10 +14,10 @@
 @implementation UnusualInfoController
 
 @synthesize navController,rootTableViewController,leafTableViewController;
-@synthesize webAddr,rootWebAddr, leafVeryBadWebAddr,leafBadWebAddr,leafAgtLostWebAddr,timer,refreshInterval,dataDictArray,originView,landscapeView,controlPadView,refreshIntervalSlider,refreshIntervalLabel,pauseOrStartButton;
+@synthesize webAddr,rootWebAddr, leafVeryBadAndBadWebAddr,leafAgtLostWebAddr,timer,refreshInterval,dataDictArray,originView,landscapeView;
 @synthesize barChartViewLandscape,barChartLandscape,barPlotLandscape,barPlotData;
 @synthesize addrPrefix,addrPostfix;
-@synthesize delegate,cashResponseStr;
+@synthesize delegate,rootCashResponseStr,leafVeryBadAndBadCashResponseStr,leafAgtLostCashResponseStr;
 @synthesize loadingOrigin,loadingLandscape;
 @synthesize ifLoading;
 
@@ -26,15 +26,14 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        cashResponseStr = [[NSString alloc]init];
-        //navController.delegate = self;
-        UnUsualRootTableViewController *_rootTableViewController = [[UnUsualRootTableViewController alloc]initWithStyle:UITableViewStyleGrouped dataDictArray:nil delegate:self];
-        self.rootTableViewController = _rootTableViewController;
-        [_rootTableViewController release];
+        rootCashResponseStr = [[NSString alloc]init];
+        leafVeryBadAndBadCashResponseStr = [[NSString alloc]init];
+        leafAgtLostCashResponseStr = [[NSString alloc]init];
+    
+        rootTableViewController = [[UnUsualRootTableViewController alloc]initWithStyle:UITableViewStyleGrouped dataDictArray:nil delegate:self];
         
-        UnUsualLeafTableViewController *_unUsualLeafVeryBadTableViewController = [[UnUsualLeafTableViewController alloc ]initWithStyle:UITableViewStyleGrouped dataDictArray:nil Tag:0];
-        self.leafTableViewController = _unUsualLeafVeryBadTableViewController;
-        [_unUsualLeafVeryBadTableViewController release];
+        leafTableViewController = [[UnUsualLeafTableViewController alloc ]initWithStyle:UITableViewStyleGrouped dataDictArray:nil Tag:0];
+
     }
     return self;
 }
@@ -48,11 +47,8 @@
     self.rootWebAddr = _addr0;
     [_addr0 release];
     NSString *_addr1 = [[NSString alloc]initWithFormat:@"%@SvrDefineInfo%@",addrPrefix,addrPostfix];
-    self.leafVeryBadWebAddr = _addr1;
+    self.leafVeryBadAndBadWebAddr = _addr1;
     [_addr1 release];
-    NSString *_addr2 = [[NSString alloc]initWithFormat:@"%@SvrDefineInfo%@",addrPrefix,addrPostfix];
-    self.leafBadWebAddr = _addr2;
-    [_addr2 release];
     NSString *_addr3 = [[NSString alloc]initWithFormat:@"%@AgtLostInfo%@",addrPrefix,addrPostfix];   
     self.leafAgtLostWebAddr = _addr3;
     [_addr3 release];
@@ -78,15 +74,16 @@
     [rootTableViewController release];
     [leafTableViewController release];
     [timer release];
+    [rootWebAddr release];
+    [leafVeryBadAndBadWebAddr release];
+    [leafAgtLostWebAddr release];
     [webAddr release];
+    [leafVeryBadAndBadCashResponseStr release];
+    [leafAgtLostCashResponseStr release];
     [dataDictArray release];
     [originView release];
     [landscapeView release];
-    [controlPadView release];
-    [refreshIntervalSlider release];
-    [refreshIntervalLabel release];
     [barChartViewLandscape release];
-    [cashResponseStr release];
     [super dealloc];
 }
 #pragma mark - View lifecycle
@@ -104,7 +101,6 @@
     {
         refreshInterval = 60;
     }
-    [controlPadView setFrame:CGRectMake(0.0f, 30.0f, 320.0f, 44.0f)];
     
     UINavigationController *_navController = [[UINavigationController alloc]initWithRootViewController:rootTableViewController];
     self.navController = _navController;
@@ -115,10 +111,6 @@
     [navController.view setFrame:CGRectMake(0.0f, 0.0f, 320.0f, 379.0f)];
     [self.view addSubview:navController.view];
     
-    UIImage *pauseImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"media-playback-pause" ofType:@"png"]];
-    [pauseOrStartButton setImage:pauseImage forState:UIControlStateNormal];
-    UIImage *startImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"media-playback-start" ofType:@"png"]];
-    [pauseOrStartButton setImage:startImage forState:UIControlStateSelected];
     
     [self createBarChartInLandscapeView];
     loadingOrigin=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:
@@ -138,10 +130,6 @@
     self.navController = nil;
     self.originView = nil;
     self.landscapeView = nil;
-    self.controlPadView = nil;
-    self.refreshIntervalSlider = nil;
-    self.refreshIntervalLabel = nil;
-    self.pauseOrStartButton = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -204,53 +192,61 @@
 - (void)requestFinished:(ASIHTTPRequest *)request
 {
     NSString *responseString = [[NSString alloc] initWithData:[request responseData] encoding:NSUTF8StringEncoding];  
-    if (![cashResponseStr isEqualToString:responseString]) {
-        NSMutableArray *tmpArray = [responseString JSONValue];
-        if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]]) {
-            if ([request.url.absoluteString isEqualToString:rootWebAddr])
-            {
-                self.cashResponseStr = responseString; 
-                veryBadNum = 0;
-                badNum = 0;
-                lostCntNum = 0;
-                agtCntNum = 0;
-                agtLostNum = 0;
-                cusLostNum = 0;
-                sysLostNum = 0;
-                offLostNum = 0;
-                othLostNum = 0;
-                waitDurSecondNum = 0;
-                for (NSDictionary* anyDict in tmpArray) {
-                    veryBadNum = veryBadNum+[[anyDict objectForKey:@"verybad"] intValue];
-                    badNum = badNum+[[anyDict objectForKey:@"bad"] intValue];
-                    lostCntNum = lostCntNum+[[anyDict objectForKey:@"lostcnt"] intValue];
-                    float lostRate = [[anyDict objectForKey:@"lostrate"] floatValue];
-                    if (0.0f!=lostRate) {
-                        agtCntNum +=  [[anyDict objectForKey:@"lostcnt"] intValue]/lostRate;
+    if ([request.url.absoluteString isEqualToString:rootWebAddr]) {
+        if (![rootCashResponseStr isEqualToString:responseString]) {
+            NSMutableArray *tmpArray = [responseString JSONValue];
+            if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]]) {
+                {
+                    self.rootCashResponseStr = responseString; 
+                    veryBadNum = 0;
+                    badNum = 0;
+                    lostCntNum = 0;
+                    agtCntNum = 0;
+                    agtLostNum = 0;
+                    cusLostNum = 0;
+                    sysLostNum = 0;
+                    offLostNum = 0;
+                    othLostNum = 0;
+                    waitDurSecondNum = 0;
+                    for (NSDictionary* anyDict in tmpArray) {
+                        veryBadNum = veryBadNum+[[anyDict objectForKey:@"verybad"] intValue];
+                        badNum = badNum+[[anyDict objectForKey:@"bad"] intValue];
+                        lostCntNum = lostCntNum+[[anyDict objectForKey:@"lostcnt"] intValue];
+                        float lostRate = [[anyDict objectForKey:@"lostrate"] floatValue];
+                        if (0.0f!=lostRate) {
+                            agtCntNum +=  [[anyDict objectForKey:@"lostcnt"] intValue]/lostRate;
+                        }
+                        agtLostNum += [[anyDict objectForKey:@"agtlost"] intValue];
+                        cusLostNum += [[anyDict objectForKey:@"cuslost"] intValue];
+                        sysLostNum += [[anyDict objectForKey:@"syslost"] intValue];
+                        offLostNum += [[anyDict objectForKey:@"offlost"] intValue];
+                        othLostNum += [[anyDict objectForKey:@"othlost"] intValue];
+                        waitDurSecondNum += [[anyDict objectForKey:@"waitdur"]intValue]*[[anyDict objectForKey:@"cuslost"] intValue];
                     }
-                    agtLostNum += [[anyDict objectForKey:@"agtlost"] intValue];
-                    cusLostNum += [[anyDict objectForKey:@"cuslost"] intValue];
-                    sysLostNum += [[anyDict objectForKey:@"syslost"] intValue];
-                    offLostNum += [[anyDict objectForKey:@"offlost"] intValue];
-                    othLostNum += [[anyDict objectForKey:@"othlost"] intValue];
-                    waitDurSecondNum += [[anyDict objectForKey:@"waitdur"]intValue]*[[anyDict objectForKey:@"cuslost"] intValue];
-                }
-                NSDictionary *tmpDict = [[NSDictionary alloc ]initWithObjectsAndKeys:[NSNumber numberWithInt:veryBadNum] ,@"verybad",[NSNumber numberWithInt:badNum] ,@"bad",[NSNumber numberWithInt:lostCntNum] ,@"lostcnt",[NSNumber numberWithInt:agtLostNum] ,@"agtlost",[NSNumber numberWithFloat:(agtCntNum?((float)lostCntNum/(float)agtCntNum):0.0f)] ,@"lostrate",[NSNumber numberWithInt:cusLostNum] ,@"cuslost",[NSNumber numberWithInt:sysLostNum] ,@"syslost",[NSNumber numberWithInt:offLostNum] ,@"offlost",[NSNumber numberWithInt:othLostNum] ,@"othlost", nil];
-                NSArray *tmpDictArray = [[NSArray alloc]initWithObjects:tmpDict, nil];
-                [tmpDict release];
-                self.dataDictArray = tmpDictArray;
-                [tmpDictArray release];
-                [rootTableViewController setDataDictArray:dataDictArray];
-                
-                if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:)]) {
-                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                    [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
-                    NSString *timeString=[formatter stringFromDate: [NSDate date]];
-                    [formatter release];
-                    [delegate willInfoBoardUpdateUIOnPage:timeString];
+                    NSDictionary *tmpDict = [[NSDictionary alloc ]initWithObjectsAndKeys:[NSNumber numberWithInt:veryBadNum] ,@"verybad",[NSNumber numberWithInt:badNum] ,@"bad",[NSNumber numberWithInt:lostCntNum] ,@"lostcnt",[NSNumber numberWithInt:agtLostNum] ,@"agtlost",[NSNumber numberWithFloat:(agtCntNum?((float)lostCntNum/(float)agtCntNum):0.0f)] ,@"lostrate",[NSNumber numberWithInt:cusLostNum] ,@"cuslost",[NSNumber numberWithInt:sysLostNum] ,@"syslost",[NSNumber numberWithInt:offLostNum] ,@"offlost",[NSNumber numberWithInt:othLostNum] ,@"othlost", nil];
+                    NSArray *tmpDictArray = [[NSArray alloc]initWithObjects:tmpDict, nil];
+                    [tmpDict release];
+                    self.dataDictArray = tmpDictArray;
+                    [tmpDictArray release];
+                    [rootTableViewController setDataDictArray:dataDictArray];
+                    
+                    if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:)]) {
+                        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                        [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
+                        NSString *timeString=[formatter stringFromDate: [NSDate date]];
+                        [formatter release];
+                        [delegate willInfoBoardUpdateUIOnPage:timeString];
+                    }
                 }
             }
-            else if([request.url.absoluteString isEqualToString:leafVeryBadWebAddr] || [request.url.absoluteString isEqualToString:leafBadWebAddr])
+        }
+    }
+    else if([request.url.absoluteString isEqualToString:leafVeryBadAndBadWebAddr])
+    {
+        self.webAddr = rootWebAddr;
+        if (![leafVeryBadAndBadCashResponseStr isEqualToString:responseString]) {
+            NSMutableArray *tmpArray = [responseString JSONValue];
+            if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
             {
                 NSMutableArray *veryBadDictArray = [[NSMutableArray alloc]init];
                 NSMutableArray *badDictArray = [[NSMutableArray alloc]init];
@@ -265,25 +261,35 @@
                 [tmpDictArray release];
                 [leafTableViewController setDataDictArray:dataDictArray];
             }
-            else if([request.url.absoluteString isEqualToString:leafAgtLostWebAddr])
-            {
-                self.dataDictArray = tmpArray;
-                [leafTableViewController setDataDictArray:dataDictArray];
-            }
-            if (ifLoading==NO){
-                [self hideWaiting];
-                //NSLog(@"hideWating");
-            }
-            NSLog(@"%d ifLoading in requestFinishded",ifLoading);
-            self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
         }
     }
-    [responseString release];
+
+    else if([request.url.absoluteString isEqualToString:leafAgtLostWebAddr])
+    {
+        self.webAddr = rootWebAddr;
+        if (![leafAgtLostCashResponseStr isEqualToString:responseString]) {
+            NSMutableArray *tmpArray = [responseString JSONValue];
+            if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
+            {
+                        self.dataDictArray = tmpArray;
+                        [leafTableViewController setDataDictArray:dataDictArray];
+            }
+
+        }
+
+    }
+    if (ifLoading==NO){
+     [self hideWaiting];
+    }
+    self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
+
+
 }
 
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
     //NSError *error = [request error];
+    [request startAsynchronous];
 }
 
 #pragma mark - UI Updata Methods
@@ -329,7 +335,7 @@
 	// Add plot space for horizontal bar charts
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
     //plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat(90.0f)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f+1.0)];
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat(5.0f)];
     
     // Create grid line styles
@@ -458,11 +464,7 @@
 
         [[rootTableViewController tableView]reloadData];
     }
-    else if([request.url.absoluteString isEqualToString:leafVeryBadWebAddr])
-    {
-        [[leafTableViewController tableView]reloadData];
-    }
-    else if([request.url.absoluteString isEqualToString:leafBadWebAddr])
+    else if([request.url.absoluteString isEqualToString:leafVeryBadAndBadWebAddr])
     {
         [[leafTableViewController tableView]reloadData];
     }
@@ -503,10 +505,7 @@
                             nil];
         
         CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
-        @try{plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f)];}
-        @catch (NSException *e) {
-        }
-        [barPlotLandscape reloadData];
+        plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f+1.0)];
     }
 
 }
@@ -529,7 +528,7 @@
                 switch (indexPath.row) {
                     case 0:
                     {
-                        self.webAddr = leafVeryBadWebAddr;
+                        self.webAddr = leafVeryBadAndBadWebAddr;
                         leafTableViewController.view.tag =  UnUsualLeafTableViewControllerSituationVeryBad;
                         [navController pushViewController:leafTableViewController animated:YES];
                         leafTableViewController.sectionVeryBadOpend = YES;
@@ -540,7 +539,7 @@
 
                     case 1:
                     {
-                        self.webAddr = leafBadWebAddr;
+                        self.webAddr = leafVeryBadAndBadWebAddr;
                         leafTableViewController.view.tag =  UnUsualLeafTableViewControllerSituationBad;
                         [navController pushViewController:leafTableViewController animated:YES];
                         leafTableViewController.sectionVeryBadOpend = NO;
@@ -733,83 +732,7 @@
         [leafTableViewController.tableView reloadData];
         //navController.navigationBar.topItem.leftBarButtonItem.title = @"返回";
         [self requestData];
-        self.webAddr = rootWebAddr;
     }
 }
-
-#pragma mark - touch and controlPad
-- (IBAction)showControlPadView:(id)sender
-{
-    UIButton *tietleButton = (UIButton *)sender;
-    tietleButton.selected = !tietleButton.selected;
-    if(tietleButton.selected)
-    {
-        /*
-         CATransition *animation = [CATransition animation];
-         animation.duration = 1.0f;
-         animation.timingFunction = UIViewAnimationCurveEaseInOut;
-         //设置上面4种动画效果使用CATransiton可以设置4种动画效果，分别为：kCATransitionFade渐渐消失;kCATransitionMoveIn覆盖进入;kCATransitionPush推出;kCATransitionReveal与MoveIn相反;
-         animation.type = kCATransitionFade;
-         //设置动画的方向，有四种，分别为kCATransitionFromRight、kCATransitionFromLeft、kCATransitionFromTop、kCATransitionFromBottom
-         animation.subtype = kCATransitionFromBottom;
-         */
-        //[self.controlPadView.layer addAnimation:animation forKey:@"animationAppear"];
-        
-        refreshIntervalSlider.value = refreshInterval;
-        NSString *refreshIntervalStr = [[NSString alloc]initWithFormat:@"%d", refreshInterval];
-        refreshIntervalLabel.text = refreshIntervalStr;
-        [refreshIntervalStr release];
-        //[controlPadView setFrame:CGRectMake(0.0f, 30.0f, 320.0f, 44.0f)];
-        [self.view addSubview:controlPadView];
-    }
-    else
-    {
-        /*
-         CATransition *animation = [CATransition animation];
-         animation.duration = 0.5f;
-         animation.timingFunction = UIViewAnimationCurveEaseInOut;
-         //设置上面4种动画效果使用CATransiton可以设置4种动画效果，分别为：kCATransitionFade;//渐渐消失kCATransitionMoveIn;//覆盖进入kCATransitionPush;//推出kCATransitionReveal;//与MoveIn相反
-         animation.type = kCATransitionMoveIn;
-         //设置动画的方向，有四种，分别为kCATransitionFromRight、kCATransitionFromLeft、kCATransitionFromTop、kCATransitionFromBottom
-         animation.subtype = kCATransitionFromTop; 
-         [self.controlPadView.layer addAnimation:animation forKey:@"animationDissappear"];
-         */
-        
-        NSUserDefaults *df = [NSUserDefaults standardUserDefaults];  
-        if (df) {  
-            NSNumber *_refreshInterval = [[NSNumber alloc]initWithInt:refreshInterval];
-            [df setObject:_refreshInterval forKey:@"unusualInfoInterval"]; 
-            [_refreshInterval release];
-            [df synchronize];  
-        }  
-        [controlPadView removeFromSuperview];
-    }
-}
-
-- (IBAction)sliderChanged:(id)sender
-{
-    UISlider *theSlider = (UISlider *)sender;
-    refreshInterval = round(theSlider.value); 
-    NSString *_refreshIntervalStr = [[NSString alloc]initWithFormat:@"%d", refreshInterval];
-    refreshIntervalLabel.text = _refreshIntervalStr;
-    [_refreshIntervalStr release];
-    [self dataUpdatePause];
-    self.timer=[NSTimer scheduledTimerWithTimeInterval:refreshInterval
-                                                target:self 
-                                              selector:@selector(requestData) 
-                                              userInfo:nil 
-                                               repeats:YES]; 
-}
-
-- (IBAction)refresh:(id)sender{
-    [self dataUpdatePause];
-    [self dataUpdateStart];
-}
-- (IBAction)pauseOrStart:(id)sender{
-    UIButton *theButton = (UIButton *)sender;
-    theButton.selected = !theButton.selected;
-    theButton.selected?[self dataUpdatePause]:[self dataUpdateStart];
-}
-
 
 @end

@@ -20,11 +20,7 @@
 @property (nonatomic, retain) IBOutlet UIView *originView;
 @property (nonatomic, retain) IBOutlet UIView *landscapeView;
 
-@property (nonatomic, retain) IBOutlet UIView *controlPadView;
-@property (nonatomic, retain) IBOutlet UISlider *refreshIntervalSlider;
-@property (nonatomic, retain) IBOutlet UILabel *refreshIntervalLabel;
-@property (nonatomic, retain) IBOutlet UIButton *refreshButton;
-@property (nonatomic, retain) IBOutlet UIButton *pauseOrStartButton;
+
 
 
 - (void)setAddrWithAddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet;
@@ -38,8 +34,5 @@
 
 - (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number;
 
-- (IBAction)sliderChanged:(id)sender;
-- (IBAction)showControlPadView:(id)sender;
-- (IBAction)refresh:(id)sender;
-- (IBAction)pauseOrStart:(id)sender;
+
 @end

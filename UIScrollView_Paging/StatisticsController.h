@@ -11,7 +11,7 @@
 #import "SDInfoBoardUIUpdate.h"
 @class ASIHTTPRequest;
 
-@interface StatisticsController : UIViewController<UIActionSheetDelegate,CPTPieChartDataSource, CPTPieChartDelegate, CPTPlotDataSource>
+@interface StatisticsController : UIViewController<UIActionSheetDelegate,CPTPieChartDataSource, CPTPieChartDelegate, CPTPlotDataSource,CPTBarPlotDelegate>
 {
     CPTGraphHostingView *barChartView; //一个装一个柱状图或者饼图 
     CPTXYGraph *barChart;//xy背景图，表格
@@ -86,8 +86,6 @@
     
     UIView *originView;
     UIView *landscapeView;
-    UIView *controlPadView;
-    UISlider *refreshIntervalSlider;
 }
 @property (nonatomic, assign) id <SDInfoBoardUpdateUI> delegate;
 @property (nonatomic,copy) NSString *agtTotalInfoCashResponseStr;
@@ -137,10 +135,6 @@
 @property (nonatomic, retain) IBOutlet UIView *originView;
 @property (nonatomic, retain) IBOutlet UIView *landscapeView;
 
-@property (nonatomic, retain) IBOutlet UIView *controlPadView;
-@property (nonatomic, retain) IBOutlet UISlider *refreshIntervalSlider;
-@property (nonatomic, retain) IBOutlet UILabel *refreshIntervalLabel;
-@property (nonatomic, retain) IBOutlet UIButton *pauseOrStartButton;
 
 @property (nonatomic, retain) UIActivityIndicatorView *loadingOrigin;
 @property (nonatomic, retain) UIActivityIndicatorView *loadingLandscape;
@@ -162,8 +156,5 @@
 - (void) cleanUI;
 
 - (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number;
-- (IBAction)sliderChanged:(id)sender;
-- (IBAction)showControlPadView:(id)sender;
-- (IBAction)refresh:(id)sender;
-- (IBAction)pauseOrStart:(id)sender;
+
 @end

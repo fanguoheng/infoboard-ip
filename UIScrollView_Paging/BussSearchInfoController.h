@@ -47,10 +47,6 @@
 @property (nonatomic, retain) IBOutlet UIView *originView;
 @property (nonatomic, retain) IBOutlet UIView *landscapeView;
 @property (nonatomic, retain) IBOutlet UITableView *tableViewPortrait;
-@property (nonatomic, retain) IBOutlet UIView *controlPadView;
-@property (nonatomic, retain) IBOutlet UISlider *refreshIntervalSlider;
-@property (nonatomic, retain) IBOutlet UILabel *refreshIntervalLabel;
-@property (nonatomic, retain) IBOutlet UIButton *pauseOrStartButton;
 @property (nonatomic, retain) UIActivityIndicatorView *loadingOrigin;
 @property (nonatomic, retain) UIActivityIndicatorView *loadingLandscape;
 @property (nonatomic, readwrite) BOOL ifLoading;
@@ -63,11 +59,6 @@
 - (void)updateOriginView:(ASIHTTPRequest *)request;
 - (void)updateLandscapeView:(ASIHTTPRequest *)request;
 - (void) cleanUI;
-
-- (IBAction)sliderChanged:(id)sender;
-- (IBAction)showControlPadView:(id)sender;
-- (IBAction)refresh:(id)sender;
-- (IBAction)pauseOrStart:(id)sender;
 
 - (void)createBarChartAndPiePlotInLandscapeView;
 - (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number;

@@ -12,7 +12,6 @@
 @synthesize addrPrefix,addrPostfix;
 @synthesize timer,refreshInterval;
 @synthesize originView,landscapeView;
-@synthesize controlPadView,refreshIntervalSlider,refreshIntervalLabel,refreshButton,pauseOrStartButton;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -47,11 +46,6 @@
 {
     [originView release];
     [landscapeView release];
-    [controlPadView release];
-    [refreshIntervalSlider release];
-    [refreshIntervalLabel release];
-    [refreshButton release];
-    [pauseOrStartButton release];
     [super dealloc];
 }
 
@@ -86,11 +80,6 @@
     // e.g. self.myOutlet = nil;
     self.originView = nil;
     self.landscapeView  = nil;
-    self.controlPadView  = nil;
-    self.refreshIntervalSlider  = nil;
-    self.refreshIntervalLabel  = nil;
-    self.refreshButton  = nil;
-    self.pauseOrStartButton  = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -133,58 +122,6 @@
 {
     //基类中此函数什么也不做
 }
-#pragma mark - controlPad
-- (IBAction)showControlPadView:(id)sender
-{
-    UIButton *theButton = (UIButton *)sender;
-    theButton.selected = !theButton.selected;
-    if(theButton.selected)
-    {
-        refreshIntervalSlider.value = refreshInterval;
-        NSString *refreshIntervalStr = [[NSString alloc]initWithFormat:@"%d", refreshInterval];
-        refreshIntervalLabel.text = refreshIntervalStr;
-        [refreshIntervalStr release];
-        [self.view addSubview:controlPadView];
-    }
-    else
-    {
-        NSUserDefaults *df = [NSUserDefaults standardUserDefaults];  
-        if (df) {  
-            NSNumber *_refreshInterval = [[NSNumber alloc]initWithInt:refreshInterval];
-            [df setObject:_refreshInterval forKey:@"statisticsinterval"]; 
-            [_refreshInterval release];
-            [df synchronize];  
-        }  
-        [controlPadView removeFromSuperview];
-    }
-}
-
-- (IBAction)sliderChanged:(id)sender
-{
-    UISlider *theSlider = (UISlider *)sender;
-    refreshInterval = round(theSlider.value); 
-    NSString *_refreshIntervalStr = [[NSString alloc]initWithFormat:@"%d", refreshInterval];
-    refreshIntervalLabel.text = _refreshIntervalStr;
-    [_refreshIntervalStr release];
-    [self dataUpdatePause];
-    self.timer=[NSTimer scheduledTimerWithTimeInterval:refreshInterval
-                                                target:self 
-                                              selector:@selector(requestData) 
-                                              userInfo:nil 
-                                               repeats:YES]; 
-}
-
-- (IBAction)refresh:(id)sender{
-    [self dataUpdatePause];
-    [self dataUpdateStart];
-}
-
-- (IBAction)pauseOrStart:(id)sender{
-    UIButton *theButton = (UIButton *)sender;
-    theButton.selected = !theButton.selected;
-    theButton.selected?[self dataUpdatePause]:[self dataUpdateStart];
-}
-
 #pragma mark - utiles
 //将整数变成带逗号的字符串，仅支持小于1,000,000的整数
 - (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number

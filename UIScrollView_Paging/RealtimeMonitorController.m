@@ -42,7 +42,6 @@
 
 @synthesize originView;
 @synthesize landscapeView;
-@synthesize controlPadView,refreshIntervalSlider,refreshIntervalLabel,pauseOrStartButton;
 
 @synthesize delegate,cashResponseStr;
 @synthesize loadingOrigin,loadingLandscape;
@@ -87,10 +86,6 @@
     [queueLabel release];
     [originView release];
     [landscapeView release];
-    [controlPadView release];
-    [refreshIntervalSlider release];
-    [refreshIntervalLabel release];
-    [pauseOrStartButton release];
     [super dealloc];
     
     [barChartView release];
@@ -124,13 +119,10 @@
     {
         refreshInterval = 60;
     }
-    [controlPadView setFrame:CGRectMake(0.0f, 30.0f, 320.0f, 44.0f)];
+
     [self createBarChartInOriginView]; 
     [self createBarChartInLandscapeView];
-    UIImage *pauseImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"media-playback-pause" ofType:@"png"]];
-    [pauseOrStartButton setImage:pauseImage forState:UIControlStateNormal];
-    UIImage *startImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"media-playback-start" ofType:@"png"]];
-    [pauseOrStartButton setImage:startImage forState:UIControlStateSelected];
+
 
     loadingOrigin=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:
                    UIActivityIndicatorViewStyleWhiteLarge];
@@ -183,10 +175,6 @@
     self.queueLabel = nil;
     self.originView = nil;
     self.landscapeView = nil;
-    self.controlPadView = nil;
-    self.refreshIntervalSlider = nil;
-    self.refreshIntervalLabel = nil;
-    self.pauseOrStartButton = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -300,9 +288,7 @@
 
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
-    //NSError *error = [request error];
-    [timer invalidate];
-    timer = nil;
+    [request startAsynchronous];
 }
  
 - (void)updateOriginView:(ASIHTTPRequest *)request
@@ -458,7 +444,7 @@
     
     //plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f)];
     //plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat(8.0f)];
-    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f)];
+    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f+1.0)];
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat(5.0f)];
     
 	CPTXYAxisSet *axisSet = (CPTXYAxisSet *)barChart.axisSet;
@@ -579,7 +565,7 @@
 	// Add plot space for horizontal bar charts
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
     //plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat(90.0f)];
-    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f)];
+    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f+1.0)];
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat(5.0f)];
     
     // Create grid line styles
@@ -827,78 +813,4 @@
     frontView.selected = YES;
 }
  */
-#pragma mark - touch and controlPad
-- (IBAction)showControlPadView:(id)sender
-{
-    UIButton *tietleButton = (UIButton *)sender;
-    tietleButton.selected = !tietleButton.selected;
-    if(tietleButton.selected)
-    {
-        /*
-         CATransition *animation = [CATransition animation];
-         animation.duration = 1.0f;
-         animation.timingFunction = UIViewAnimationCurveEaseInOut;
-         //设置上面4种动画效果使用CATransiton可以设置4种动画效果，分别为：kCATransitionFade渐渐消失;kCATransitionMoveIn覆盖进入;kCATransitionPush推出;kCATransitionReveal与MoveIn相反;
-         animation.type = kCATransitionFade;
-         //设置动画的方向，有四种，分别为kCATransitionFromRight、kCATransitionFromLeft、kCATransitionFromTop、kCATransitionFromBottom
-         animation.subtype = kCATransitionFromBottom;
-         */
-        //[self.controlPadView.layer addAnimation:animation forKey:@"animationAppear"];
-        
-        refreshIntervalSlider.value = refreshInterval;
-        NSString *refreshIntervalStr = [[NSString alloc]initWithFormat:@"%d", refreshInterval];
-        refreshIntervalLabel.text = refreshIntervalStr;
-        [refreshIntervalStr release];
-        //[controlPadView setFrame:CGRectMake(0.0f, 30.0f, 320.0f, 44.0f)];
-        [self.view addSubview:controlPadView];
-    }
-    else
-    {
-        /*
-         CATransition *animation = [CATransition animation];
-         animation.duration = 0.5f;
-         animation.timingFunction = UIViewAnimationCurveEaseInOut;
-         //设置上面4种动画效果使用CATransiton可以设置4种动画效果，分别为：kCATransitionFade;//渐渐消失kCATransitionMoveIn;//覆盖进入kCATransitionPush;//推出kCATransitionReveal;//与MoveIn相反
-         animation.type = kCATransitionMoveIn;
-         //设置动画的方向，有四种，分别为kCATransitionFromRight、kCATransitionFromLeft、kCATransitionFromTop、kCATransitionFromBottom
-         animation.subtype = kCATransitionFromTop; 
-         [self.controlPadView.layer addAnimation:animation forKey:@"animationDissappear"];
-         */
-        
-        NSUserDefaults *df = [NSUserDefaults standardUserDefaults];  
-        if (df) {  
-            NSNumber *_refreshInterval = [[NSNumber alloc]initWithInt:refreshInterval];
-            [df setObject:_refreshInterval forKey:@"realtimemonitorinterval"]; 
-            [_refreshInterval release];
-            [df synchronize];  
-        }  
-        [controlPadView removeFromSuperview];
-    }
-}
-
-- (IBAction)sliderChanged:(id)sender
-{
-    UISlider *theSlider = (UISlider *)sender;
-    refreshInterval = round(theSlider.value); 
-    NSString *_refreshIntervalStr = [[NSString alloc]initWithFormat:@"%d", refreshInterval];
-    refreshIntervalLabel.text = _refreshIntervalStr;
-    [_refreshIntervalStr release];
-    [self dataUpdatePause];
-    self.timer=[NSTimer scheduledTimerWithTimeInterval:refreshInterval
-                                                target:self 
-                                              selector:@selector(requestData) 
-                                              userInfo:nil 
-                                               repeats:YES]; 
-}
-
-- (IBAction)refresh:(id)sender{
-    [self dataUpdatePause];
-    [self dataUpdateStart];
-}
-- (IBAction)pauseOrStart:(id)sender{
-    UIButton *theButton = (UIButton *)sender;
-    theButton.selected = !theButton.selected;
-    theButton.selected?[self dataUpdatePause]:[self dataUpdateStart];
-    
-}
 @end

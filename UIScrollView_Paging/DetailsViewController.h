@@ -53,10 +53,7 @@
 
 @property (nonatomic, retain) IBOutlet UIView *originView;
 @property (nonatomic, retain) IBOutlet UIView *landscapeView;
-@property (nonatomic, retain) IBOutlet UIView *controlPadView;
-@property (nonatomic, retain) IBOutlet UISlider *refreshIntervalSlider;
-@property (nonatomic, retain) IBOutlet UILabel *refreshIntervalLabel;
-@property (nonatomic, retain) IBOutlet UIButton *pauseOrStartButton;
+
 @property (nonatomic, retain) NSMutableArray *lists;
 
 @property (nonatomic, retain) UINavigationController *navController;
@@ -75,8 +72,4 @@
 - (void) updateLandscapeView:(ASIHTTPRequest*)request;
 - (void) cleanUI;
 
-- (IBAction)sliderChanged:(id)sender;
-- (IBAction)showControlPadView:(id)sender;
-- (IBAction)refresh:(id)sender;
-- (IBAction)pauseOrStart:(id)sender;
 @end

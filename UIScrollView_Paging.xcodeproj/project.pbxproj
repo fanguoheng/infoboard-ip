@@ -326,7 +326,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		040351C814452E6900D736EE /* Popover */ = {
+		040351C814452E6900D736EE /* WEPopover */ = {
 			isa = PBXGroup;
 			children = (
 				040351C914452E6900D736EE /* UIBarButtonItem+WEPopover.h */,
@@ -339,6 +339,7 @@
 				040351D014452E6900D736EE /* WETouchableView.h */,
 				040351D114452E6900D736EE /* WETouchableView.m */,
 			);
+			name = WEPopover;
 			path = Popover;
 			sourceTree = "<group>";
 		};
@@ -411,7 +412,7 @@
 				2CCAA01614959CBC00D3C8AD /* Reachability.h */,
 				2CCAA01714959CBC00D3C8AD /* Reachability.m */,
 				04CA2F9A14592A5400C8378E /* CorePlotHeaders */,
-				040351C814452E6900D736EE /* Popover */,
+				040351C814452E6900D736EE /* WEPopover */,
 				04B097D01399FDCD00C69F3A /* ASIHTTPRequest */,
 				048DBB7B13970DB000A30AB5 /* JSON */,
 				04A017BC13961AA100B942E1 /* UIScrollView_Paging */,
