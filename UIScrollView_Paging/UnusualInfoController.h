@@ -7,6 +7,7 @@
 //
 #import "CorePlot-CocoaTouch.h"
 #import "SDInfoBoardUIUpdate.h"
+#import "BSTableHeadView.h"
 #import <UIKit/UIKit.h>
 @class UnUsualRootTableViewController;
 @class UnUsualLeafTableViewController;

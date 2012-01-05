@@ -187,12 +187,12 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
         
-    NSString *headerTitle = [[NSString alloc]initWithFormat:@"座席组监控: %d个",[allGrpInfoDictArray count]];
-    return [[[DetailHeaderView alloc] initWithFrame:CGRectMake(0.0, 0.0, groupTableViewController.tableView.frame.size.width, 22.0) title:headerTitle delegate:self] autorelease];
+    NSString *headerTitle = [[NSString alloc]initWithFormat:@"   监控数: %d个（点击查看坐席列表）",[allGrpInfoDictArray count]];
+    return [[[DetailHeaderView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 30.0) title:headerTitle delegate:self] autorelease];
     [headerTitle release];
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 22.0;
+    return 35.0;
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath

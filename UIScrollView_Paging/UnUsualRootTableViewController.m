@@ -8,6 +8,7 @@
 
 #import "UnUsualRootTableViewController.h"
 #import "CVTableCellBGView.h"
+
 @implementation UnUsualRootTableViewController
 
 @synthesize dataDictArray;
@@ -18,7 +19,9 @@
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        self.tableView.separatorColor=[UIColor darkGrayColor];
         self.view.backgroundColor = [UIColor clearColor];
         self.tableView.showsHorizontalScrollIndicator = NO;
         self.tableView.showsVerticalScrollIndicator = NO;
@@ -93,6 +96,7 @@
         cell.textLabel.textColor = [UIColor whiteColor];
         cell.detailTextLabel.textColor = [UIColor clearColor];
         cell.detailTextLabel.textColor = [UIColor orangeColor];
+        cell.textLabel.font=[UIFont systemFontOfSize:18];
     }
     //此时cell != nil
     switch (indexPath.section) {
@@ -177,9 +181,7 @@
 {
     return 3;
 }
-
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+/*- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     switch (section) {
         case 0:
@@ -191,7 +193,7 @@
         default:
             return nil;
     }
-}
+}*/
 
 #pragma mark - utiles
 

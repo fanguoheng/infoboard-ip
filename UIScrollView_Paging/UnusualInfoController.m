@@ -585,6 +585,22 @@
 
     }
 }
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    switch (section) {
+        case 0:
+            return [[[BSTableHeadView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0,30.0) headStr:@"   客户差评(个)"] autorelease];
+        case 1:
+            return [[[BSTableHeadView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0,30.0) headStr:@"   电话丢失统计(个)"] autorelease];
+        case 2:
+            return [[[BSTableHeadView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0,30.0) headStr:@"   电话丢失原因分类统计(个)"] autorelease];
+        default:
+            return nil;
+    }
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 35.0;
+}
 #pragma mark - core plot 
 
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot

@@ -15,7 +15,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        headLabel= [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, self.frame.size.width, self.frame.size.height)];
+        headLabel= [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0,320.0, 30.0)];
         [self addSubview:headLabel];
     }
     return self;
@@ -24,6 +24,10 @@
 {
     [self initWithFrame:frame];
     headLabel.text=str;
+    headLabel.backgroundColor=[UIColor clearColor];
+    headLabel.textColor=[UIColor whiteColor];
+    headLabel.font=[UIFont boldSystemFontOfSize:18];
+    self.backgroundColor=[UIColor clearColor];
     return self;
 }
 

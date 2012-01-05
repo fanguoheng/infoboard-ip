@@ -28,8 +28,13 @@
 - (id)initWithFrame:(CGRect)frame title:(NSString*)titleSet delegate:(id)delegateSet
 {
     [self initWithFrame:frame];
-    titleLabel.text = titleSet;
+    //titleLabel.text = titleSet;
     delegate = delegateSet;
+    titleLabel.text=titleSet;
+    titleLabel.backgroundColor=[UIColor clearColor];
+    titleLabel.textColor=[UIColor whiteColor];
+    titleLabel.font=[UIFont boldSystemFontOfSize:18];
+    self.backgroundColor=[UIColor clearColor];
     return self;
 }
 
