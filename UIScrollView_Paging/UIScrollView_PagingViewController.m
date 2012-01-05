@@ -31,6 +31,7 @@
 @synthesize picker,provincesShops,provinces,shops;
 
 @synthesize navBar,navBarTitles;
+@synthesize updateTimeStrArray;
 - (void)dealloc
 {
     [navBar release];
@@ -50,6 +51,7 @@
     [provinces release];
     [shops release];
     [allViewsPicView release];
+    [updateTimeStrArray release];
     [super dealloc];
 }
 
@@ -74,6 +76,7 @@
     Float32 scrollViewFrameHeight = scrollView.frame.size.height;
     navBarTitles = [[NSArray alloc]initWithObjects:@"统计分析",@"业务汇总",@"异常汇总",@"实时呼叫",@"座席列表", nil];
     navBar.topItem.title = [navBarTitles objectAtIndex:0];
+    updateTimeStrArray = [[NSMutableArray alloc]initWithObjects:@"",@"",@"",@"",@"", nil];
     
     StatisticsController *statisticsController = [[StatisticsController alloc ]initWithNibName:@"StatisticsController" bundle:nil];
     statisticsController.delegate = self;
@@ -683,9 +686,10 @@ UIInterfaceOrientation temp;
 }
 
 #pragma mark - willInfoBoardUpdateUIOnPage: Delegate
-- (void)willInfoBoardUpdateUIOnPage:(NSString *) msg
+- (void)willInfoBoardUpdateUIOnPage:(NSInteger)page WithMessage:(NSString*) msg;
 {
 
-    pageRefreshTimeLabel.text = msg;
+    [updateTimeStrArray replaceObjectAtIndex:page withObject:msg];
+    pageRefreshTimeLabel.text = [updateTimeStrArray objectAtIndex:pageControl.currentPage];
 }
 @end

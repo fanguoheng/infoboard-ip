@@ -230,12 +230,12 @@
                     [tmpDictArray release];
                     [rootTableViewController setDataDictArray:dataDictArray];
                     
-                    if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:)]) {
+                    if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
                         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                         [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
                         NSString *timeString=[formatter stringFromDate: [NSDate date]];
                         [formatter release];
-                        [delegate willInfoBoardUpdateUIOnPage:timeString];
+                        [delegate willInfoBoardUpdateUIOnPage:2 WithMessage:timeString];
                     }
                 }
             }
