@@ -25,10 +25,12 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        //tableViewPortrait=[[[UITableView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 200.0) style:UITableViewStyleGrouped] autorelease];
         tableViewPortrait.showsHorizontalScrollIndicator = NO;
         tableViewPortrait.showsVerticalScrollIndicator = NO;
         bussinessInfoCashResponseStr = [[NSString alloc]init ];
         bussSearchInfoCashResponseStr = [[NSString alloc]init];
+        //self.tableViewPortrait.style=UITableViewCellSeparatorStyleSingleLine;
        // self.tableViewPortrait.delegate=self;
     }
     return self;
@@ -49,7 +51,8 @@
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil AddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)AddrPostfixSet
 {
-    [self initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+   [self initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+
     [self setAddrWithAddrPrefix:addrPrefixSet AddrPostfix:AddrPostfixSet];
     
     return self;
@@ -552,6 +555,7 @@
         cell.textLabel.backgroundColor=[UIColor clearColor];
         cell.detailTextLabel.textColor = [UIColor orangeColor];
         cell.detailTextLabel.backgroundColor=[UIColor clearColor];
+        cell.textLabel.font=[UIFont systemFontOfSize:18];
     }
     switch (indexPath.section) {
         case 0:
@@ -594,24 +598,23 @@
     return cell;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-
     switch (section) {
         case 0:
-            return [[[BSTableHeadView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableViewPortrait.frame.size.width,22.0) headStr:@"业务数据（个）"] autorelease];
+            return [[[BSTableHeadView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0,30.0) headStr:@"   业务数据（个）"] autorelease];
         case 1:
-            return [[[BSTableHeadView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableViewPortrait.frame.size.width,22.0) headStr:@"查单分类统计（个）"] autorelease];
+            return [[[BSTableHeadView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0,30.0) headStr:@"   查单分类统计（个）"] autorelease];
         default:
             return nil;
     }
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 22.0;
+    return 35.0;
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 2;
 }
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+/*- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     switch (section) {
         case 0:
@@ -621,7 +624,7 @@
         default:
             return nil;
     }
-}
+}*/
 
 #pragma mark - core plot 
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
