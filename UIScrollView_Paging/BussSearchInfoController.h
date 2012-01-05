@@ -33,6 +33,7 @@
 @property (nonatomic, retain) NSDictionary *bussinessInfoDataDict;
 @property (nonatomic, retain) NSArray *bussSearchInfoDataDictKeys;
 @property (nonatomic, retain) NSMutableDictionary *bussSearchInfoDataDict;
+@property (nonatomic, retain) NSArray *bussSearchInfoDataDictArray;
 
 
 @property (nonatomic, retain) CPTGraphHostingView *barChartViewLandscape; 
@@ -62,4 +63,19 @@
 
 - (void)createBarChartAndPiePlotInLandscapeView;
 - (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number;
+@end
+
+@interface NSDictionary(myCompare)
+- (NSComparisonResult)myCompareMethodWithDict: (NSDictionary*)theOtherDict;
+@end
+
+
+@implementation NSDictionary(myCompare)
+- (NSComparisonResult)myCompareMethodWithDict: (NSDictionary*)anotherDict
+{
+    NSInteger firstValue = [[self objectForKey: @"value"] intValue];
+    NSInteger secondValue = [[anotherDict objectForKey: @"value"] intValue];
+    
+    return firstValue < secondValue;
+}
 @end
