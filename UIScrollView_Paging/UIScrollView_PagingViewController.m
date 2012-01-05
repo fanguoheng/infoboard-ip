@@ -106,7 +106,6 @@
     //self.view.backgroundColor = [UIColor whiteColor];
     scrollView.contentSize = CGSizeMake(scrollViewFrameWidth * viewBoardControllersCount, scrollViewFrameHeight);
     scrollView.alpha = 0.0f;
-    
     //各页面属性设置
     for (NSInteger i=0; i<viewBoardControllersCount; i++) {
         [[[viewBoardControllers objectAtIndex:i] view ] setFrame:CGRectMake(scrollViewFrameWidth * i, 0.0f, scrollViewFrameWidth - kViewGap, scrollViewFrameHeight)];
@@ -163,11 +162,13 @@
              [shopSelectedNumber release];
              }
              */
+            
             self.provincesShops = [df objectForKey:@"provincesshops"];
             self.provinces = [df objectForKey:@"provinces"];
             NSInteger provinceSelected = [[df objectForKey:@"provinceselectednumber"] intValue];
             NSInteger shopSelected = [[df objectForKey:@"shopselectednumber"] intValue];
             self.shops = [provincesShops objectForKey:[provinces objectAtIndex:provinceSelected]];
+            //[showAllViewBoardsAndSettingButton setTitle:[shops objectAtIndex:shopSelected] forState:UIControlStateNormal];
             [picker reloadAllComponents];
             [picker selectRow:provinceSelected inComponent:0 animated:NO]; 
             [picker selectRow:shopSelected inComponent:1 animated:NO]; 
@@ -453,7 +454,9 @@ UIInterfaceOrientation temp;
     NSInteger provinceSelected = [picker selectedRowInComponent:0];
     NSInteger shopSelected = [picker selectedRowInComponent:1];
     self.addrPostfix = [[NSString alloc]initWithFormat:@"&shopId=%@",[[[provincesShops objectForKey:[provinces objectAtIndex:provinceSelected]] objectAtIndex:shopSelected] objectForKey:@"shopid"]];
-    [showAllViewBoardsAndSettingButton setTitle:[[[provincesShops objectForKey:[provinces objectAtIndex:provinceSelected]] objectAtIndex:shopSelected] objectForKey:@"shopname"] forState:UIControlStateNormal];
+    NSString *shopName = [[NSString alloc]initWithString:[[[provincesShops objectForKey:[provinces objectAtIndex:provinceSelected]] objectAtIndex:shopSelected] objectForKey:@"shopname"]];
+    [showAllViewBoardsAndSettingButton setTitle:shopName forState:UIControlStateNormal];
+    //[shopName release];
     NSUserDefaults *df = [NSUserDefaults standardUserDefaults];
     if (df) {
         NSNumber *provinceSelectedNumber = [[NSNumber alloc]initWithInt:provinceSelected];
@@ -463,6 +466,7 @@ UIInterfaceOrientation temp;
         [df setValue:provinces forKey:@"provinces"];
         [df setValue:provincesShops forKey:@"provincesshops"];
         [df setValue:addrPostfix forKey:@"addrpostfix"];
+        //[df setValue:shopName forKey:@"shopname"];
         [df synchronize];
         [provinceSelectedNumber release];
         [shopSelectedNumber release];
