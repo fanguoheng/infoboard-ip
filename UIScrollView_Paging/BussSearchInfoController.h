@@ -31,7 +31,6 @@
 @property (nonatomic, retain) NSTimer *timer;
 @property (nonatomic, retain) NSDictionary *cashDict_1;
 @property (nonatomic, retain) NSDictionary *bussinessInfoDataDict;
-@property (nonatomic, retain) NSArray *bussSearchInfoDataDictKeys;
 @property (nonatomic, retain) NSMutableDictionary *bussSearchInfoDataDict;
 @property (nonatomic, retain) NSArray *bussSearchInfoDataDictArray;
 
@@ -75,11 +74,13 @@
 {
     NSInteger firstValue = [[self objectForKey: @"value"] intValue];
     NSInteger secondValue = [[anotherDict objectForKey: @"value"] intValue];
+    return firstValue < secondValue;
+    
     if  (firstValue!=secondValue)
         return firstValue < secondValue;
     else
     {
-        return [(NSString*)[self objectForKey:@"searchtype"] compare:[anotherDict objectForKey:@"searchtype"]];
+        return [(NSString*)[self objectForKey:@"searchType"] compare:[anotherDict objectForKey:@"searchType"]];
     }
 }
 @end

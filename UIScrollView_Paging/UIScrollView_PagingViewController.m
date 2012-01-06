@@ -168,7 +168,7 @@
             NSInteger provinceSelected = [[df objectForKey:@"provinceselectednumber"] intValue];
             NSInteger shopSelected = [[df objectForKey:@"shopselectednumber"] intValue];
             self.shops = [provincesShops objectForKey:[provinces objectAtIndex:provinceSelected]];
-            //[showAllViewBoardsAndSettingButton setTitle:[shops objectAtIndex:shopSelected] forState:UIControlStateNormal];
+            [showAllViewBoardsAndSettingButton setTitle:[[shops objectAtIndex:shopSelected]objectForKey:@"shopname"] forState:UIControlStateNormal];
             [picker reloadAllComponents];
             [picker selectRow:provinceSelected inComponent:0 animated:NO]; 
             [picker selectRow:shopSelected inComponent:1 animated:NO]; 

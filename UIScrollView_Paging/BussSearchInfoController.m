@@ -15,7 +15,7 @@
 @implementation BussSearchInfoController
 @synthesize addrPrefix;
 @synthesize addrPostfix;
-@synthesize bussinessInfoWebAddr,bussSearchInfoWebAddr,timer,refreshInterval,cashDict_1,bussSearchInfoDataDictKeys, bussinessInfoDataDict,bussSearchInfoDataDict,bussSearchInfoDataDictArray,originView,landscapeView,tableViewPortrait;
+@synthesize bussinessInfoWebAddr,bussSearchInfoWebAddr,timer,refreshInterval,cashDict_1, bussinessInfoDataDict,bussSearchInfoDataDict,bussSearchInfoDataDictArray,originView,landscapeView,tableViewPortrait;
 @synthesize barChartViewLandscape,barChartLandscape,barPlotLandscape,barPlotData,pieChartViewLandscape,pieChartLandscape,piePlotLandscape,answerRatePersent;
 @synthesize delegate,bussinessInfoCashResponseStr,bussSearchInfoCashResponseStr;
 @synthesize loadingOrigin,loadingLandscape;
@@ -72,7 +72,6 @@
     [originView release];
     [landscapeView release];
     [pieChartViewLandscape release];
-    
     [super dealloc];
 }
 #pragma mark - View lifecycle
@@ -227,8 +226,9 @@
                     [newNumber release];
                     [searchType release];
                 }
-                self.bussSearchInfoDataDictKeys = [bussSearchInfoDataDict allKeys];
+
                 self.bussSearchInfoDataDictArray = [[bussSearchInfoDataDict allValues]sortedArrayUsingSelector:@selector(myCompareMethodWithDict:)];
+                //self.bussSearchInfoDataDictArray = [bussSearchInfoDataDict allValues];
                 
                 if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
                     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -521,8 +521,7 @@
     cuscompcntNum = 0;
     sitcompcntNum = 0;
     searchcntNum = 0;
-    self.bussSearchInfoDataDict = nil;
-    self.bussSearchInfoDataDictKeys = nil;
+    self.bussSearchInfoDataDictArray = nil;
     [tableViewPortrait reloadData];
     
 }
@@ -534,7 +533,7 @@
         case 0:
             return 3;
         case 1:
-            return [bussSearchInfoDataDictKeys count];
+            return [bussSearchInfoDataDictArray count];
         default:
             return 0;
     }
@@ -588,7 +587,7 @@
             cell.textLabel.text = [searchType isEqualToString:@""]?@"暂无分类":searchType;
             cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:[[bussSearchInfoDataDict objectForKey:searchType] intValue]];
             [searchType release];*/
-            NSDictionary *search = [bussSearchInfoDataDictArray objectAtIndex:indexPath.row];
+            NSDictionary *search = [[NSDictionary alloc]initWithDictionary: [bussSearchInfoDataDictArray objectAtIndex:indexPath.row]];
             cell.textLabel.text = [[search objectForKey:@"searchType"] isEqualToString:@""]?@"暂无分类":[search objectForKey:@"searchType"];
             cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:[[search objectForKey:@"value"]intValue]];
             [search release];
@@ -638,7 +637,7 @@
     else
     {
         //return [answerRatePersent count];
-         return [bussSearchInfoDataDictKeys count];
+         return [bussSearchInfoDataDictArray count];
     }
 }
 
@@ -659,10 +658,11 @@
         
     }
     else{
-        if ( index >= [bussSearchInfoDataDictKeys count] ) return nil;
+        if ( index >= [bussSearchInfoDataDictArray count] ) return nil;
         
         if ( fieldEnum == CPTPieChartFieldSliceWidth ) {
-            return [bussSearchInfoDataDict objectForKey:[[bussSearchInfoDataDictKeys sortedArrayUsingSelector:@selector(compare:)] objectAtIndex:index]];
+            //return [bussSearchInfoDataDict objectForKey:[[bussSearchInfoDataDictKeys sortedArrayUsingSelector:@selector(compare:)] objectAtIndex:index]];
+            return [bussSearchInfoDataDictArray objectAtIndex:index];
         }
         else {
             return [NSNumber numberWithInt:index];
@@ -695,7 +695,7 @@
         [textStyle release];
         return [label autorelease];
          */
-        CPTTextLayer *label = [[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%d",[[bussSearchInfoDataDict objectForKey:[bussSearchInfoDataDictKeys objectAtIndex:index]]intValue]]];
+        CPTTextLayer *label = [[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%d",[[[bussSearchInfoDataDictArray objectAtIndex:index]objectForKey:@"value"]intValue]]];
         CPTMutableTextStyle *textStyle = [label.textStyle mutableCopy];
         textStyle.color = [CPTColor whiteColor];
         label.textStyle = textStyle;
@@ -836,7 +836,7 @@
 -(CGFloat)radialOffsetForPieChart:(CPTPieChart *)pieChart recordIndex:(NSUInteger)index
 {
     //return ( index == 0 ? 30.0f : 0.0f );
-    return 5.0f+50.0f*pow((1.0f-[[bussSearchInfoDataDict objectForKey:[bussSearchInfoDataDictKeys objectAtIndex:index]]floatValue]/maxSearchNum),4.0f);
+    return 5.0f+50.0f*pow((1.0f-[[[bussSearchInfoDataDictArray objectAtIndex:index]objectForKey:@"value"] floatValue]/maxSearchNum),4.0f);
 }
 #pragma mark - UITableViewDelegate Methods
 /*
