@@ -75,7 +75,11 @@
 {
     NSInteger firstValue = [[self objectForKey: @"value"] intValue];
     NSInteger secondValue = [[anotherDict objectForKey: @"value"] intValue];
-    
-    return firstValue < secondValue;
+    if  (firstValue!=secondValue)
+        return firstValue < secondValue;
+    else
+    {
+        return [(NSString*)[self objectForKey:@"searchtype"] compare:[anotherDict objectForKey:@"searchtype"]];
+    }
 }
 @end
