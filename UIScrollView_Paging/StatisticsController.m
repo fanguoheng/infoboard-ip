@@ -306,12 +306,12 @@
                                           [NSNumber numberWithFloat:answerRate3Num/totalAgtAnswerNum],
                                           [NSNumber numberWithFloat:answerRate4Num/totalAgtAnswerNum],
                                           nil];
-                if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:)]) {
+                if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
                     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                     [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
                     NSString *timeString=[formatter stringFromDate: [NSDate date]];
                     [formatter release];
-                    [delegate willInfoBoardUpdateUIOnPage:timeString];
+                    [delegate willInfoBoardUpdateUIOnPage:0 WithMessage:timeString];
                 }
                 if (ifLoading==NO){
                     [self hideWaiting];
@@ -350,12 +350,12 @@
                     lastAvrWorkDurNum += [[anyDic objectForKey:@"lastavrworkdur"]intValue];;
                 }
                 
-                if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:)]) {
+                if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
                     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                     [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
                     NSString *timeString=[formatter stringFromDate: [NSDate date]];
                     [formatter release];
-                    [delegate willInfoBoardUpdateUIOnPage:timeString];
+                    [delegate willInfoBoardUpdateUIOnPage:0 WithMessage:timeString];
                 }
                 self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
             }

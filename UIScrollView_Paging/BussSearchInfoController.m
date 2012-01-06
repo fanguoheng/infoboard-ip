@@ -15,7 +15,7 @@
 @implementation BussSearchInfoController
 @synthesize addrPrefix;
 @synthesize addrPostfix;
-@synthesize bussinessInfoWebAddr,bussSearchInfoWebAddr,timer,refreshInterval,cashDict_1,bussSearchInfoDataDictKeys, bussinessInfoDataDict,bussSearchInfoDataDict,originView,landscapeView,tableViewPortrait;
+@synthesize bussinessInfoWebAddr,bussSearchInfoWebAddr,timer,refreshInterval,cashDict_1,bussSearchInfoDataDictKeys, bussinessInfoDataDict,bussSearchInfoDataDict,bussSearchInfoDataDictArray,originView,landscapeView,tableViewPortrait;
 @synthesize barChartViewLandscape,barChartLandscape,barPlotLandscape,barPlotData,pieChartViewLandscape,pieChartLandscape,piePlotLandscape,answerRatePersent;
 @synthesize delegate,bussinessInfoCashResponseStr,bussSearchInfoCashResponseStr;
 @synthesize loadingOrigin,loadingLandscape;
@@ -195,12 +195,12 @@
                     sitcompcntNum += [[anyDic objectForKey:@"sitcompcnt"]intValue];
                     searchcntNum += [[anyDic objectForKey:@"searchcnt"]intValue];
                 }
-                if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:)]) {
+                if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage: WithMessage:)]) {
                     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                     [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
                     NSString *timeString=[formatter stringFromDate: [NSDate date]];
                     [formatter release];
-                    [delegate willInfoBoardUpdateUIOnPage:timeString];
+                    [delegate willInfoBoardUpdateUIOnPage:1 WithMessage:timeString];
                 }
                 self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
             }
@@ -219,27 +219,28 @@
                 maxSearchNum = 0;
                 for (NSDictionary *anyDict in tmpArray) {
                     NSString *searchType = [[NSString alloc]initWithString:[anyDict objectForKey:@"searchtype"]];
-                    NSInteger newNum = ([bussSearchInfoDataDict objectForKey:searchType])?([[bussSearchInfoDataDict objectForKey:searchType] intValue]+[[anyDict objectForKey:@"cnt"] intValue]):[[anyDict objectForKey:@"cnt"] intValue];
+                    NSInteger newNum = ([bussSearchInfoDataDict objectForKey:searchType])?([[[bussSearchInfoDataDict objectForKey:searchType]objectForKey:@"value"] intValue]+[[anyDict objectForKey:@"cnt"] intValue]):[[anyDict objectForKey:@"cnt"] intValue];
                     NSNumber *newNumber = [[NSNumber alloc]initWithInt:newNum];
                     maxSearchNum = maxSearchNum>newNum?maxSearchNum:newNum;
-                    [bussSearchInfoDataDict setObject:newNumber forKey:searchType];
+                    NSDictionary *searchTypeValue = [[NSDictionary alloc]initWithObjectsAndKeys:searchType,@"searchType",newNumber,@"value", nil];
+                    [bussSearchInfoDataDict setObject:searchTypeValue forKey:searchType];
                     [newNumber release];
                     [searchType release];
                 }
                 self.bussSearchInfoDataDictKeys = [bussSearchInfoDataDict allKeys];
-                if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:)]) {
+                self.bussSearchInfoDataDictArray = [[bussSearchInfoDataDict allValues]sortedArrayUsingSelector:@selector(myCompareMethodWithDict:)];
+                
+                if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
                     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                     [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
                     NSString *timeString=[formatter stringFromDate: [NSDate date]];
                     [formatter release];
-                    [delegate willInfoBoardUpdateUIOnPage:timeString];
+                    [delegate willInfoBoardUpdateUIOnPage:1 WithMessage:timeString];;
                 }
                 if (ifLoading==NO){
                     [self hideWaiting];
                     //NSLog(@"hideWating");
                 }
-                NSLog(@"%d ifLoading in requestFinishded",ifLoading);
-                
                 self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
             }
         }
@@ -582,10 +583,15 @@
             break;
         case 1:
         {
+            /*
             NSString *searchType = [[NSString alloc]initWithString:[[bussSearchInfoDataDictKeys sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:indexPath.row]];
             cell.textLabel.text = [searchType isEqualToString:@""]?@"暂无分类":searchType;
             cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:[[bussSearchInfoDataDict objectForKey:searchType] intValue]];
-            [searchType release];
+            [searchType release];*/
+            NSDictionary *search = [bussSearchInfoDataDictArray objectAtIndex:indexPath.row];
+            cell.textLabel.text = [[search objectForKey:@"searchType"] isEqualToString:@""]?@"暂无分类":[search objectForKey:@"searchType"];
+            cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:[[search objectForKey:@"value"]intValue]];
+            [search release];
             break;
         }
         default:

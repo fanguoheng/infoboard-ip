@@ -10,6 +10,6 @@
 
 @protocol SDInfoBoardUpdateUI <NSObject>
 @optional
-- (void)willInfoBoardUpdateUIOnPage:(id) msg;
-- (void)didInfoBoardUpdateUI:(NSString*) msg;
+- (void)willInfoBoardUpdateUIOnPage:(NSInteger)page WithMessage:(NSString*) msg;
+- (void)didInfoBoardUpdateUIWithMessage:(id) msg;
 @end

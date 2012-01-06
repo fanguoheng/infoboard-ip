@@ -47,6 +47,7 @@
 
 @property (nonatomic, retain) IBOutlet UINavigationBar *navBar;
 @property (nonatomic, retain) NSArray *navBarTitles;
+@property (nonatomic, retain) NSMutableArray *updateTimeStrArray;
 - (void)startTimersPaged;
 - (IBAction)showAllViewBoards:(id)sender;
 - (void)jumpToCurrentPage;
