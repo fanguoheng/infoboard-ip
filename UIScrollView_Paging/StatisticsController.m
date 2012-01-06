@@ -426,7 +426,9 @@
 }
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
-    [request startAsynchronous];
+    //[request startAsynchronous];
+    ASIHTTPRequest *newRequest = [[request copy] autorelease]; 
+    [newRequest startAsynchronous]; 
     
 }
 
