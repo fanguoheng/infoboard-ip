@@ -90,7 +90,6 @@
 		2CF834F8146EA385004297A8 /* forwardGreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 2CF834F7146EA384004297A8 /* forwardGreen.png */; };
 		2CF834FA146EA515004297A8 /* 19-gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 2CF834F9146EA515004297A8 /* 19-gear.png */; };
 		43512E1C14B6C73D00CC3952 /* icon3.png in Resources */ = {isa = PBXBuildFile; fileRef = 43512E1B14B6C73D00CC3952 /* icon3.png */; };
-		435365CD14B6C579000FB87F /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 435365CC14B6C579000FB87F /* icon.png */; };
 		43B61D5214A329AA00CCB52F /* BSTableHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 43B61D5114A329AA00CCB52F /* BSTableHeadView.m */; };
 /* End PBXBuildFile section */
 
@@ -305,7 +304,6 @@
 		2CF834F7146EA384004297A8 /* forwardGreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = forwardGreen.png; sourceTree = "<group>"; };
 		2CF834F9146EA515004297A8 /* 19-gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "19-gear.png"; sourceTree = "<group>"; };
 		43512E1B14B6C73D00CC3952 /* icon3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon3.png; sourceTree = "<group>"; };
-		435365CC14B6C579000FB87F /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		43B61D5014A329AA00CCB52F /* BSTableHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSTableHeadView.h; sourceTree = "<group>"; };
 		43B61D5114A329AA00CCB52F /* BSTableHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSTableHeadView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -487,7 +485,7 @@
 				2C9F0DA2149F27B5007D37D3 /* pbg_5.png */,
 				2CA26D13149F10950033920A /* pbg1_4.png */,
 				2C08D03014872FB7002E43C7 /* allviews1112011143.png */,
-				435365CC14B6C579000FB87F /* icon.png */,
+				43512E1B14B6C73D00CC3952 /* icon3.png */,
 				2C9821C714838ADA00D7FCAA /* icon2.png */,
 				2CBAD167147E488E0046322C /* Default.png */,
 				2CBAD158147E3D950046322C /* refresh.png */,
@@ -503,7 +501,6 @@
 				04E65D611443EFDC007993BA /* group.png */,
 				04D84BEC1423002B000EB199 /* pbg1_2.png */,
 				04D84BED1423002B000EB199 /* pbg1_1.png */,
-				43512E1B14B6C73D00CC3952 /* icon3.png */,
 				2CF834F9146EA515004297A8 /* 19-gear.png */,
 				04A017BE13961AA100B942E1 /* UIScrollView_Paging-Info.plist */,
 				04A017BF13961AA100B942E1 /* InfoPlist.strings */,
@@ -740,7 +737,6 @@
 				2C9F0DAC149F2CE1007D37D3 /* carat.png in Resources */,
 				2CE236A314A02448002E54C7 /* 201112191737.png in Resources */,
 				2CCCB0DF14A063CC006FC6FB /* AgtTableViewCell.xib in Resources */,
-				435365CD14B6C579000FB87F /* icon.png in Resources */,
 				43512E1C14B6C73D00CC3952 /* icon3.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
