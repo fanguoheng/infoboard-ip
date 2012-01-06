@@ -289,7 +289,9 @@
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
     //NSError *error = [request error];
-    [request startAsynchronous];
+    //[request startAsynchronous];
+    ASIHTTPRequest *newRequest = [[request copy] autorelease]; 
+    [newRequest startAsynchronous]; 
 }
 
 #pragma mark - UI Updata Methods
