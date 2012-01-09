@@ -918,7 +918,7 @@
     if (!request || [request.url.absoluteString isEqualToString:agtTotalInfoWebAddr]) {
         CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
         plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f+1.0)];
-        [barChartLandscape reloadData];
+        [barPlotLandscape reloadData];
         [piePlotLandscape reloadData];
     }
 }
