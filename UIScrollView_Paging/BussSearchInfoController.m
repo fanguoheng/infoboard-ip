@@ -175,7 +175,7 @@
 - (void)requestFinished:(ASIHTTPRequest *)request
 {
 
-    
+    requestFailedCount = 0;
     NSString *responseString = [[NSString alloc] initWithData:[request responseData] encoding:NSUTF8StringEncoding];    
     if ([request.url.absoluteString isEqualToString:bussinessInfoWebAddr]) 
     {
@@ -288,9 +288,10 @@
 
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
-    //[request startAsynchronous];
-    ASIHTTPRequest *newRequest = [[request copy] autorelease]; 
-    [newRequest startAsynchronous]; 
+    if (requestFailedCount < 6) {
+        ASIHTTPRequest *newRequest = [[request copy] autorelease]; 
+        [newRequest startAsynchronous]; 
+    }
 }
 
 #pragma mark - UI Updata Methods
@@ -587,7 +588,7 @@
             cell.textLabel.text = [searchType isEqualToString:@""]?@"暂无分类":searchType;
             cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:[[bussSearchInfoDataDict objectForKey:searchType] intValue]];
             [searchType release];*/
-            NSDictionary *search = [[NSDictionary alloc]initWithDictionary: [bussSearchInfoDataDictArray objectAtIndex:indexPath.row]];
+            NSDictionary *search = [[bussSearchInfoDataDictArray objectAtIndex:indexPath.row]retain];
             cell.textLabel.text = [[search objectForKey:@"searchType"] isEqualToString:@""]?@"暂无分类":[search objectForKey:@"searchType"];
             cell.detailTextLabel.text = [self mutableStringWithCommaConvertFromInteger:[[search objectForKey:@"value"]intValue]];
             [search release];

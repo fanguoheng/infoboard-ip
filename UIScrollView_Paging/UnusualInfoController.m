@@ -33,6 +33,7 @@
         rootTableViewController = [[UnUsualRootTableViewController alloc]initWithStyle:UITableViewStyleGrouped dataDictArray:nil delegate:self];
         
         leafTableViewController = [[UnUsualLeafTableViewController alloc ]initWithStyle:UITableViewStyleGrouped dataDictArray:nil Tag:0];
+        requestFailedCount = 0;
 
     }
     return self;
@@ -191,6 +192,7 @@
 
 - (void)requestFinished:(ASIHTTPRequest *)request
 {
+    requestFailedCount = 0;
     NSString *responseString = [[NSString alloc] initWithData:[request responseData] encoding:NSUTF8StringEncoding];  
     if ([request.url.absoluteString isEqualToString:rootWebAddr]) {
         if (![rootCashResponseStr isEqualToString:responseString]) {
@@ -288,10 +290,10 @@
 
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
-    //NSError *error = [request error];
-    //[request startAsynchronous];
-    ASIHTTPRequest *newRequest = [[request copy] autorelease]; 
-    [newRequest startAsynchronous]; 
+    if (requestFailedCount < 6) {
+        ASIHTTPRequest *newRequest = [[request copy] autorelease]; 
+        [newRequest startAsynchronous]; 
+    }
 }
 
 #pragma mark - UI Updata Methods

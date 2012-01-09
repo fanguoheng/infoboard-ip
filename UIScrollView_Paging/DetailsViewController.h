@@ -25,6 +25,7 @@
     UIView *originView;
     UIView *landscapeView;
     NSMutableArray *lists;
+    NSInteger requestFailedCount;
 }
 @property (nonatomic, assign) id <SDInfoBoardUpdateUI> delegate;
 @property (nonatomic, copy) NSString* allGrpInfoCashResponseStr;

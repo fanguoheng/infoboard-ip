@@ -19,6 +19,7 @@
     NSInteger searchcntNum;
     
     NSInteger maxSearchNum;
+    NSInteger requestFailedCount;
 }
 @property (nonatomic, assign) id <SDInfoBoardUpdateUI> delegate;
 @property (nonatomic, copy) NSString* bussinessInfoCashResponseStr;

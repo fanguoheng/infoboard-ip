@@ -287,6 +287,7 @@
 
 - (void)requestFinished:(ASIHTTPRequest*)request
 {
+    requestFailedCount = 0;
     NSString *responseString = [[NSString alloc] initWithData:[request responseData] encoding:NSUTF8StringEncoding];    
     if ([request.url.absoluteString isEqualToString:allGrpInfoWebAddr]) {
         if (![allGrpInfoCashResponseStr isEqualToString:responseString]) {
@@ -360,9 +361,10 @@
 
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
-    //[request startAsynchronous];
-    ASIHTTPRequest *newRequest = [[request copy] autorelease]; 
-    [newRequest startAsynchronous]; 
+    if (requestFailedCount < 6) {
+        ASIHTTPRequest *newRequest = [[request copy] autorelease]; 
+        [newRequest startAsynchronous]; 
+    }
 
 }
 

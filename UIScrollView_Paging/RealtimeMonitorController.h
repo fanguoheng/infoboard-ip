@@ -64,6 +64,7 @@
     UIView *landscapeView;
     
     NSMutableArray *customLabels;
+    NSInteger requestFailedCount;
 }
 @property (nonatomic, assign) id <SDInfoBoardUpdateUI> delegate;
 @property (nonatomic, copy) NSString* cashResponseStr;

@@ -29,6 +29,7 @@
     NSInteger othLostNum;
     
     NSInteger waitDurSecondNum;
+    NSInteger requestFailedCount;
 }
 @property (nonatomic, assign) id <SDInfoBoardUpdateUI> delegate;
 @property (nonatomic,retain) UINavigationController *navController;

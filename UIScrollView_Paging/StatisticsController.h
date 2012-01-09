@@ -86,6 +86,7 @@
     
     UIView *originView;
     UIView *landscapeView;
+    NSInteger requestFailedCount;
 }
 @property (nonatomic, assign) id <SDInfoBoardUpdateUI> delegate;
 @property (nonatomic,copy) NSString *agtTotalInfoCashResponseStr;

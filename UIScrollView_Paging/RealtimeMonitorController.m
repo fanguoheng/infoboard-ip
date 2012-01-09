@@ -215,6 +215,7 @@
 
 - (void)requestFinished:(ASIHTTPRequest *)request
 {
+    requestFailedCount = 0;
     NSString *responseString = [[NSString alloc] initWithData:[request responseData] encoding:NSUTF8StringEncoding];   
     if (![cashResponseStr isEqualToString:responseString]) {
         self.cashResponseStr = responseString;
@@ -275,8 +276,6 @@
                 [self hideWaiting];
                 //NSLog(@"hideWating");
             }
-            NSLog(@"%d ifLoading in requestFinishded",ifLoading);
-            
             self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
         }
 
@@ -288,9 +287,10 @@
 
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
-    //[request startAsynchronous];
-    ASIHTTPRequest *newRequest = [[request copy] autorelease]; 
-    [newRequest startAsynchronous]; 
+    if (requestFailedCount < 6) {
+        ASIHTTPRequest *newRequest = [[request copy] autorelease]; 
+        [newRequest startAsynchronous]; 
+    }
 }
  
 - (void)updateOriginView:(ASIHTTPRequest *)request

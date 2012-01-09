@@ -254,6 +254,7 @@
 
 - (void)requestFinished:(ASIHTTPRequest *)request
 {
+    requestFailedCount = 0;
     NSString *responseString = [[NSString alloc] initWithData:[request responseData] encoding:NSUTF8StringEncoding];
     if ([request.url.absoluteString isEqualToString:agtTotalInfoWebAddr]) {
         if (![agtTotalInfoCashResponseStr isEqualToString:responseString]) {
@@ -317,8 +318,6 @@
                     [self hideWaiting];
                     //NSLog(@"hideWating");
                 }
-                //NSLog(@"%d ifLoading in requestFinishded",ifLoading);
-                
                 self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
             }
         }
@@ -426,10 +425,11 @@
 }
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
-    //[request startAsynchronous];
-    ASIHTTPRequest *newRequest = [[request copy] autorelease]; 
-    [newRequest startAsynchronous]; 
-    
+    requestFailedCount ++;
+    if (requestFailedCount < 6) {
+        ASIHTTPRequest *newRequest = [[request copy] autorelease]; 
+        [newRequest startAsynchronous]; 
+    }
 }
 
 #pragma mark - update UI
@@ -726,10 +726,10 @@
     // Add pie chart
     self.piePlotLandscape = [[CPTPieChart alloc] init];
     piePlotLandscape.dataSource = self;
-	piePlotLandscape.pieRadius = 100.0f;
+	piePlotLandscape.pieRadius = 90.0f;
     piePlotLandscape.identifier = @"PiePlotLandscape";
 	piePlotLandscape.startAngle = 0.0f;
-    piePlotLandscape.labelOffset = -65.0f;
+    piePlotLandscape.labelOffset = -70.0f;
 	piePlotLandscape.sliceDirection = CPTPieDirectionCounterClockwise;
 	piePlotLandscape.centerAnchor = CGPointMake(0.5, 0.5);
 	piePlotLandscape.borderLineStyle = barLineStyle;
