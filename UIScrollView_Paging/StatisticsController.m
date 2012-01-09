@@ -258,23 +258,23 @@
     NSString *responseString = [[NSString alloc] initWithData:[request responseData] encoding:NSUTF8StringEncoding];
     if ([request.url.absoluteString isEqualToString:agtTotalInfoWebAddr]) {
         if (![agtTotalInfoCashResponseStr isEqualToString:responseString]) {
+            totalInboundNum = 0;
+            totalOutboundNum = 0;
+            totalAgtAnswerNum = 0;
+            totalTransAgtNum = 0;
+            veryGoodNum = 0;
+            goodNum = 0;
+            generalNum = 0;
+            badNum = 0;
+            veryBadNum = 0;
+            answerRate1Num = 0;
+            answerRate2Num = 0;
+            answerRate3Num = 0;
+            answerRate4Num = 0;
             self.agtTotalInfoCashResponseStr = responseString ;
             NSArray *tmpArray = [responseString JSONValue];
             if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
             {
-                totalInboundNum = 0;
-                totalOutboundNum = 0;
-                totalAgtAnswerNum = 0;
-                totalTransAgtNum = 0;
-                veryGoodNum = 0;
-                goodNum = 0;
-                generalNum = 0;
-                badNum = 0;
-                veryBadNum = 0;
-                answerRate1Num = 0;
-                answerRate2Num = 0;
-                answerRate3Num = 0;
-                answerRate4Num = 0;
                 for (NSMutableDictionary *anyDic in tmpArray) {
                     totalInboundNum += [[anyDic objectForKey:@"totalinbound"]intValue];
                     totalOutboundNum += [[anyDic objectForKey:@"totaloutbound"]intValue];
@@ -292,52 +292,51 @@
                     answerRate3Num += round(theTotalagtanswer*[[anyDic objectForKey:@"answerrate3"]floatValue]);
                     answerRate4Num += round(theTotalagtanswer*[[anyDic objectForKey:@"answerrate4"]floatValue]);
                 }
-                totalBoundNum = totalInboundNum + totalOutboundNum;
-                self.barPlotData = [NSArray arrayWithObjects:
-                                    [NSNumber numberWithInt:veryGoodNum],
-                                    [NSNumber numberWithInt:goodNum],
-                                    [NSNumber numberWithInt:generalNum],
-                                    [NSNumber numberWithInt:badNum],
-                                    [NSNumber numberWithInt:veryBadNum],
-                                    nil];
-                
-                self.answerRatePersent = [NSArray arrayWithObjects:
-                                          [NSNumber numberWithFloat:answerRate1Num/totalAgtAnswerNum],
-                                          [NSNumber numberWithFloat:answerRate2Num/totalAgtAnswerNum],
-                                          [NSNumber numberWithFloat:answerRate3Num/totalAgtAnswerNum],
-                                          [NSNumber numberWithFloat:answerRate4Num/totalAgtAnswerNum],
-                                          nil];
-                if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
-                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                    [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
-                    NSString *timeString=[formatter stringFromDate: [NSDate date]];
-                    [formatter release];
-                    [delegate willInfoBoardUpdateUIOnPage:0 WithMessage:timeString];
-                }
-                if (ifLoading==NO){
-                    [self hideWaiting];
-                    //NSLog(@"hideWating");
-                }
-                self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
             }
+            totalBoundNum = totalInboundNum + totalOutboundNum;
+            self.barPlotData = [NSArray arrayWithObjects:
+                                [NSNumber numberWithInt:veryGoodNum],
+                                [NSNumber numberWithInt:goodNum],
+                                [NSNumber numberWithInt:generalNum],
+                                [NSNumber numberWithInt:badNum],
+                                [NSNumber numberWithInt:veryBadNum],
+                                nil];
+            
+            self.answerRatePersent = [NSArray arrayWithObjects:
+                                      [NSNumber numberWithFloat:answerRate1Num/totalAgtAnswerNum],
+                                      [NSNumber numberWithFloat:answerRate2Num/totalAgtAnswerNum],
+                                      [NSNumber numberWithFloat:answerRate3Num/totalAgtAnswerNum],
+                                      [NSNumber numberWithFloat:answerRate4Num/totalAgtAnswerNum],
+                                      nil];
+            if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateFormat:@"YY-MM-dd HH:mm:ss"];
+                NSString *timeString=[formatter stringFromDate: [NSDate date]];
+                [formatter release];
+                [delegate willInfoBoardUpdateUIOnPage:0 WithMessage:timeString];
+            }
+            if (ifLoading==NO){
+                [self hideWaiting];
+            }
+            self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
         }
     }
     else if ([request.url.absoluteString isEqualToString:agtAverageInfoWebAddr])
     {
         if (![agtAverageInfoCashResponseStr isEqualToString:responseString]) {
+            avrAnswerCntNum = 0;
+            avrWaitDurNum = 0;
+            avrSvrDurNum = 0;
+            avrWorkDurNum = 0;
+            lastAvrAnswerCntNum = 0;
+            lastAvrWaitDurNum = 0;
+            lastAvrSvrDurNum = 0;
+            lastAvrWorkDurNum = 0;
             self.agtAverageInfoCashResponseStr = responseString;
             NSArray *tmpArray = [responseString JSONValue];
+            grpCount = (float)[tmpArray count];//[tmpArray count]已确保非0
             if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
             {
-                grpCount = (float)[tmpArray count];//[tmpArray count]已确保非0
-                avrAnswerCntNum = 0;
-                avrWaitDurNum = 0;
-                avrSvrDurNum = 0;
-                avrWorkDurNum = 0;
-                lastAvrAnswerCntNum = 0;
-                lastAvrWaitDurNum = 0;
-                lastAvrSvrDurNum = 0;
-                lastAvrWorkDurNum = 0;
                 for (NSDictionary* anyDic in tmpArray) {
                     avrAnswerCntNum += [[anyDic objectForKey:@"avranswer"]intValue];
                     avrWaitDurNum += [[anyDic objectForKey:@"avrwaitdur"]intValue];;
@@ -348,79 +347,17 @@
                     lastAvrSvrDurNum += [[anyDic objectForKey:@"lastavrsvrdur"]intValue];;
                     lastAvrWorkDurNum += [[anyDic objectForKey:@"lastavrworkdur"]intValue];;
                 }
-                
-                if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
-                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                    [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
-                    NSString *timeString=[formatter stringFromDate: [NSDate date]];
-                    [formatter release];
-                    [delegate willInfoBoardUpdateUIOnPage:0 WithMessage:timeString];
-                }
-                self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
             }
+            if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateFormat:@"YY-MM-dd HH:mm:ss"];
+                NSString *timeString=[formatter stringFromDate: [NSDate date]];
+                [formatter release];
+                [delegate willInfoBoardUpdateUIOnPage:0 WithMessage:timeString];
+            }
+            self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
         }
     }
-    /*
-    if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]]) {
-        if ([request.url.absoluteString isEqualToString:agtTotalInfoWebAddr]) {
-            
-            totalInboundNum = 0;
-            totalOutboundNum = 0;
-            totalAgtAnswerNum = 0;
-            totalTransAgtNum = 0;
-            veryGoodNum = 0;
-            goodNum = 0;
-            generalNum = 0;
-            badNum = 0;
-            veryBadNum = 0;
-            answerRate1Num = 0;
-            answerRate2Num = 0;
-            answerRate3Num = 0;
-            answerRate4Num = 0;
-            for (NSMutableDictionary *anyDic in tmpArray) {
-                totalInboundNum += [[anyDic objectForKey:@"totalinbound"]intValue];
-                totalOutboundNum += [[anyDic objectForKey:@"totaloutbound"]intValue];
-                NSInteger theTotalagtanswer = [[anyDic objectForKey:@"totalagtanswer"]intValue];
-                totalAgtAnswerNum += theTotalagtanswer;
-                totalTransAgtNum += [[anyDic objectForKey:@"totaltransagt"]intValue];
-                veryGoodNum += [[anyDic objectForKey:@"verygood"]intValue];
-                goodNum += [[anyDic objectForKey:@"good"]intValue];
-                generalNum += [[anyDic objectForKey:@"infogeneral"]intValue];
-                badNum += [[anyDic objectForKey:@"bad"]intValue];
-                veryBadNum += [[anyDic objectForKey:@"verybad"]intValue];
-                
-                answerRate1Num += round(theTotalagtanswer*[[anyDic objectForKey:@"answerrate1"]floatValue]);
-                answerRate2Num += round(theTotalagtanswer*[[anyDic objectForKey:@"answerrate2"]floatValue]);
-                answerRate3Num += round(theTotalagtanswer*[[anyDic objectForKey:@"answerrate3"]floatValue]);
-                answerRate4Num += round(theTotalagtanswer*[[anyDic objectForKey:@"answerrate4"]floatValue]);
-            }
-            totalBoundNum = totalInboundNum + totalOutboundNum;
-        }
-        else if ([request.url.absoluteString isEqualToString:agtAverageInfoWebAddr])
-        {        
-            grpCount = (float)[tmpArray count];//[tmpArray count]已确保非0
-            avrAnswerCntNum = 0;
-            avrWaitDurNum = 0;
-            avrSvrDurNum = 0;
-            avrWorkDurNum = 0;
-            lastAvrAnswerCntNum = 0;
-            lastAvrWaitDurNum = 0;
-            lastAvrSvrDurNum = 0;
-            lastAvrWorkDurNum = 0;
-            for (NSDictionary* anyDic in tmpArray) {
-                avrAnswerCntNum += [[anyDic objectForKey:@"avranswer"]intValue];
-                avrWaitDurNum += [[anyDic objectForKey:@"avrwaitdur"]intValue];;
-                avrSvrDurNum += [[anyDic objectForKey:@"avrsvrdur"]intValue];;
-                avrWorkDurNum += [[anyDic objectForKey:@"avrworkdur"]intValue];;
-                lastAvrAnswerCntNum += [[anyDic objectForKey:@"lastavranswercnt"]intValue];;
-                lastAvrWaitDurNum += [[anyDic objectForKey:@"lastavrwaitdur"]intValue];;
-                lastAvrSvrDurNum += [[anyDic objectForKey:@"lastavrsvrdur"]intValue];;
-                lastAvrWorkDurNum += [[anyDic objectForKey:@"lastavrworkdur"]intValue];;
-            }
-        }
-        self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
-    }
-     */
     [responseString release];
 }
 - (void)requestFailed:(ASIHTTPRequest *)request
@@ -918,7 +855,7 @@
     if (!request || [request.url.absoluteString isEqualToString:agtTotalInfoWebAddr]) {
         CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
         plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f+1.0)];
-        [barPlotLandscape reloadData];
+        [barChartLandscape reloadData];
         [piePlotLandscape reloadData];
     }
 }

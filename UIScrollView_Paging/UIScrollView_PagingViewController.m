@@ -320,6 +320,7 @@ UIInterfaceOrientation temp;
         NSInteger page = floor(currentOffset / scrollViewFrameWidth - 0.5f) + 1.0f;
         pageControl.currentPage = page;
         navBar.topItem.title = [navBarTitles objectAtIndex:page];
+        pageRefreshTimeLabel.text = [updateTimeStrArray objectAtIndex:page];
     }
 
 }

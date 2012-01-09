@@ -180,108 +180,70 @@
     if ([request.url.absoluteString isEqualToString:bussinessInfoWebAddr]) 
     {
         if (![bussinessInfoCashResponseStr isEqualToString:responseString]) {
+            ordercntNum = 0;
+            cuscompcntNum = 0;
+            sitcompcntNum = 0;
+            searchcntNum = 0;
             NSArray *tmpArray = [responseString JSONValue];
+            self.bussinessInfoCashResponseStr = responseString;
             if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
             {
-                self.bussinessInfoCashResponseStr = responseString;
-                ordercntNum = 0;
-                cuscompcntNum = 0;
-                sitcompcntNum = 0;
-                searchcntNum = 0;
                 for (NSDictionary* anyDic in tmpArray) {
                     ordercntNum += [[anyDic objectForKey:@"ordercnt"]intValue];
                     cuscompcntNum += [[anyDic objectForKey:@"cuscompcnt"]intValue];
                     sitcompcntNum += [[anyDic objectForKey:@"sitcompcnt"]intValue];
                     searchcntNum += [[anyDic objectForKey:@"searchcnt"]intValue];
                 }
-                if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage: WithMessage:)]) {
-                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                    [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
-                    NSString *timeString=[formatter stringFromDate: [NSDate date]];
-                    [formatter release];
-                    [delegate willInfoBoardUpdateUIOnPage:1 WithMessage:timeString];
-                }
-                self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
             }
+            if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage: WithMessage:)]) {
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateFormat:@"YY-MM-dd HH:mm:ss"];
+                NSString *timeString=[formatter stringFromDate: [NSDate date]];
+                [formatter release];
+                [delegate willInfoBoardUpdateUIOnPage:1 WithMessage:timeString];
+            }
+            self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
+            
         }
     }
     else if ([request.url.absoluteString isEqualToString:bussSearchInfoWebAddr])
     {
         if (![bussSearchInfoCashResponseStr isEqualToString:responseString]) {
             NSArray *tmpArray = [responseString JSONValue];
-            if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
-            {
-                self.bussSearchInfoCashResponseStr = responseString;
-                NSMutableDictionary *_dict = [[NSMutableDictionary alloc]init];
-                self.bussSearchInfoDataDict = _dict;
-                [_dict release];
-                maxSearchNum = 0;
-                for (NSDictionary *anyDict in tmpArray) {
-                    NSString *searchType = [[NSString alloc]initWithString:[anyDict objectForKey:@"searchtype"]];
-                    NSInteger newNum = ([bussSearchInfoDataDict objectForKey:searchType])?([[[bussSearchInfoDataDict objectForKey:searchType]objectForKey:@"value"] intValue]+[[anyDict objectForKey:@"cnt"] intValue]):[[anyDict objectForKey:@"cnt"] intValue];
-                    NSNumber *newNumber = [[NSNumber alloc]initWithInt:newNum];
-                    maxSearchNum = maxSearchNum>newNum?maxSearchNum:newNum;
-                    NSDictionary *searchTypeValue = [[NSDictionary alloc]initWithObjectsAndKeys:searchType,@"searchType",newNumber,@"value", nil];
-                    [bussSearchInfoDataDict setObject:searchTypeValue forKey:searchType];
-                    [newNumber release];
-                    [searchType release];
-                }
-
-                self.bussSearchInfoDataDictArray = [[bussSearchInfoDataDict allValues]sortedArrayUsingSelector:@selector(myCompareMethodWithDict:)];
-                //self.bussSearchInfoDataDictArray = [bussSearchInfoDataDict allValues];
-                
-                if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
-                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                    [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
-                    NSString *timeString=[formatter stringFromDate: [NSDate date]];
-                    [formatter release];
-                    [delegate willInfoBoardUpdateUIOnPage:1 WithMessage:timeString];;
-                }
-                if (ifLoading==NO){
-                    [self hideWaiting];
-                    //NSLog(@"hideWating");
-                }
-                self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
-            }
-        }
-    }
-    [responseString release];
-    /*
-    NSArray *tmpArray = [responseString JSONValue];
-    [responseString release];
-    if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]]) {
-        if ([request.url.absoluteString isEqualToString:bussinessInfoWebAddr]) 
-        {
-            ordercntNum = 0;
-            cuscompcntNum = 0;
-            sitcompcntNum = 0;
-            searchcntNum = 0;
-            for (NSDictionary* anyDic in tmpArray) {
-                ordercntNum += [[anyDic objectForKey:@"ordercnt"]intValue];
-                cuscompcntNum += [[anyDic objectForKey:@"cuscompcnt"]intValue];
-                sitcompcntNum += [[anyDic objectForKey:@"sitcompcnt"]intValue];
-                searchcntNum += [[anyDic objectForKey:@"searchcnt"]intValue];
-            }
-        }else if([request.url.absoluteString isEqualToString:bussSearchInfoWebAddr])
-        {
+            
+            self.bussSearchInfoCashResponseStr = responseString;
             NSMutableDictionary *_dict = [[NSMutableDictionary alloc]init];
             self.bussSearchInfoDataDict = _dict;
             [_dict release];
             maxSearchNum = 0;
-            for (NSDictionary *anyDict in tmpArray) {
+            
+            if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
+            {            
+                for (NSDictionary *anyDict in tmpArray) {
                 NSString *searchType = [[NSString alloc]initWithString:[anyDict objectForKey:@"searchtype"]];
-                NSInteger newNum = ([bussSearchInfoDataDict objectForKey:searchType])?([[bussSearchInfoDataDict objectForKey:searchType] intValue]+[[anyDict objectForKey:@"cnt"] intValue]):[[anyDict objectForKey:@"cnt"] intValue];
+                NSInteger newNum = ([bussSearchInfoDataDict objectForKey:searchType])?([[[bussSearchInfoDataDict objectForKey:searchType]objectForKey:@"value"] intValue]+[[anyDict objectForKey:@"cnt"] intValue]):[[anyDict objectForKey:@"cnt"] intValue];
                 NSNumber *newNumber = [[NSNumber alloc]initWithInt:newNum];
                 maxSearchNum = maxSearchNum>newNum?maxSearchNum:newNum;
-                [bussSearchInfoDataDict setObject:newNumber forKey:searchType];
+                NSDictionary *searchTypeValue = [[NSDictionary alloc]initWithObjectsAndKeys:searchType,@"searchType",newNumber,@"value", nil];
+                [bussSearchInfoDataDict setObject:searchTypeValue forKey:searchType];
                 [newNumber release];
                 [searchType release];
+            }}
+            self.bussSearchInfoDataDictArray = [[bussSearchInfoDataDict allValues]sortedArrayUsingSelector:@selector(myCompareMethodWithDict:)];                
+            if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateFormat:@"YY-MM-dd HH:mm:ss"];
+                NSString *timeString=[formatter stringFromDate: [NSDate date]];
+                [formatter release];
+                [delegate willInfoBoardUpdateUIOnPage:1 WithMessage:timeString];;
             }
-            
-            self.bussSearchInfoDataDictKeys = [bussSearchInfoDataDict allKeys];
+            if (ifLoading==NO){
+                [self hideWaiting];
+            }
+            self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
         }
-        self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
-    }*/
+    }
+    [responseString release];
 }
 
 

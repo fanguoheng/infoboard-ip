@@ -292,23 +292,24 @@
     if ([request.url.absoluteString isEqualToString:allGrpInfoWebAddr]) {
         if (![allGrpInfoCashResponseStr isEqualToString:responseString]) {
             NSArray *tmpArray = [responseString JSONValue];
+            self.allGrpInfoCashResponseStr = responseString;
+            self.allGrpInfoDictArray = nil;
+            groupTableViewController.dataDictArray = nil;
             if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]]) {
-                self.allGrpInfoCashResponseStr = responseString;
                 self.allGrpInfoDictArray = tmpArray;
                 groupTableViewController.dataDictArray = tmpArray;
-                
-                if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
-                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                    [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
-                    NSString *timeString=[formatter stringFromDate: [NSDate date]];
-                    [formatter release];
-                    [delegate willInfoBoardUpdateUIOnPage:4 WithMessage:timeString];
-                }
-                if (ifLoading==NO){
-                    [self hideWaiting];
-                }
-                (self.view == originView)?[self updateOriginView:request]:[self updateLandscapeView:request];
             }
+            if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateFormat:@"YY-MM-dd HH:mm:ss"];
+                NSString *timeString=[formatter stringFromDate: [NSDate date]];
+                [formatter release];
+                [delegate willInfoBoardUpdateUIOnPage:4 WithMessage:timeString];
+            }
+            if (ifLoading==NO){
+                [self hideWaiting];
+            }
+            (self.view == originView)?[self updateOriginView:request]:[self updateLandscapeView:request];
         }
     }
     else if ([request.url.absoluteString isEqualToString:mAgtInfoWebAddr])
@@ -317,10 +318,10 @@
         [self requestData];
         if (![mAgtInfoCashResponseStr isEqualToString:responseString]) {
             NSArray *tmpArray = [responseString JSONValue];
+            self.mAgtInfoCashResponseStr = responseString;
+            NSMutableDictionary *selectedAgtDict = [[NSMutableDictionary alloc]init ];
             if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
             {
-                self.mAgtInfoCashResponseStr = responseString;
-                NSMutableDictionary *selectedAgtDict = [[NSMutableDictionary alloc]init ];
                 for (NSDictionary *anyAgt in tmpArray) {
                     if ([selectedGrpId isEqualToString:@"_ALLGROUPS_"]) {
                         [selectedAgtDict setObject:anyAgt forKey:[anyAgt objectForKey:@"agtid"]];
@@ -338,9 +339,9 @@
         self.webAddr = allGrpInfoWebAddr;
         if (![agtCallInfoCashResponseStr isEqualToString:responseString]) {
             NSArray *tmpArray = [responseString JSONValue];
+            self.agtCallInfoCashResponseStr = responseString;
             if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
             {
-                self.agtCallInfoCashResponseStr = responseString;
                 for (NSDictionary *anyAgt in tmpArray) {
                     if ([mAgtInfoDict objectForKey:[anyAgt objectForKey:@"agtid"]]) 
                     {
@@ -349,7 +350,6 @@
                     }
                 }
                 NSArray *keys = [[mAgtInfoDict allKeys] sortedArrayUsingSelector:@selector(compare:)];
-                NSLog(@"mAgtInfoDict count: %d",[keys count]);
                 agtTableViewController.dataDictArray = [mAgtInfoDict objectsForKeys:keys notFoundMarker:@"NEVERTOBEUSED"];
                 (self.view == originView)?[self updateOriginView:request]:[self updateLandscapeView:request];
             }

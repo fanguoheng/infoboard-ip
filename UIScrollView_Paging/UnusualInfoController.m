@@ -197,49 +197,49 @@
     if ([request.url.absoluteString isEqualToString:rootWebAddr]) {
         if (![rootCashResponseStr isEqualToString:responseString]) {
             NSMutableArray *tmpArray = [responseString JSONValue];
-            if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]]) {
-                {
-                    self.rootCashResponseStr = responseString; 
-                    veryBadNum = 0;
-                    badNum = 0;
-                    lostCntNum = 0;
-                    agtCntNum = 0;
-                    agtLostNum = 0;
-                    cusLostNum = 0;
-                    sysLostNum = 0;
-                    offLostNum = 0;
-                    othLostNum = 0;
-                    waitDurSecondNum = 0;
-                    for (NSDictionary* anyDict in tmpArray) {
-                        veryBadNum = veryBadNum+[[anyDict objectForKey:@"verybad"] intValue];
-                        badNum = badNum+[[anyDict objectForKey:@"bad"] intValue];
-                        lostCntNum = lostCntNum+[[anyDict objectForKey:@"lostcnt"] intValue];
-                        float lostRate = [[anyDict objectForKey:@"lostrate"] floatValue];
-                        if (0.0f!=lostRate) {
-                            agtCntNum +=  [[anyDict objectForKey:@"lostcnt"] intValue]/lostRate;
-                        }
-                        agtLostNum += [[anyDict objectForKey:@"agtlost"] intValue];
-                        cusLostNum += [[anyDict objectForKey:@"cuslost"] intValue];
-                        sysLostNum += [[anyDict objectForKey:@"syslost"] intValue];
-                        offLostNum += [[anyDict objectForKey:@"offlost"] intValue];
-                        othLostNum += [[anyDict objectForKey:@"othlost"] intValue];
-                        waitDurSecondNum += [[anyDict objectForKey:@"waitdur"]intValue]*[[anyDict objectForKey:@"cuslost"] intValue];
+            
+            self.rootCashResponseStr = responseString; 
+            veryBadNum = 0;
+            badNum = 0;
+            lostCntNum = 0;
+            agtCntNum = 0;
+            agtLostNum = 0;
+            cusLostNum = 0;
+            sysLostNum = 0;
+            offLostNum = 0;
+            othLostNum = 0;
+            waitDurSecondNum = 0;
+            if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]]) 
+            {
+                for (NSDictionary* anyDict in tmpArray) {
+                    veryBadNum = veryBadNum+[[anyDict objectForKey:@"verybad"] intValue];
+                    badNum = badNum+[[anyDict objectForKey:@"bad"] intValue];
+                    lostCntNum = lostCntNum+[[anyDict objectForKey:@"lostcnt"] intValue];
+                    float lostRate = [[anyDict objectForKey:@"lostrate"] floatValue];
+                    if (0.0f!=lostRate) {
+                        agtCntNum +=  [[anyDict objectForKey:@"lostcnt"] intValue]/lostRate;
                     }
-                    NSDictionary *tmpDict = [[NSDictionary alloc ]initWithObjectsAndKeys:[NSNumber numberWithInt:veryBadNum] ,@"verybad",[NSNumber numberWithInt:badNum] ,@"bad",[NSNumber numberWithInt:lostCntNum] ,@"lostcnt",[NSNumber numberWithInt:agtLostNum] ,@"agtlost",[NSNumber numberWithFloat:(agtCntNum?((float)lostCntNum/(float)agtCntNum):0.0f)] ,@"lostrate",[NSNumber numberWithInt:cusLostNum] ,@"cuslost",[NSNumber numberWithInt:sysLostNum] ,@"syslost",[NSNumber numberWithInt:offLostNum] ,@"offlost",[NSNumber numberWithInt:othLostNum] ,@"othlost", nil];
-                    NSArray *tmpDictArray = [[NSArray alloc]initWithObjects:tmpDict, nil];
-                    [tmpDict release];
-                    self.dataDictArray = tmpDictArray;
-                    [tmpDictArray release];
-                    [rootTableViewController setDataDictArray:dataDictArray];
-                    
-                    if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
-                        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                        [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
-                        NSString *timeString=[formatter stringFromDate: [NSDate date]];
-                        [formatter release];
-                        [delegate willInfoBoardUpdateUIOnPage:2 WithMessage:timeString];
-                    }
+                    agtLostNum += [[anyDict objectForKey:@"agtlost"] intValue];
+                    cusLostNum += [[anyDict objectForKey:@"cuslost"] intValue];
+                    sysLostNum += [[anyDict objectForKey:@"syslost"] intValue];
+                    offLostNum += [[anyDict objectForKey:@"offlost"] intValue];
+                    othLostNum += [[anyDict objectForKey:@"othlost"] intValue];
+                    waitDurSecondNum += [[anyDict objectForKey:@"waitdur"]intValue]*[[anyDict objectForKey:@"cuslost"] intValue];
                 }
+            }
+            NSDictionary *tmpDict = [[NSDictionary alloc ]initWithObjectsAndKeys:[NSNumber numberWithInt:veryBadNum] ,@"verybad",[NSNumber numberWithInt:badNum] ,@"bad",[NSNumber numberWithInt:lostCntNum] ,@"lostcnt",[NSNumber numberWithInt:agtLostNum] ,@"agtlost",[NSNumber numberWithFloat:(agtCntNum?((float)lostCntNum/(float)agtCntNum):0.0f)] ,@"lostrate",[NSNumber numberWithInt:cusLostNum] ,@"cuslost",[NSNumber numberWithInt:sysLostNum] ,@"syslost",[NSNumber numberWithInt:offLostNum] ,@"offlost",[NSNumber numberWithInt:othLostNum] ,@"othlost", nil];
+            NSArray *tmpDictArray = [[NSArray alloc]initWithObjects:tmpDict, nil];
+            [tmpDict release];
+            self.dataDictArray = tmpDictArray;
+            [tmpDictArray release];
+            [rootTableViewController setDataDictArray:dataDictArray];
+            
+            if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateFormat:@"YY-MM-dd HH:mm:ss"];
+                NSString *timeString=[formatter stringFromDate: [NSDate date]];
+                [formatter release];
+                [delegate willInfoBoardUpdateUIOnPage:2 WithMessage:timeString];
             }
         }
     }
@@ -248,21 +248,21 @@
         self.webAddr = rootWebAddr;
         if (![leafVeryBadAndBadCashResponseStr isEqualToString:responseString]) {
             NSMutableArray *tmpArray = [responseString JSONValue];
+            NSMutableArray *veryBadDictArray = [[NSMutableArray alloc]init];
+            NSMutableArray *badDictArray = [[NSMutableArray alloc]init];
             if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
             {
-                NSMutableArray *veryBadDictArray = [[NSMutableArray alloc]init];
-                NSMutableArray *badDictArray = [[NSMutableArray alloc]init];
                 for (NSDictionary* anyDict in tmpArray) {
                     (5 == [[anyDict objectForKey:@"def"]intValue])?[veryBadDictArray addObject:anyDict]:nil;
                     (4 == [[anyDict objectForKey:@"def"]intValue])?[badDictArray addObject:anyDict]:nil;
                 }
-                NSArray *tmpDictArray = [[NSArray alloc]initWithObjects:veryBadDictArray,badDictArray, nil];
-                [veryBadDictArray release];
-                [badDictArray release];
-                self.dataDictArray = tmpDictArray;
-                [tmpDictArray release];
-                [leafTableViewController setDataDictArray:dataDictArray];
             }
+            NSArray *tmpDictArray = [[NSArray alloc]initWithObjects:veryBadDictArray,badDictArray, nil];
+            [veryBadDictArray release];
+            [badDictArray release];
+            self.dataDictArray = tmpDictArray;
+            [tmpDictArray release];
+            [leafTableViewController setDataDictArray:dataDictArray];
         }
     }
 
@@ -271,10 +271,12 @@
         self.webAddr = rootWebAddr;
         if (![leafAgtLostCashResponseStr isEqualToString:responseString]) {
             NSMutableArray *tmpArray = [responseString JSONValue];
-            if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
+            self.dataDictArray = tmpArray;
+            [leafTableViewController setDataDictArray:dataDictArray];
+            if ([tmpArray count] && [[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
             {
-                        self.dataDictArray = tmpArray;
-                        [leafTableViewController setDataDictArray:dataDictArray];
+                self.dataDictArray = nil;
+                [leafTableViewController setDataDictArray:dataDictArray];
             }
 
         }

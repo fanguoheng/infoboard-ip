@@ -220,22 +220,25 @@
     if (![cashResponseStr isEqualToString:responseString]) {
         self.cashResponseStr = responseString;
         NSArray *tmpArray = [responseString JSONValue];
-        if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]]) {
-            totalInboundNum = 0;
-            totalOutboundNum = 0;
-            totalAgtAnswerNum = 0;
-            totalTransAgtNum = 0;
-            totalIVRNum = 0;
-            loninAgtNum = 0;
-            
-            inboundNum = 0;
-            outboundNum = 0;
-            queueNum = 0;
-            ringAgtNum = 0;
-            pauseAgtNum = 0;
-            idleAgtNum = 0;
-            talkingAgtNum = 0;
-            occupyAgtNum = 0;
+        
+        totalInboundNum = 0;
+        totalOutboundNum = 0;
+        totalAgtAnswerNum = 0;
+        totalTransAgtNum = 0;
+        totalIVRNum = 0;
+        loninAgtNum = 0;
+        
+        inboundNum = 0;
+        outboundNum = 0;
+        queueNum = 0;
+        ringAgtNum = 0;
+        pauseAgtNum = 0;
+        idleAgtNum = 0;
+        talkingAgtNum = 0;
+        occupyAgtNum = 0;
+        
+        if ([tmpArray count]&&![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]]) 
+        {
             for (NSMutableDictionary *anyDic in tmpArray) {
                 totalInboundNum += [[anyDic objectForKey:@"totalinbound"]intValue];
                 totalOutboundNum += [[anyDic objectForKey:@"totaloutbound"]intValue];
@@ -243,10 +246,8 @@
                 totalTransAgtNum += [[anyDic objectForKey:@"totaltransagt"]intValue];
                 totalIVRNum += [[anyDic objectForKey:@"totalivr"]intValue];
                 loninAgtNum += [[anyDic objectForKey:@"loninagt"]intValue];
-                
                 inboundNum += [[anyDic objectForKey:@"inbound"]intValue];
                 outboundNum += [[anyDic objectForKey:@"outbound"]intValue];
-                
                 queueNum += [[anyDic objectForKey:@"infoqueue"]intValue];
                 ringAgtNum += [[anyDic objectForKey:@"ringagt"]intValue];
                 pauseAgtNum += [[anyDic objectForKey:@"pauseagt"]intValue];
@@ -255,30 +256,27 @@
                 occupyAgtNum += [[anyDic objectForKey:@"occupyagt"]intValue];
                 
             }
-            totalBoundNum = totalInboundNum + totalOutboundNum;
-            
-            self.barPlotData = [NSArray arrayWithObjects:
-                                [NSNumber numberWithInt:pauseAgtNum],
-                                [NSNumber numberWithInt:occupyAgtNum],
-                                [NSNumber numberWithInt:talkingAgtNum],
-                                [NSNumber numberWithInt:ringAgtNum],
-                                [NSNumber numberWithInt:idleAgtNum],
-                                nil];
-            
-            if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
-                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                [formatter setDateFormat:@"YY-MM-dd hh:mm:ss"];
-                NSString *timeString=[formatter stringFromDate: [NSDate date]];
-                [formatter release];
-                [delegate willInfoBoardUpdateUIOnPage:3 WithMessage:timeString];
-            }
-            if (ifLoading==NO){
-                [self hideWaiting];
-                //NSLog(@"hideWating");
-            }
-            self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
         }
-
+        totalBoundNum = totalInboundNum + totalOutboundNum;
+        self.barPlotData = [NSArray arrayWithObjects:
+                            [NSNumber numberWithInt:pauseAgtNum],
+                            [NSNumber numberWithInt:occupyAgtNum],
+                            [NSNumber numberWithInt:talkingAgtNum],
+                            [NSNumber numberWithInt:ringAgtNum],
+                            [NSNumber numberWithInt:idleAgtNum],
+                            nil];
+        
+        if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateFormat:@"YY-MM-dd HH:mm:ss"];
+            NSString *timeString=[formatter stringFromDate: [NSDate date]];
+            [formatter release];
+            [delegate willInfoBoardUpdateUIOnPage:3 WithMessage:timeString];
+        }
+        if (ifLoading==NO){
+            [self hideWaiting];
+        }
+        self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
     }
     [responseString release];
         
