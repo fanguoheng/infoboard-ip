@@ -265,7 +265,6 @@
                             [NSNumber numberWithInt:ringAgtNum],
                             [NSNumber numberWithInt:idleAgtNum],
                             nil];
-        
         if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setDateFormat:@"YY-MM-dd HH:mm:ss"];

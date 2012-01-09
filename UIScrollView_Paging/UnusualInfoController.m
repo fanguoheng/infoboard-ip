@@ -197,7 +197,6 @@
     if ([request.url.absoluteString isEqualToString:rootWebAddr]) {
         if (![rootCashResponseStr isEqualToString:responseString]) {
             NSMutableArray *tmpArray = [responseString JSONValue];
-            
             self.rootCashResponseStr = responseString; 
             veryBadNum = 0;
             badNum = 0;
@@ -233,7 +232,6 @@
             self.dataDictArray = tmpDictArray;
             [tmpDictArray release];
             [rootTableViewController setDataDictArray:dataDictArray];
-            
             if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
                 NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                 [formatter setDateFormat:@"YY-MM-dd HH:mm:ss"];
@@ -241,7 +239,12 @@
                 [formatter release];
                 [delegate willInfoBoardUpdateUIOnPage:2 WithMessage:timeString];
             }
+            if (ifLoading==NO){
+                [self hideWaiting];
+            }
+            self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
         }
+
     }
     else if([request.url.absoluteString isEqualToString:leafVeryBadAndBadWebAddr])
     {
@@ -263,6 +266,10 @@
             self.dataDictArray = tmpDictArray;
             [tmpDictArray release];
             [leafTableViewController setDataDictArray:dataDictArray];
+            if (ifLoading==NO){
+                [self hideWaiting];
+            }
+            self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
         }
     }
 
@@ -278,15 +285,15 @@
                 self.dataDictArray = nil;
                 [leafTableViewController setDataDictArray:dataDictArray];
             }
+            if (ifLoading==NO){
+                [self hideWaiting];
+            }
+            self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
 
         }
 
     }
-    if (ifLoading==NO){
-     [self hideWaiting];
-    }
-    self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
-
+    [responseString release];
 
 }
 

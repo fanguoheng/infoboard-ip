@@ -374,7 +374,6 @@
 						<string key="NSFrame">{{249, 349}, {50, 12}}</string>
 						<reference key="NSSuperview" ref="32512162"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<reference key="IBUIBackgroundColor" ref="755807323"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -525,7 +524,6 @@
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">1</int>
 						<float key="IBUIMinimumFontSize">5</float>
-						<int key="IBUITextAlignment">2</int>
 						<reference key="IBUIFontDescription" ref="663880892"/>
 						<reference key="IBUIFont" ref="22371952"/>
 					</object>
@@ -546,7 +544,6 @@
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">1</int>
 						<float key="IBUIMinimumFontSize">5</float>
-						<int key="IBUITextAlignment">2</int>
 						<reference key="IBUIFontDescription" ref="663880892"/>
 						<reference key="IBUIFont" ref="22371952"/>
 					</object>
@@ -567,7 +564,6 @@
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">1</int>
 						<float key="IBUIMinimumFontSize">10</float>
-						<int key="IBUITextAlignment">2</int>
 						<reference key="IBUIFontDescription" ref="663880892"/>
 						<reference key="IBUIFont" ref="22371952"/>
 					</object>
@@ -588,7 +584,6 @@
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">1</int>
 						<float key="IBUIMinimumFontSize">5</float>
-						<int key="IBUITextAlignment">2</int>
 						<reference key="IBUIFontDescription" ref="663880892"/>
 						<reference key="IBUIFont" ref="22371952"/>
 					</object>
@@ -609,7 +604,6 @@
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">1</int>
 						<float key="IBUIMinimumFontSize">5</float>
-						<int key="IBUITextAlignment">2</int>
 						<reference key="IBUIFontDescription" ref="663880892"/>
 						<reference key="IBUIFont" ref="22371952"/>
 					</object>
@@ -630,7 +624,6 @@
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">1</int>
 						<float key="IBUIMinimumFontSize">5</float>
-						<int key="IBUITextAlignment">2</int>
 						<reference key="IBUIFontDescription" ref="663880892"/>
 						<reference key="IBUIFont" ref="22371952"/>
 					</object>
@@ -826,7 +819,6 @@
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">1</int>
 						<float key="IBUIMinimumFontSize">5</float>
-						<int key="IBUITextAlignment">2</int>
 						<reference key="IBUIFontDescription" ref="663880892"/>
 						<reference key="IBUIFont" ref="22371952"/>
 					</object>
@@ -1147,7 +1139,6 @@
 				<string key="NSFrameSize">{480, 262}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
-				<reference key="NSNextKeyView"/>
 				<reference key="IBUIBackgroundColor" ref="115576751"/>
 				<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
 					<int key="IBUIInterfaceOrientation">3</int>

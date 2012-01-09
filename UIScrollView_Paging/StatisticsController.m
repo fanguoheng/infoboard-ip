@@ -315,10 +315,6 @@
                 [formatter release];
                 [delegate willInfoBoardUpdateUIOnPage:0 WithMessage:timeString];
             }
-            if (ifLoading==NO){
-                [self hideWaiting];
-            }
-            self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
         }
     }
     else if ([request.url.absoluteString isEqualToString:agtAverageInfoWebAddr])
@@ -355,9 +351,13 @@
                 [formatter release];
                 [delegate willInfoBoardUpdateUIOnPage:0 WithMessage:timeString];
             }
-            self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
         }
+        
     }
+    if (ifLoading==NO){
+        [self hideWaiting];
+    }
+    self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
     [responseString release];
 }
 - (void)requestFailed:(ASIHTTPRequest *)request
