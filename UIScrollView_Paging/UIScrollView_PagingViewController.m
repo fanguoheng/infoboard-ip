@@ -384,10 +384,10 @@ UIInterfaceOrientation temp;
             else
             {
                 NSString *allShopsID = [[NSString alloc]initWithFormat:@"%@*",[[anyShop objectForKey:@"shopid"]substringToIndex:3]];
-                NSString *allShopsName = [[NSString alloc]initWithFormat:@"%@所有站点",provinceName];
-                NSDictionary *AllShops = [[NSDictionary alloc]initWithObjectsAndKeys:allShopsID,@"shopid",allShopsName,@"shopname", nil];
+                //NSString *allShopsName = [[NSString alloc]initWithFormat:@"%@所有站点",provinceName];
+                NSDictionary *AllShops = [[NSDictionary alloc]initWithObjectsAndKeys:allShopsID,@"shopid",@"所有站点",@"shopname", nil];
                 [allShopsID release];
-                [allShopsName release];
+                //[allShopsName release];
                 NSMutableArray *shopsOfTheProvice = [[NSMutableArray alloc]initWithObjects:AllShops,anyShop, nil];
                 [AllShops release];
                 [provincesShops setObject:shopsOfTheProvice forKey:provinceName];
@@ -395,15 +395,8 @@ UIInterfaceOrientation temp;
             }
         }
         self.provinces = [[NSMutableArray alloc]initWithArray:[provincesShops allKeys]];
-        NSString *nationwideShopsStr = [[NSString alloc]initWithString:@"全国"];
-        [provinces insertObject:nationwideShopsStr atIndex:0];
-        [nationwideShopsStr release];
-        NSString *nationwideShopsID = [[NSString alloc]initWithString:@"all"];
-        NSString *nationwideShopsName = [[NSString alloc]initWithString:@"全国所有站点"];
-
-        NSDictionary *nationwideShopsDic = [[NSDictionary alloc]initWithObjectsAndKeys:nationwideShopsID,@"shopid",nationwideShopsName,@"shopname", nil];
-        [nationwideShopsID release];
-        [nationwideShopsName release];
+        [provinces insertObject:@"全国" atIndex:0];
+        NSDictionary *nationwideShopsDic = [[NSDictionary alloc]initWithObjectsAndKeys:@"all",@"shopid",@"所有站点",@"shopname", nil];
         NSArray *nationwideShopsArray = [[NSArray alloc]initWithObjects:nationwideShopsDic, nil];
         [provincesShops setObject:nationwideShopsArray forKey:@"全国"];
         self.shops = [provincesShops objectForKey:[provinces objectAtIndex:0]];
@@ -448,15 +441,23 @@ UIInterfaceOrientation temp;
     for (id viewBoardController in viewBoardControllers) {
         [viewBoardController cleanUI];
     }
+    for (NSInteger i=0; i<[updateTimeStrArray count]; i++) {
+        [updateTimeStrArray replaceObjectAtIndex:i withObject:@""];
+    }
+    pageRefreshTimeLabel.text = nil;
     NSString *_addrPrefix = [[NSString alloc]initWithFormat:@"http://%@/STMC/ScanData.json?methodName=Get",hostAddr];
     self.addrPrefix = _addrPrefix;
     [_addrPrefix release];
     NSInteger provinceSelected = [picker selectedRowInComponent:0];
     NSInteger shopSelected = [picker selectedRowInComponent:1];
     self.addrPostfix = [[NSString alloc]initWithFormat:@"&shopId=%@",[[[provincesShops objectForKey:[provinces objectAtIndex:provinceSelected]] objectAtIndex:shopSelected] objectForKey:@"shopid"]];
-    NSString *shopName = [[NSString alloc]initWithString:[[[provincesShops objectForKey:[provinces objectAtIndex:provinceSelected]] objectAtIndex:shopSelected] objectForKey:@"shopname"]];
-    [showAllViewBoardsAndSettingButton setTitle:shopName forState:UIControlStateNormal];
-    //[shopName release];
+    NSString *provinceName = [[provinces objectAtIndex:provinceSelected]retain];
+    NSString *shopName = [[[[provincesShops objectForKey:[provinces objectAtIndex:provinceSelected]] objectAtIndex:shopSelected] objectForKey:@"shopname"]retain];
+    NSString *province_shopStr = [[NSString alloc]initWithFormat:@"%@ %@",provinceName,shopName];
+    [provinceName release];
+    [shopName release];
+    [showAllViewBoardsAndSettingButton setTitle:province_shopStr forState:UIControlStateNormal];
+    [province_shopStr release];
     NSUserDefaults *df = [NSUserDefaults standardUserDefaults];
     if (df) {
         NSNumber *provinceSelectedNumber = [[NSNumber alloc]initWithInt:provinceSelected];

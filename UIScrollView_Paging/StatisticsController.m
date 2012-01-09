@@ -545,8 +545,8 @@
     // Add pie chart
     self.piePlot = [[CPTPieChart alloc] init];
     piePlot.dataSource = self;
-	piePlot.pieRadius = 61.0;
-    piePlot.labelOffset = -25.0f;
+	piePlot.pieRadius = 58.0;
+    piePlot.labelOffset = -28.0f;
     piePlot.identifier = @"PiePlot";
 	piePlot.startAngle = 0.0f;
 	piePlot.sliceDirection = CPTPieDirectionCounterClockwise;
@@ -726,10 +726,10 @@
     // Add pie chart
     self.piePlotLandscape = [[CPTPieChart alloc] init];
     piePlotLandscape.dataSource = self;
-	piePlotLandscape.pieRadius = 90.0f;
+	piePlotLandscape.pieRadius = 95.0f;
     piePlotLandscape.identifier = @"PiePlotLandscape";
 	piePlotLandscape.startAngle = 0.0f;
-    piePlotLandscape.labelOffset = -70.0f;
+    piePlotLandscape.labelOffset = -65.0f;
 	piePlotLandscape.sliceDirection = CPTPieDirectionCounterClockwise;
 	piePlotLandscape.centerAnchor = CGPointMake(0.5, 0.5);
 	piePlotLandscape.borderLineStyle = barLineStyle;
