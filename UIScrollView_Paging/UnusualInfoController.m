@@ -526,6 +526,8 @@
 - (void)cleanUI
 {
     self.dataDictArray = nil;
+    [rootTableViewController setDataDictArray:dataDictArray];
+    [leafTableViewController setDataDictArray:dataDictArray];
     [[(id)[navController topViewController] tableView] reloadData];
     
 }
