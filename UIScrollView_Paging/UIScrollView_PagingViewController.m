@@ -540,13 +540,13 @@ UIInterfaceOrientation temp;
     [emptyStr release];
 }
 #pragma mark - viewBoards Manage
-- (void) loadAllViewBoardsWithAddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet
+- (void) loadAllViewBoardsWithAddrPrefix:(NSString*)newAddrPrefix AddrPostfix:(NSString*)newAddrPostfix
 {
     //pageControl.backgroundColor = [UIColor whiteColor];
     //self.view.backgroundColor = [UIColor whiteColor];
     scrollView.alpha = 1.0f;
     for (id anyViewBoardController in viewBoardControllers) {
-        [anyViewBoardController setAddrWithAddrPrefix:addrPrefixSet AddrPostfix:addrPostfixSet];
+        [anyViewBoardController setAddrWithAddrPrefix:newAddrPrefix AddrPostfix:newAddrPostfix];
     }
     [[viewBoardControllers objectAtIndex:pageControl.currentPage] dataUpdateStart];
     [NSTimer scheduledTimerWithTimeInterval:0.8f

@@ -7,10 +7,12 @@
 //
 
 #import "SDInfoBoardController.h"
-
+#import "ASIHTTPRequest.h"
+#import "ASIAuthenticationDialog.h"
 @implementation SDInfoBoardController
-@synthesize addrPrefix,addrPostfix;
-@synthesize timer,refreshInterval;
+@synthesize delegate;
+@synthesize addrPrefix,addrPostfix,urlStringSet;
+@synthesize timer,refreshInterval,requestFailedCountMax;
 @synthesize originView,landscapeView;
 
 
@@ -19,19 +21,21 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        self.refreshInterval = 5;
+        self.refreshInterval = 60;
+        self.requestFailedCountMax = 6;
+        urlStringSet = [[NSMutableSet alloc]init];
     }
     return self;
 }
-- (void)setAddrWithAddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet
+- (void)setAddrWithAddrPrefix:(NSString*)newAddrPrefix AddrPostfix:(NSString*)newAddrPostfix
 {
-    self.addrPrefix = addrPrefixSet;
-    self.addrPostfix = addrPostfixSet;
+    self.addrPrefix = newAddrPrefix;
+    self.addrPostfix = newAddrPostfix;
 }
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil AddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil AddrPrefix:(NSString*)newAddrPrefix AddrPostfix:(NSString*)newAddrPostfix
 {
     [self initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    [self setAddrWithAddrPrefix:addrPrefixSet AddrPostfix:addrPostfixSet];
+    [self setAddrWithAddrPrefix:newAddrPrefix AddrPostfix:newAddrPostfix];
     return self;
 }
 - (void)didReceiveMemoryWarning
@@ -54,7 +58,22 @@
 //refreshInterval最小值为1
 - (void) setRefreshInterval:(NSUInteger)refreshInterValSet
 {
-    (refreshInterValSet<1)?(refreshInterval = 1):(refreshInterval = refreshInterValSet);
+    if (refreshInterValSet<1) {
+        NSLog(@"wanning: refreshInterVal CANNOT be smaller than 1, set to 1 by default.");
+        refreshInterval = 1;
+    }
+    else
+        refreshInterval = (NSUInteger)refreshInterValSet;
+}
+
+- (void) setRequestFailedCountMax:(NSUInteger)requestFailedCountMaxSet
+{
+    if (requestFailedCountMaxSet<1) {
+        NSLog(@"wanning: requestFailedCount CANNOT be smaller than 1, set to 1 by default.");
+        requestFailedCountMax = 1;
+    }
+    else    
+        requestFailedCountMax = (NSUInteger)requestFailedCountMaxSet;
 }
 #pragma mark - View lifecycle
 
@@ -89,14 +108,18 @@
 }
 
 #pragma mark - dataUpdate
-- (void)requestData
+- (void)requestDataFromAddrArray
 {
-    //基类中此函数什么也不做
+    for (NSString *addr in urlStringSet) {
+        ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:addr]];
+        [request setDelegate:self];
+        [request startAsynchronous];
+    }
 }
 - (void)dataUpdateStart
 {
     if (timer == nil) {
-        [self requestData];
+        [self requestDataFromAddrArray];
         self.timer=[NSTimer scheduledTimerWithTimeInterval:refreshInterval
                                                     target:self 
                                                   selector:@selector(requestData) 
@@ -108,17 +131,35 @@
 - (void)dataUpdatePause
 {
     [timer invalidate];
-    if (timer != nil) {
+    if (timer != nil) { 
         self.timer = nil;
     }
 }
 
-#pragma mark - dataUpdate
-- (void) updateOriginView
+- (void)requestFinished:(ASIHTTPRequest *)request
+{
+    requestFailedCount = 0;
+}
+- (void)requestFailed:(ASIHTTPRequest *)request
+{
+    requestFailedCount ++;
+    if (requestFailedCount < requestFailedCountMax) {
+        ASIHTTPRequest *newRequest = [[request copy] autorelease]; 
+        [newRequest startAsynchronous]; 
+    }
+}
+
+#pragma mark - UIUpdate
+- (void) updateOriginView:(ASIHTTPRequest *)request
 {
     //基类中此函数什么也不做
 }
-- (void) updateLandscapeView
+- (void) updateLandscapeView:(ASIHTTPRequest *)request
+{
+    //基类中此函数什么也不做
+}
+
+- (void) cleanUI
 {
     //基类中此函数什么也不做
 }

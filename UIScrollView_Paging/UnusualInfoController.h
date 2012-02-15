@@ -64,7 +64,7 @@
 @property (nonatomic, retain) UIActivityIndicatorView *loadingLandscape;
 @property (nonatomic, readwrite) BOOL ifLoading;
 
-- (void)setAddrWithAddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet;
+- (void)setAddrWithAddrPrefix:(NSString*)newAddrPrefix AddrPostfix:(NSString*)newAddrPostfix;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil AddrPrefix:(NSString*)addrPrefix AddrPostfix:(NSString*)addrPostfix;
 - (void)dataUpdateStart;
 - (void)dataUpdatePause;

@@ -56,17 +56,17 @@
     }
     return self;
 }
-- (void)setAddrWithAddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet
+- (void)setAddrWithAddrPrefix:(NSString*)newAddrPrefix AddrPostfix:(NSString*)newAddrPostfix
 {
     //self.webAddr = [[NSString alloc ]initWithString:@"http://121.32.133.59:8502/FlexBoard/JsonFiles/AgtTotalInfo.json"];
-    self.addrPrefix = addrPrefixSet;
-    self.addrPostfix = addrPostfixSet;
+    self.addrPrefix = newAddrPrefix;
+    self.addrPostfix = newAddrPostfix;
     self.webAddr = [[NSString alloc ]initWithFormat:@"%@AgttotalInfo%@",addrPrefix,addrPostfix];
 }
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil AddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil AddrPrefix:(NSString*)newAddrPrefix AddrPostfix:(NSString*)newAddrPostfix
 {
     [self initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    [self setAddrWithAddrPrefix:addrPrefixSet AddrPostfix:addrPostfixSet];
+    [self setAddrWithAddrPrefix:newAddrPrefix AddrPostfix:newAddrPostfix];
     
     return self;
 }
@@ -721,7 +721,7 @@
      渐变5       #47ddee——#48b3e4
      */
     switch (index) {
-        case 0:
+        case 4:
         {
             CPTColor *areaColor = [CPTColor colorWithComponentRed:0x67/255.0f green:0xd8/255.0f  blue:0x3b/255.0f  alpha:0.7f];
             CPTColor *areaColor_2 = [CPTColor colorWithComponentRed:0xcb/255.0f green:0xf8/255.0f  blue:0x69/255.0f  alpha:1.0f];
@@ -740,7 +740,7 @@
             CPTFill* areaGradientFill = [CPTFill fillWithGradient:areaGradient];
             return areaGradientFill;
         }
-        case 2:
+        case 0:
         {
             CPTColor *areaColor = [CPTColor colorWithComponentRed:0xf8/255.0f  green:0xb9/255.0f  blue:0x32/255.0f  alpha:0.7f];
             CPTColor *areaColor_2 = [CPTColor colorWithComponentRed:0xf5/255.0f green:0xf0/255.0f  blue:0x5e/255.0f  alpha:1.0f];
@@ -758,7 +758,7 @@
             CPTFill* areaGradientFill = [CPTFill fillWithGradient:areaGradient];
             return areaGradientFill;
         }
-        case 4:
+        case 2:
         {
             CPTColor *areaColor = [CPTColor colorWithComponentRed:0xe9/255.0f green:0x24/255.0f  blue:0x3b/255.0f  alpha:0.7f];
             CPTColor *areaColor_2 = [CPTColor colorWithComponentRed:0xf5/255.0f green:0x2b/255.0f  blue:0x77/255.0f  alpha:1.0f];

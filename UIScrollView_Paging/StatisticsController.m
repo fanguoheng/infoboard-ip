@@ -35,7 +35,6 @@
 @synthesize addrPostfix;
 @synthesize agtTotalInfoWebAddr;
 @synthesize agtAverageInfoWebAddr;
-@synthesize timer,refreshInterval;
 
 @synthesize agtTotalInfoJsonDictionary;
 @synthesize agtAverageInfoJsonDictionary;
@@ -75,29 +74,22 @@
     return self;
 }
 
-- (void)setAddrWithAddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet
+- (void)setAddrWithAddrPrefix:(NSString*)newAddrPrefix AddrPostfix:(NSString*)newAddrPostfix
 {
     
     //self.agtTotalInfoWebAddr =  [[NSString alloc ]initWithString:@"http://121.32.133.59:8502/FlexBoard/JsonFiles/AgtTotalInfo.json"];
     //self.agtAverageInfoWebAddr = [[NSString alloc ]initWithString:@"http://121.32.133.59:8502/FlexBoard/JsonFiles/AgtAverageInfo.json"];
-    self.addrPrefix = addrPrefixSet;
-    self.addrPostfix = addrPostfixSet;
+    [super setAddrWithAddrPrefix:newAddrPrefix AddrPostfix:newAddrPostfix];
     NSString *addr1 = [[NSString alloc ]initWithFormat:@"%@AgttotalInfo%@",addrPrefix,addrPostfix];
     self.agtTotalInfoWebAddr = addr1;
     [addr1 release];
-    //NSLog(@"%@",agtTotalInfoWebAddr);
+    [self.urlStringSet addObject:self.agtTotalInfoWebAddr];
     NSString *addr2 = [[NSString alloc ]initWithFormat:@"%@AgtAverageInfo%@",addrPrefix,addrPostfix];
     self.agtAverageInfoWebAddr = addr2;
     [addr2 release];
-    //NSLog(@"%@",agtAverageInfoWebAddr);
+    [self.urlStringSet addObject:self.agtAverageInfoWebAddr];
 }
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil AddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet
-{
-    [self initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    [self setAddrWithAddrPrefix:addrPrefixSet AddrPostfix:addrPostfixSet];
-    
-    return self;
-}
+
 
 - (void)dealloc
 {    
@@ -148,11 +140,11 @@
 
     NSUserDefaults *df = [NSUserDefaults standardUserDefaults];  
     if (df) {  
-        refreshInterval = [[df objectForKey:@"statisticsinterval"]intValue];
+        self.refreshInterval = [[df objectForKey:@"statisticsinterval"]intValue];
     }
-    if(0 == refreshInterval)
+    if(0 == self.refreshInterval)
     {
-        refreshInterval = 60;
+        self.refreshInterval = 60;
     }
     [self createBarChartAndPiePlotInOriginView];
     [self createBarChartAndPiePlotInLandscapeView];
@@ -164,27 +156,6 @@
                    UIActivityIndicatorViewStyleWhiteLarge];
     loadingLandscape.center=CGPointMake(240,110);
     ifLoading=YES;
-}
-
-
-- (void)dataUpdateStart
-{
-    if (timer == nil) {
-        [self requestData];
-        self.timer=[NSTimer scheduledTimerWithTimeInterval:refreshInterval
-                                                    target:self 
-                                                  selector:@selector(requestData) 
-                                                  userInfo:nil 
-                                                   repeats:YES]; 
-    }
-}
-
-- (void)dataUpdatePause
-{
-    [timer invalidate];
-    if (timer != nil) {
-        self.timer = nil;
-    }
 }
 
 - (void)viewDidUnload
@@ -233,8 +204,9 @@
     [loadingLandscape removeFromSuperview];
 }
 
-- (void)requestData
+- (void)requestDataFromAddrArray
 {
+    [super requestDataFromAddrArray];
     if (ifLoading) {
         [self showWaiting];
         //NSLog(@"%d showWaing",ifLoading);
@@ -254,7 +226,7 @@
 
 - (void)requestFinished:(ASIHTTPRequest *)request
 {
-    requestFailedCount = 0;
+    [super requestFinished:request];
     NSString *responseString = [[NSString alloc] initWithData:[request responseData] encoding:NSUTF8StringEncoding];
     if ([request.url.absoluteString isEqualToString:agtTotalInfoWebAddr]) {
         if (![agtTotalInfoCashResponseStr isEqualToString:responseString]) {
@@ -360,14 +332,7 @@
     self.view == originView?[self updateOriginView:request]:[self updateLandscapeView:request];
     [responseString release];
 }
-- (void)requestFailed:(ASIHTTPRequest *)request
-{
-    requestFailedCount ++;
-    if (requestFailedCount < 6) {
-        ASIHTTPRequest *newRequest = [[request copy] autorelease]; 
-        [newRequest startAsynchronous]; 
-    }
-}
+
 
 #pragma mark - update UI
 - (void)createBarChartAndPiePlotInOriginView 
@@ -1120,32 +1085,5 @@
  {
  //pieChart.title = [NSString stringWithFormat:@"Selected index: %lu", index];
  }
- 
-#pragma mark - utiles
-
-
-- (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number
-{
-    if (number < 1000) {
-        NSMutableString *resultString = [[NSMutableString alloc ]initWithFormat:@"%d", number];
-        return [resultString autorelease];
-    }
-    else
-    {
-        NSMutableString *resultString = [[NSMutableString alloc ]initWithFormat:@"%d,%d", number/1000, number%1000];
-        if ((number%1000)<10) 
-        {
-            NSRange range = [resultString rangeOfString:@","];
-            [resultString insertString:@"00" atIndex:range.location+1]; 
-        }
-        else if ((number%1000)<100) 
-        {
-            NSRange range = [resultString rangeOfString:@","];
-            [resultString insertString:@"0" atIndex:range.location+1]; 
-        }
-        return [resultString autorelease];
-    }
-}
-
 
 @end

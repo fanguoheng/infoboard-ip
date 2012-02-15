@@ -57,13 +57,13 @@
     return self;
 }
 
-- (void)setAddrWithAddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet
+- (void)setAddrWithAddrPrefix:(NSString*)newAddrPrefix AddrPostfix:(NSString*)newAddrPostfix
 {
     
     //self.agtInfoWebAddr = [[NSString alloc]initWithString:@"http://121.32.133.59:8502/FlexBoard/JsonFiles/mAgtInfo.json"];
     //self.allGrpInfoWebAddr =   [[NSString alloc]initWithString:@"http://121.32.133.59:8502/FlexBoard/JsonFiles/AllGrpInfo.json"];
-    self.addrPrefix = addrPrefixSet;
-    self.addrPostfix = addrPostfixSet;
+    self.addrPrefix = newAddrPrefix;
+    self.addrPostfix = newAddrPostfix;
 
     NSString *str1 = [[NSString alloc]initWithFormat:@"%@AllGrpInfo%@",addrPrefix,addrPostfix];
     self.allGrpInfoWebAddr = str1;
@@ -75,10 +75,10 @@
     self.webAddr = allGrpInfoWebAddr;
     
 }
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil AddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)AddrPostfixSet
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil AddrPrefix:(NSString*)newAddrPrefix AddrPostfix:(NSString*)newAddrPostfix
 {
     [self initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    [self setAddrWithAddrPrefix:addrPrefixSet AddrPostfix:AddrPostfixSet];
+    [self setAddrWithAddrPrefix:newAddrPrefix AddrPostfix:newAddrPostfix];
 
 
     

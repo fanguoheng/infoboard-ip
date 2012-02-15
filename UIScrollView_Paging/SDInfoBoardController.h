@@ -7,32 +7,39 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "SDInfoBoardUIUpdate.h"
+@class  ASIHTTPRequest;
 @interface SDInfoBoardController : UIViewController
 {
-    @private NSUInteger refreshInterval;
+ @private
+    NSUInteger refreshInterval;
+    NSUInteger requestFailedCount;
 }
+@property (nonatomic, assign) id <SDInfoBoardUpdateUI> delegate;
 @property (nonatomic, copy) NSString *addrPrefix;
 @property (nonatomic, copy) NSString *addrPostfix;
+@property (nonatomic, retain) NSMutableSet *urlStringSet;
+
 @property (nonatomic, retain) NSTimer *timer;
 @property (nonatomic, readwrite) NSUInteger refreshInterval;
+@property (nonatomic, readwrite) NSUInteger requestFailedCountMax;
 
 @property (nonatomic, retain) IBOutlet UIView *originView;
 @property (nonatomic, retain) IBOutlet UIView *landscapeView;
 
 
 
+- (void)setAddrWithAddrPrefix:(NSString*)newAddrPrefix AddrPostfix:(NSString*)newnewAddrPostfix;
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil AddrPrefix:(NSString*)newAddrPrefix AddrPostfix:(NSString*)newAddrPostfix;
 
-- (void)setAddrWithAddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet;
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil AddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet;
-
+- (void)requestFinished:(ASIHTTPRequest *)request;
+- (void)requestFailed:(ASIHTTPRequest *)request;
 - (void) dataUpdateStart;
 - (void) dataUpdatePause;
-- (void) requestData;
-- (void) updateOriginView;
-- (void) updateLandscapeView;
-
+- (void) requestDataFromAddrArray;
+- (void) updateOriginView:(ASIHTTPRequest *)request;
+- (void) updateLandscapeView:(ASIHTTPRequest *)request;
+- (void) cleanUI;
 - (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number;
-
-
 @end
+

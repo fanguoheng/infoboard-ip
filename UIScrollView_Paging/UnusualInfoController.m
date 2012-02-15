@@ -39,11 +39,11 @@
     return self;
 }
 
-- (void)setAddrWithAddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet
+- (void)setAddrWithAddrPrefix:(NSString*)newAddrPrefix AddrPostfix:(NSString*)newAddrPostfix
 {
     
-    self.addrPrefix = addrPrefixSet;
-    self.addrPostfix = addrPostfixSet;
+    self.addrPrefix = newAddrPrefix;
+    self.addrPostfix = newAddrPostfix;
     NSString *_addr0 = [[NSString alloc ]initWithFormat:@"%@UnusualInfo%@",addrPrefix,addrPostfix];
     self.rootWebAddr = _addr0;
     [_addr0 release];
@@ -56,10 +56,10 @@
 
     self.webAddr = rootWebAddr;
 }
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil AddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil AddrPrefix:(NSString*)newAddrPrefix AddrPostfix:(NSString*)newAddrPostfix
 {
     [self initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    [self setAddrWithAddrPrefix:addrPrefixSet AddrPostfix:addrPostfixSet];
+    [self setAddrWithAddrPrefix:newAddrPrefix AddrPostfix:newAddrPostfix];
     return self;
 }
 - (void)didReceiveMemoryWarning

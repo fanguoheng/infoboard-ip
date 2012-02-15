@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "CorePlot-CocoaTouch.h"
 #import "SDInfoBoardUIUpdate.h"
-@class ASIHTTPRequest;
+#import "SDInfoBoardController.h"
 
-@interface StatisticsController : UIViewController<UIActionSheetDelegate,CPTPieChartDataSource, CPTPieChartDelegate, CPTPlotDataSource,CPTBarPlotDelegate>
+@interface StatisticsController : SDInfoBoardController<UIActionSheetDelegate,CPTPieChartDataSource, CPTPieChartDelegate, CPTPlotDataSource,CPTBarPlotDelegate>
 {
     CPTGraphHostingView *barChartView; //一个装一个柱状图或者饼图 
     CPTXYGraph *barChart;//xy背景图，表格
@@ -31,8 +31,6 @@
     
     NSString *agtTotalInfoWebAddr;
     NSString *agtAverageInfoWebAddr;
-    NSTimer *timer;
-    NSInteger refreshInterval;
 
 	NSMutableData *agtTotalInfoResponseData;
     
@@ -83,12 +81,7 @@
     UILabel *lastAvrWaitDurLabel;
     UILabel *lastAvrSvrDurLabel;
     UILabel *lastAvrWorkDurLabel;
-    
-    UIView *originView;
-    UIView *landscapeView;
-    NSInteger requestFailedCount;
 }
-@property (nonatomic, assign) id <SDInfoBoardUpdateUI> delegate;
 @property (nonatomic,copy) NSString *agtTotalInfoCashResponseStr;
 @property (nonatomic,copy) NSString *agtAverageInfoCashResponseStr;
 @property (nonatomic, retain) CPTGraphHostingView *barChartView; 
@@ -107,12 +100,8 @@
 @property (nonatomic, retain) CPTPieChart *piePlotLandscape;
 @property (nonatomic, retain) NSArray * answerRatePersent;
 
-@property (nonatomic, copy) NSString *addrPrefix;
-@property (nonatomic, copy) NSString *addrPostfix;
 @property (nonatomic, copy) NSString *agtTotalInfoWebAddr;
 @property (nonatomic, copy) NSString *agtAverageInfoWebAddr;
-@property (nonatomic, retain) NSTimer *timer;
-@property (nonatomic) NSInteger refreshInterval;
 
 @property (nonatomic, retain) NSDictionary *agtTotalInfoJsonDictionary;
 @property (nonatomic, retain) NSDictionary *agtAverageInfoJsonDictionary;
@@ -133,29 +122,12 @@
 @property (nonatomic, retain) IBOutlet UILabel *lastAvrSvrDurLabel;
 @property (nonatomic, retain) IBOutlet UILabel *lastAvrWorkDurLabel;
 
-@property (nonatomic, retain) IBOutlet UIView *originView;
-@property (nonatomic, retain) IBOutlet UIView *landscapeView;
-
 
 @property (nonatomic, retain) UIActivityIndicatorView *loadingOrigin;
 @property (nonatomic, retain) UIActivityIndicatorView *loadingLandscape;
 @property (nonatomic, readwrite) BOOL ifLoading;
 
-- (void)setAddrWithAddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet;
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil AddrPrefix:(NSString*)addrPrefixSet AddrPostfix:(NSString*)addrPostfixSet;
-
-- (void) dataUpdateStart;
-- (void) dataUpdatePause;
-- (void) requestData;
-//- (void) cleanAllData;
-
 - (void)createBarChartAndPiePlotInOriginView; 
 - (void)createBarChartAndPiePlotInLandscapeView;
-
-- (void) updateOriginView:(ASIHTTPRequest *)request;
-- (void) updateLandscapeView:(ASIHTTPRequest *)request;
-- (void) cleanUI;
-
-- (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number;
 
 @end
