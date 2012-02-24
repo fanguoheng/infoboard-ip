@@ -41,5 +41,6 @@
 - (void) updateLandscapeView:(ASIHTTPRequest *)request;
 - (void) cleanUI;
 - (NSMutableString *)mutableStringWithCommaConvertFromInteger:(NSInteger)number;
+- (void)requestData;
 @end
 

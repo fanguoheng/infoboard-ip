@@ -15,7 +15,7 @@
 @synthesize timer,refreshInterval,requestFailedCountMax;
 @synthesize originView,landscapeView;
 
-
+- (void)requestData{}
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
