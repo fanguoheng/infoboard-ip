@@ -138,14 +138,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
 
-    NSUserDefaults *df = [NSUserDefaults standardUserDefaults];  
-    if (df) {  
-        self.refreshInterval = [[df objectForKey:@"statisticsinterval"]intValue];
-    }
-    if(0 == self.refreshInterval)
-    {
-        self.refreshInterval = 60;
-    }
+    self.refreshInterval = 60;
+ 
     [self createBarChartAndPiePlotInOriginView];
     [self createBarChartAndPiePlotInLandscapeView];
     

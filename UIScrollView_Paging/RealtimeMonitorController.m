@@ -109,21 +109,9 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
-    
-    NSUserDefaults *df = [NSUserDefaults standardUserDefaults];  
-    if (df) {  
-        refreshInterval = [[df objectForKey:@"realtimemonitorinterval"]intValue];
-    }
-    if(0 == refreshInterval)
-    {
-        refreshInterval = 60;
-    }
-
+    refreshInterval = 60;
     [self createBarChartInOriginView]; 
     [self createBarChartInLandscapeView];
-
-
     loadingOrigin=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:
                    UIActivityIndicatorViewStyleWhiteLarge];
     loadingOrigin.center=CGPointMake(160,200);

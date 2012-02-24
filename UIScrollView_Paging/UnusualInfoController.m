@@ -93,16 +93,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    //firstLoad = YES;
-    NSUserDefaults *df = [NSUserDefaults standardUserDefaults];  
-    if (df) {  
-        refreshInterval = [[df objectForKey:@"unusualInfoInterval"]intValue];
-    }
-    if(0 == refreshInterval)
-    {
-        refreshInterval = 60;
-    }
-    
+    refreshInterval = 60;
     UINavigationController *_navController = [[UINavigationController alloc]initWithRootViewController:rootTableViewController];
     self.navController = _navController;
     [_navController release];

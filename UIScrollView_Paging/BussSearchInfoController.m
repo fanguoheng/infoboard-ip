@@ -9,7 +9,6 @@
 #import "ASIHTTPRequest.h"
 #import "ASIAuthenticationDialog.h"
 #import "BussSearchInfoController.h"
-#import "CVTableCellBGView.h"
 #import "BSTableHeadView.h"
 
 @implementation BussSearchInfoController
@@ -80,17 +79,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
-    NSUserDefaults *df = [NSUserDefaults standardUserDefaults];  
-    if (df) {  
-        refreshInterval = [[df objectForKey:@"busssearchinterval"]intValue];
-    }
-    if(0 == refreshInterval)
-    {
-        refreshInterval = 60;
-    }
-
-    
+    refreshInterval = 60;
     loadingOrigin=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:
                    UIActivityIndicatorViewStyleWhiteLarge];
     loadingOrigin.center=CGPointMake(160,200);
@@ -395,8 +384,8 @@
     pieChartViewLandscape.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin| UIViewAutoresizingFlexibleRightMargin;
     [self.landscapeView addSubview:self.pieChartViewLandscape];
     pieChartLandscape = [[CPTXYGraph alloc] initWithFrame:CGRectZero];
-	//CPTTheme *pieChartTheme = [CPTTheme themeNamed:kCPTDarkGradientTheme];
-    //[pieChartLandscape applyTheme:pieChartTheme];
+//	CPTTheme *pieChartTheme = [CPTTheme themeNamed:kCPTDarkGradientTheme];
+//    [pieChartLandscape applyTheme:pieChartTheme];
 	CPTGraphHostingView *pieChartHostingView = (CPTGraphHostingView *)self.pieChartViewLandscape;
     pieChartHostingView.hostedGraph = pieChartLandscape;
 	
@@ -593,7 +582,6 @@
 #pragma mark - core plot 
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
 {
-    static NSUInteger num=0;
     if ([plot.identifier isEqual:@"BarPlotLandscape"])
     {
         return [barPlotData count];
@@ -601,17 +589,12 @@
     else
     {
         //return [answerRatePersent count];
-        num=[bussSearchInfoDataDictArray count];
-        if (num>6) {
-            num=6;
-        }
-         return num;
+         return [bussSearchInfoDataDictArray count];
     }
 }
 
 -(NSNumber *)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index 
 {
-    static NSInteger total=0;
     if([plot.identifier isEqual:@"BarPlotLandscape"])
     {
         switch ( fieldEnum ) {
@@ -627,7 +610,7 @@
         
     }
     else{
-        /*if ( index >= [bussSearchInfoDataDictArray count] ) return nil;
+        if ( index >= [bussSearchInfoDataDictArray count] ) return nil;
         
         if ( fieldEnum == CPTPieChartFieldSliceWidth ) {
             //return [bussSearchInfoDataDict objectForKey:[[bussSearchInfoDataDictKeys sortedArrayUsingSelector:@selector(compare:)] objectAtIndex:index]];
@@ -635,24 +618,14 @@
         }
         else {
             return [NSNumber numberWithInt:index];
-        }*/
-        
-        if (index<5) {
-            NSInteger now=[[[bussSearchInfoDataDictArray objectAtIndex:index] objectForKey:@"value"] intValue];
-            total+=now;
-            return [NSNumber numberWithInt:now];
-        }else if(index==5){
-            NSInteger other=searchcntNum-total;
-            total=0;
-            return [NSNumber numberWithInt:other];
-        }else return nil;
+        }
     }
+    
 }
 
 
 -(CPTLayer *)dataLabelForPlot:(CPTPlot *)plot recordIndex:(NSUInteger)index 
 {
-    static NSInteger total=0;
     if([plot.identifier isEqual:@"BarPlotLandscape"])
     {
         //CPTTextLayer *label = [[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%lu", index]];
@@ -674,28 +647,14 @@
         [textStyle release];
         return [label autorelease];
          */
-        CPTTextLayer *label;
-        NSInteger now=[[[bussSearchInfoDataDictArray objectAtIndex:index] objectForKey:@"value"] intValue];
-        NSString *keystr=[[bussSearchInfoDataDictArray objectAtIndex:index] objectForKey:@"searchType"];
-        if (index<5) {
-            total+=now;
-            if ([keystr isEqualToString:@""]) {
-                keystr=@"未填写";
-            }
-            label=[[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%@ %d",keystr,now]];
-        }else if(index==5){
-            NSInteger other=searchcntNum-total;
-            total=0;
-            label=[[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%@ %d",keystr,other]];
-        }else
-            return nil;
-                                   
+        CPTTextLayer *label = [[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%d",[[[bussSearchInfoDataDictArray objectAtIndex:index]objectForKey:@"value"]intValue]]];
         CPTMutableTextStyle *textStyle = [label.textStyle mutableCopy];
         textStyle.color = [CPTColor whiteColor];
         label.textStyle = textStyle;
         [textStyle release];
         return [label autorelease];
     }
+    
 }
 
 /*
@@ -829,8 +788,7 @@
 -(CGFloat)radialOffsetForPieChart:(CPTPieChart *)pieChart recordIndex:(NSUInteger)index
 {
     //return ( index == 0 ? 30.0f : 0.0f );
-    //return 5.0f+50.0f*pow((1.0f-[[[bussSearchInfoDataDictArray objectAtIndex:index]objectForKey:@"value"] floatValue]/maxSearchNum),4.0f);
-    return 0;
+    return 5.0f+50.0f*pow((1.0f-[[[bussSearchInfoDataDictArray objectAtIndex:index]objectForKey:@"value"] floatValue]/maxSearchNum),4.0f);
 }
 #pragma mark - UITableViewDelegate Methods
 /*

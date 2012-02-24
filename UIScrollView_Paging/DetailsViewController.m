@@ -112,16 +112,7 @@
 {
     //NSLog(@"detailsController viewDidLoad");
     [super viewDidLoad];
-    
-    NSUserDefaults *df = [NSUserDefaults standardUserDefaults];  
-    if (df) {  
-        refreshInterval = [[df objectForKey:@"detailsviewinterval"]intValue];
-    }
-    if(0 == refreshInterval)
-    {
-        refreshInterval = 60;
-    }
-    
+    refreshInterval = 60;
     UINavigationController *_navController = [[UINavigationController alloc ]initWithRootViewController:groupTableViewController];
     self.navController = _navController;
     [_navController release];
