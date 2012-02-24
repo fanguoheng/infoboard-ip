@@ -18,7 +18,6 @@
 
 #import "Reachability.h"
 #import "UIScrollView_PagingViewController.h"
-
 @implementation UIScrollView_PagingViewController
 
 @synthesize scrollView;
@@ -26,27 +25,23 @@
 
 @synthesize pageControl,showAllViewBoardsAndSettingButton,pageRefreshTimeLabel,viewBoardControllers,viewBoardFrontViews;
 
-@synthesize welcomeView,settingView,hostAddrTextField,hostReachResultLabel,hostAddr,addrPrefix,addrPostfix,allViewsPicView;
+@synthesize hostAddr,addrPrefix,addrPostfix,allViewsPicView;
 
-@synthesize picker,provincesShops,provinces,shops;
+@synthesize provincesShops,provinces,shops;
 
 @synthesize navBar,navBarTitles;
 @synthesize updateTimeStrArray;
+@synthesize loginController,settingController;
 - (void)dealloc
 {
     [navBar release];
     [navBarTitles release];
     [pageControl release];
     [viewBoardControllers release];
-    [welcomeView release];
-    [settingView release];
     [pageControl release];
     [showAllViewBoardsAndSettingButton release];
     [pageRefreshTimeLabel release];
     [viewBoardFrontViews release];
-    [hostAddrTextField release];
-    [hostReachResultLabel release];
-    [picker release];
     [provincesShops release];
     [provinces release];
     [shops release];
@@ -94,7 +89,6 @@
     viewBoardControllers = [[NSArray alloc ]initWithObjects:statisticsController,bussSearchInfoController, unusualInfoController, realtimeMonitorController, detailsViewController,nil ];
     viewBoardControllersCount = [viewBoardControllers count];
     pageControl.numberOfPages = viewBoardControllersCount;
-    //pageControl.currentPage = 0;
     viewBoardFrontViews = [[NSMutableArray alloc]init];
     
     [statisticsController release];
@@ -103,7 +97,6 @@
     [unusualInfoController release];
     [bussSearchInfoController release];
     
-    //self.view.backgroundColor = [UIColor whiteColor];
     scrollView.contentSize = CGSizeMake(scrollViewFrameWidth * viewBoardControllersCount, scrollViewFrameHeight);
     scrollView.alpha = 0.0f;
     //各页面属性设置
@@ -118,12 +111,7 @@
         [frontView release];
         [scrollView addSubview:[[viewBoardControllers objectAtIndex:i] view]];
         
-        //[[[viewBoardControllers objectAtIndex:i] view] setFrame:CGRectMake(60.0f + 20.0f*i, 100.0f, (scrollViewFrameWidth-kViewGap)*0.45, scrollViewFrameHeight*0.45)];
-        //[[[viewBoardControllers objectAtIndex:i] view] setTransform:CGAffineTransformMakeRotation(3.14159265/20*(i-2))];
         [[[viewBoardControllers objectAtIndex:i] view] setFrame:CGRectMake(15.0f + 43.0f*i, 120.0f, 116.0, 178.0)];
-        //[[[viewBoardControllers objectAtIndex:i] view] setFrame:CGRectMake(currentOffset + 60.0f + 20.0f*i, 100.0f, (scrollViewFrameWidth-kViewGap)*0.45, scrollViewFrameHeight*0.45)];
-        
-        //[[[viewBoardControllers objectAtIndex:i] view] setTransform:CGAffineTransformMakeRotation(3.14159265/20*(i-2))];
         [[[viewBoardControllers objectAtIndex:i] view] setTransform:CGAffineTransformMakeRotation(0.08726646*(i-2))];
         [[[viewBoardControllers objectAtIndex:i] view] setAlpha:0.0f];
 
@@ -131,37 +119,9 @@
 
     NSUserDefaults *df = [NSUserDefaults standardUserDefaults];  
     if (df) {  
-        hostAddr = [df objectForKey:@"hostaddr"];
-        hostAddrTextField.text = hostAddr;
-        if ([hostAddr isEqualToString:@"172.16.23.80:8902"]) {
-
-            //hostAddr = [[NSString alloc]initWithFormat:@"http://172.16.23.80:8902/STMC/ScanData.json?methodName=GetClientPermission&shopId=0"];
+        if (NO){
             addrPrefix = [[NSString alloc]initWithFormat:@"http://%@/STMC/ScanData.json?methodName=Get",hostAddr];            
             addrPostfix = [df valueForKey:@"addrpostfix"];
-            CATransition *animation = [CATransition animation];
-            animation.duration = 0.7f;
-            //设置上面4种动画效果使用CATransiton可以设置4种动画效果，分别为：kCATransitionFade;//渐渐消失kCATransitionMoveIn;//覆盖进入kCATransitionPush;//推出kCATransitionReveal;//与MoveIn相反
-            animation.type = kCATransitionPush;
-            //设置动画的方向，有四种，分别为kCATransitionFromRight、kCATransitionFromLeft、kCATransitionFromTop、kCATransitionFromBottom
-            animation.subtype = kCATransitionFromRight; 
-            animation.delegate = self;
-            [self.view.layer addAnimation:animation forKey:nil];
-            [settingView removeFromSuperview];
-            /*
-             NSUserDefaults *df = [NSUserDefaults standardUserDefaults];
-             if (df) {
-             NSNumber *provinceSelectedNumber = [[NSNumber alloc]initWithInt:provinceSelected];
-             NSNumber *shopSelectedNumber = [[NSNumber alloc]initWithInt:shopSelected];
-             [df setValue:provinceSelectedNumber forKey:@"provinceselectednumber"];
-             [df setValue:shopSelectedNumber forKey:@"shopselectednumber"];
-             [df setValue:provinces forKey:@"provinces"];
-             [df setValue:provincesShops forKey:@"provincesshops"];
-             [df setValue:addrPostfix forKey:@"addrpostfix"];
-             [df synchronize];
-             [provinceSelectedNumber release];
-             [shopSelectedNumber release];
-             }
-             */
             
             self.provincesShops = [df objectForKey:@"provincesshops"];
             self.provinces = [df objectForKey:@"provinces"];
@@ -174,16 +134,15 @@
             [provinceName release];
             [shopName release];
             [showAllViewBoardsAndSettingButton setTitle:province_shopStr forState:UIControlStateNormal];
+            NSLog(@"province_shopStr ->%@",province_shopStr);
             [province_shopStr release];
-            [picker reloadAllComponents];
-            [picker selectRow:provinceSelected inComponent:0 animated:NO]; 
-            [picker selectRow:shopSelected inComponent:1 animated:NO]; 
             [self loadAllViewBoardsWithAddrPrefix:addrPrefix  AddrPostfix:addrPostfix];
         }
         else
         {
-            [self.view addSubview:settingView];
-            [self.view addSubview:welcomeView];
+            loginController = [[SDLoginViewController alloc]initWithNibName:@"SDLoginViewController" bundle:nil tagStr:@"login"];
+            loginController.delegate = self;
+            [self.view addSubview:loginController.view];
         }
 
     }
@@ -216,8 +175,6 @@
 UIInterfaceOrientation temp;
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {    
-    //allowScrollChangePage = NO;
-    //scrollView.pagingEnabled = NO;
     temp =toInterfaceOrientation;
     CGFloat currentOffsetX = scrollView.contentOffset.x;
     CGFloat scrollViewFrameWidth = scrollView.frame.size.width;
@@ -253,7 +210,6 @@ UIInterfaceOrientation temp;
         for (NSInteger i=0; i<viewBoardControllersCount; i++) {
             [[viewBoardControllers objectAtIndex:i] setView:[[viewBoardControllers objectAtIndex:i] landscapeView]];
             [[[viewBoardControllers objectAtIndex:i] view] setFrame:CGRectMake(scrollViewFrameWidth * i, 1.0f, scrollViewFrameWidth-kViewGap, scrollViewFrameHeight)];
-            //NSLog(@"lanscapeView %d -> %f %f %f %f",i,[[viewBoardControllers objectAtIndex:i] view].frame.origin.x,[[viewBoardControllers objectAtIndex:i] view].frame.origin.y,[[viewBoardControllers objectAtIndex:i] view].frame.size.width,[[viewBoardControllers objectAtIndex:i] view].frame.size.height);
         }
         if (currentOffsetX<160.0f) {
             [scrollView setContentOffset:CGPointMake(0.0f, 0.0f) animated:NO];
@@ -330,18 +286,6 @@ UIInterfaceOrientation temp;
     [self startTimersPaged];
 }
 
-/*
-- (IBAction)changePage {
-
-    if (scrollView.scrollEnabled) {
-        CGRect frame = CGRectMake((scrollView.frame.size.width) * pageControl.currentPage, 0.0f, scrollView.frame.size.width, scrollView.frame.size.height);
-        [scrollView scrollRectToVisible:frame animated:YES];
-        [self startTimersPaged];
-    }
-
-}
-*/
-
 # pragma mark - set and invalidate timers
 
 -(void)startTimersPaged
@@ -356,194 +300,72 @@ UIInterfaceOrientation temp;
 }
 
 
-#pragma mark - shops selection
--(IBAction)requestAllShopsFromHostAddr:(id)sender
-{
-    NSString *shopListAddr = [[NSString alloc]initWithFormat:@"http://%@/STMC/ScanData.json?methodName=GetClientPermission&shopId=0",hostAddrTextField.text]; 
-    
-    ASIHTTPRequest *allShopsRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:shopListAddr]];
-    [shopListAddr release];
-    [allShopsRequest setDelegate:self];
-    allShopsRequest.didFinishSelector = @selector(didFinishAllShopsRequest:);
-    allShopsRequest.didFailSelector = @selector(didFailAllShopsRequest:);
-    [allShopsRequest startAsynchronous];
-}
+//- (void) forwardToSettingView
+//{
+//    [welcomeView removeFromSuperview];
+//    CATransition *animation = [CATransition animation];
+//    animation.duration = 0.3f;
+//    //设置上面4种动画效果使用CATransiton可以设置4种动画效果，分别为：kCATransitionFade;//渐渐消失kCATransitionMoveIn;//覆盖进入kCATransitionPush;//推出kCATransitionReveal;//与MoveIn相反
+//    animation.type = kCATransitionPush;
+//    //设置动画的方向，有四种，分别为kCATransitionFromRight、kCATransitionFromLeft、kCATransitionFromTop、kCATransitionFromBottom
+//    animation.subtype = kCATransitionFromRight; 
+//    animation.delegate = self;
+//    [self.view.layer addAnimation:animation forKey:nil];
+//    [welcomeView removeFromSuperview];
+//}
+//- (IBAction)shopsSelectionConfirm:(id)sender
+//{
+//    for (id viewBoardController in viewBoardControllers) {
+//        [viewBoardController cleanUI];
+//    }
+//    for (NSInteger i=0; i<[updateTimeStrArray count]; i++) {
+//        [updateTimeStrArray replaceObjectAtIndex:i withObject:@""];
+//    }
+//    pageRefreshTimeLabel.text = nil;
+//    NSString *_addrPrefix = [[NSString alloc]initWithFormat:@"http://%@/STMC/ScanData.json?methodName=Get",hostAddr];
+//    self.addrPrefix = _addrPrefix;
+//    [_addrPrefix release];
+//    NSInteger provinceSelected = [picker selectedRowInComponent:0];
+//    NSInteger shopSelected = [picker selectedRowInComponent:1];
+//    self.addrPostfix = [[NSString alloc]initWithFormat:@"&shopId=%@",[[[provincesShops objectForKey:[provinces objectAtIndex:provinceSelected]] objectAtIndex:shopSelected] objectForKey:@"shopid"]];
+//    NSString *provinceName = [[provinces objectAtIndex:provinceSelected]retain];
+//    NSString *shopName = [[[[provincesShops objectForKey:[provinces objectAtIndex:provinceSelected]] objectAtIndex:shopSelected] objectForKey:@"shopname"]retain];
+//    NSString *province_shopStr = [[NSString alloc]initWithFormat:@"%@ %@",provinceName,shopName];
+//    [provinceName release];
+//    [shopName release];
+//    [showAllViewBoardsAndSettingButton setTitle:province_shopStr forState:UIControlStateNormal];
+//    [province_shopStr release];
+//    NSUserDefaults *df = [NSUserDefaults standardUserDefaults];
+//    if (df) {
+//        NSNumber *provinceSelectedNumber = [[NSNumber alloc]initWithInt:provinceSelected];
+//        NSNumber *shopSelectedNumber = [[NSNumber alloc]initWithInt:shopSelected];
+//        [df setValue:provinceSelectedNumber forKey:@"provinceselectednumber"];
+//        [df setValue:shopSelectedNumber forKey:@"shopselectednumber"];
+//        [df setValue:provinces forKey:@"provinces"];
+//        [df setValue:provincesShops forKey:@"provincesshops"];
+//        [df setValue:addrPostfix forKey:@"addrpostfix"];
+//        //[df setValue:shopName forKey:@"shopname"];
+//        [df synchronize];
+//        [provinceSelectedNumber release];
+//        [shopSelectedNumber release];
+//    }
+//
+//        CATransition *animation = [CATransition animation];
+//        animation.duration = 0.7f;
+//        //设置上面4种动画效果使用CATransiton可以设置4种动画效果，分别为：kCATransitionFade;//渐渐消失kCATransitionMoveIn;//覆盖进入kCATransitionPush;//推出kCATransitionReveal;//与MoveIn相反
+//        animation.type = kCATransitionPush;
+//        //设置动画的方向，有四种，分别为kCATransitionFromRight、kCATransitionFromLeft、kCATransitionFromTop、kCATransitionFromBottom
+//        animation.subtype = kCATransitionFromRight; 
+//        animation.delegate = self;
+//        [self.view.layer addAnimation:animation forKey:nil];
+//        [settingView removeFromSuperview];
+//        [self loadAllViewBoardsWithAddrPrefix:addrPrefix  AddrPostfix:addrPostfix];
+//}
 
--(void)didFinishAllShopsRequest:(ASIHTTPRequest *)request
-{
-    NSString *responseString = [[NSString alloc] initWithData:[request responseData] encoding:NSUTF8StringEncoding];    
-    NSArray *tmpArray = [responseString JSONValue];
-    [responseString release];
-    if([tmpArray count] && ![[tmpArray objectAtIndex:0] isMemberOfClass:[NSNull class]])
-    {
-        NSString *reachText = [[NSString alloc]initWithString:@"连接服务器成功"];
-        hostReachResultLabel.text = reachText;
-        [reachText release];
-        provincesShops = [[NSMutableDictionary alloc]init ];
-        for (NSDictionary* anyShop in tmpArray) {
-            //provincesShops中已存在以此省名为key的字典
-            NSString *provinceName = [[NSString alloc]initWithString:[anyShop objectForKey:@"province"]];
-            if ([provincesShops objectForKey:provinceName])
-            {
-                [(NSMutableArray*)[provincesShops objectForKey:provinceName] addObject:anyShop];
-            }
-            //provincesShops中未存在以此省名为key的字典
-            else
-            {
-                NSString *allShopsID = [[NSString alloc]initWithFormat:@"%@*",[[anyShop objectForKey:@"shopid"]substringToIndex:3]];
-                //NSString *allShopsName = [[NSString alloc]initWithFormat:@"%@所有站点",provinceName];
-                NSDictionary *AllShops = [[NSDictionary alloc]initWithObjectsAndKeys:allShopsID,@"shopid",@"所有站点",@"shopname", nil];
-                [allShopsID release];
-                //[allShopsName release];
-                NSMutableArray *shopsOfTheProvice = [[NSMutableArray alloc]initWithObjects:AllShops,anyShop, nil];
-                [AllShops release];
-                [provincesShops setObject:shopsOfTheProvice forKey:provinceName];
 
-            }
-        }
-        self.provinces = [[NSMutableArray alloc]initWithArray:[provincesShops allKeys]];
-        [provinces insertObject:@"全国" atIndex:0];
-        NSDictionary *nationwideShopsDic = [[NSDictionary alloc]initWithObjectsAndKeys:@"all",@"shopid",@"所有站点",@"shopname", nil];
-        NSArray *nationwideShopsArray = [[NSArray alloc]initWithObjects:nationwideShopsDic, nil];
-        [provincesShops setObject:nationwideShopsArray forKey:@"全国"];
-        self.shops = [provincesShops objectForKey:[provinces objectAtIndex:0]];
-        [picker reloadAllComponents];
-        [picker selectRow:0 inComponent:0 animated:NO]; 
-        [picker selectRow:0 inComponent:1 animated:NO]; 
-        [NSTimer scheduledTimerWithTimeInterval:0.5f
-                                         target:self 
-                                       selector:@selector(forwardToSettingView) 
-                                       userInfo:nil 
-                                        repeats:NO];
-    }
-    else
-    {
-        [self didFailAllShopsRequest:nil];
-    }
-
-}
-
-- (void) forwardToSettingView
-{
-    [welcomeView removeFromSuperview];
-    CATransition *animation = [CATransition animation];
-    animation.duration = 0.3f;
-    //设置上面4种动画效果使用CATransiton可以设置4种动画效果，分别为：kCATransitionFade;//渐渐消失kCATransitionMoveIn;//覆盖进入kCATransitionPush;//推出kCATransitionReveal;//与MoveIn相反
-    animation.type = kCATransitionPush;
-    //设置动画的方向，有四种，分别为kCATransitionFromRight、kCATransitionFromLeft、kCATransitionFromTop、kCATransitionFromBottom
-    animation.subtype = kCATransitionFromRight; 
-    animation.delegate = self;
-    [self.view.layer addAnimation:animation forKey:nil];
-    [welcomeView removeFromSuperview];
-}
-
--(void)didFailAllShopsRequest:(ASIHTTPRequest *)request
-{
-    NSString *reachFailText = [[NSString alloc]initWithString:@"连接服务器失败"];
-    hostReachResultLabel.text = reachFailText;
-    [reachFailText release];
-}
-- (IBAction)shopsSelectionConfirm:(id)sender
-{
-    for (id viewBoardController in viewBoardControllers) {
-        [viewBoardController cleanUI];
-    }
-    for (NSInteger i=0; i<[updateTimeStrArray count]; i++) {
-        [updateTimeStrArray replaceObjectAtIndex:i withObject:@""];
-    }
-    pageRefreshTimeLabel.text = nil;
-    NSString *_addrPrefix = [[NSString alloc]initWithFormat:@"http://%@/STMC/ScanData.json?methodName=Get",hostAddr];
-    self.addrPrefix = _addrPrefix;
-    [_addrPrefix release];
-    NSInteger provinceSelected = [picker selectedRowInComponent:0];
-    NSInteger shopSelected = [picker selectedRowInComponent:1];
-    self.addrPostfix = [[NSString alloc]initWithFormat:@"&shopId=%@",[[[provincesShops objectForKey:[provinces objectAtIndex:provinceSelected]] objectAtIndex:shopSelected] objectForKey:@"shopid"]];
-    NSString *provinceName = [[provinces objectAtIndex:provinceSelected]retain];
-    NSString *shopName = [[[[provincesShops objectForKey:[provinces objectAtIndex:provinceSelected]] objectAtIndex:shopSelected] objectForKey:@"shopname"]retain];
-    NSString *province_shopStr = [[NSString alloc]initWithFormat:@"%@ %@",provinceName,shopName];
-    [provinceName release];
-    [shopName release];
-    [showAllViewBoardsAndSettingButton setTitle:province_shopStr forState:UIControlStateNormal];
-    [province_shopStr release];
-    NSUserDefaults *df = [NSUserDefaults standardUserDefaults];
-    if (df) {
-        NSNumber *provinceSelectedNumber = [[NSNumber alloc]initWithInt:provinceSelected];
-        NSNumber *shopSelectedNumber = [[NSNumber alloc]initWithInt:shopSelected];
-        [df setValue:provinceSelectedNumber forKey:@"provinceselectednumber"];
-        [df setValue:shopSelectedNumber forKey:@"shopselectednumber"];
-        [df setValue:provinces forKey:@"provinces"];
-        [df setValue:provincesShops forKey:@"provincesshops"];
-        [df setValue:addrPostfix forKey:@"addrpostfix"];
-        //[df setValue:shopName forKey:@"shopname"];
-        [df synchronize];
-        [provinceSelectedNumber release];
-        [shopSelectedNumber release];
-    }
-
-        CATransition *animation = [CATransition animation];
-        animation.duration = 0.7f;
-        //设置上面4种动画效果使用CATransiton可以设置4种动画效果，分别为：kCATransitionFade;//渐渐消失kCATransitionMoveIn;//覆盖进入kCATransitionPush;//推出kCATransitionReveal;//与MoveIn相反
-        animation.type = kCATransitionPush;
-        //设置动画的方向，有四种，分别为kCATransitionFromRight、kCATransitionFromLeft、kCATransitionFromTop、kCATransitionFromBottom
-        animation.subtype = kCATransitionFromRight; 
-        animation.delegate = self;
-        [self.view.layer addAnimation:animation forKey:nil];
-        [settingView removeFromSuperview];
-        [self loadAllViewBoardsWithAddrPrefix:addrPrefix  AddrPostfix:addrPostfix];
-}
-
-#pragma mark - gereral controller
-- (IBAction)backOrForward:(id)sender
-{
-    UIButton *theButton = (UIButton *)sender;
-    switch (theButton.tag) {
-        case 10:
-            exit(0);
-            break;
-        case 12:
-        {    
-            hostReachResultLabel.text = nil;
-            CATransition *animation = [CATransition animation];
-            animation.duration = 0.3f;
-            //设置上面4种动画效果使用CATransiton可以设置4种动画效果，分别为：kCATransitionFade;//渐渐消失kCATransitionMoveIn;//覆盖进入kCATransitionPush;//推出kCATransitionReveal;//与MoveIn相反
-            animation.type = kCATransitionPush;
-            //设置动画的方向，有四种，分别为kCATransitionFromRight、kCATransitionFromLeft、kCATransitionFromTop、kCATransitionFromBottom
-            animation.subtype = kCATransitionFromLeft;
-            animation.delegate = self;
-            [self.view.layer addAnimation:animation forKey:nil];
-            [self.view addSubview:welcomeView];
-            break;
-        }
-        default:
-            break;
-    }
-    
-}
-
-- (IBAction)textFieldDoneEditing:(id)sender
-{
-    
-     self.hostAddr = hostAddrTextField.text;
-     NSUserDefaults *df = [NSUserDefaults standardUserDefaults];  
-     if (df)
-     {
-         [df setValue:hostAddr forKey:@"hostaddr"];
-         [df synchronize];
-     }
-    [sender resignFirstResponder];
-}
-
-- (IBAction)textFieldEditing:(id)sender
-{
-    NSString *emptyStr = [[NSString alloc]initWithString:@""];
-    hostReachResultLabel.text = emptyStr;
-    [emptyStr release];
-}
 #pragma mark - viewBoards Manage
 - (void) loadAllViewBoardsWithAddrPrefix:(NSString*)newAddrPrefix AddrPostfix:(NSString*)newAddrPostfix
 {
-    //pageControl.backgroundColor = [UIColor whiteColor];
-    //self.view.backgroundColor = [UIColor whiteColor];
     scrollView.alpha = 1.0f;
     for (id anyViewBoardController in viewBoardControllers) {
         [anyViewBoardController setAddrWithAddrPrefix:newAddrPrefix AddrPostfix:newAddrPostfix];
@@ -564,27 +386,18 @@ UIInterfaceOrientation temp;
     Float32 currentOffset = scrollView.contentOffset.x;
     [allViewsPicView setFrame:CGRectMake(currentOffset, 0.0f, 320.0f, 434.0f)];
     for (NSInteger i=0; i<viewBoardControllersCount; i++) {
-        //(i!=pageControl.currentPage)?[[viewBoardFrontViews objectAtIndex:i]setAlpha:0.6f]:nil;
         [[viewBoardControllers objectAtIndex:i] dataUpdatePause];
         [UIView beginAnimations:@"animationViewBoardsGather" context:nil];
         [UIView setAnimationDuration:0.5f]; 
-        //[UIView setAnimationDuration:abs(pageControl.currentPage - i)*0.1+0.3];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
         [[[viewBoardControllers objectAtIndex:i] view] setFrame:CGRectMake(currentOffset + 15.0f + 43.0f*i, 120.0f, 116.0, 178.0)];
-        //[[[viewBoardControllers objectAtIndex:i] view] setFrame:CGRectMake(currentOffset + 60.0f + 20.0f*i, 100.0f, (scrollViewFrameWidth-kViewGap)*0.45, scrollViewFrameHeight*0.45)];
-        
-        //[[[viewBoardControllers objectAtIndex:i] view] setTransform:CGAffineTransformMakeRotation(3.14159265/20*(i-2))];
         [[[viewBoardControllers objectAtIndex:i] view] setTransform:CGAffineTransformMakeRotation(0.08726646*(i-2))];
         [[[viewBoardControllers objectAtIndex:i] view] setAlpha:0.0f];
-        
         [UIView commitAnimations];
     }
     
     [UIView beginAnimations:@"animationScrollviewWhite" context:nil];
     [UIView setAnimationDuration:0.7f]; 
-    //self.view.backgroundColor = [UIColor whiteColor];
-    //scrollView.backgroundColor = [UIColor whiteColor];
-    //pageControl.backgroundColor = [UIColor whiteColor];
     allViewsPicView.alpha = 1.0f;
     [UIView commitAnimations];
     [NSTimer scheduledTimerWithTimeInterval:0.8f
@@ -610,7 +423,8 @@ UIInterfaceOrientation temp;
     animation.subtype = kCATransitionFromLeft; 
     animation.delegate = self;
     [self.view.layer addAnimation:animation forKey:nil];
-    [self.view addSubview:settingView];
+    [self.view addSubview:loginController.view];
+    [self.view addSubview:settingController.view];
     scrollView.alpha = 0.0f;
 }
 
@@ -620,14 +434,9 @@ UIInterfaceOrientation temp;
     [UIView beginAnimations:@"animationScrollviewDark" context:nil]; 
     [UIView setAnimationDuration:0.6f];
     allViewsPicView.alpha = 0.0f;
-    //self.view.backgroundColor = [UIColor darkGrayColor];
-    //scrollView.backgroundColor = [UIColor darkTextColor];
-    //pageControl.backgroundColor = [UIColor darkTextColor];
     [UIView commitAnimations];
     Float32 scrollViewFrameWidth = scrollView.frame.size.width;
     Float32 scrollViewFrameHeight = scrollView.frame.size.height;
-    //[scrollView scrollRectToVisible:CGRectMake(scrollViewFrameWidth*pageControl.currentPage, 0.0f, scrollViewFrameWidth, scrollViewFrameHeight) animated:NO];
-    //allViewsPicView.alpha = 0.0f;
     
     for (NSInteger i=0; i<viewBoardControllersCount; i++) {
         
@@ -641,60 +450,10 @@ UIInterfaceOrientation temp;
         [[[viewBoardControllers objectAtIndex:i] view]setFrame:CGRectMake(scrollViewFrameWidth*i, 0.0f, scrollViewFrameWidth-kViewGap, scrollViewFrameHeight)];
         [[[viewBoardControllers objectAtIndex:i] view] setAlpha:1.0f];
         [UIView commitAnimations];
-        //[[viewBoardFrontViews objectAtIndex:i]removeTarget:self action:@selector(jumpToPageSelected:) forControlEvents:UIControlEventTouchUpInside];
     }
     scrollView.scrollEnabled = YES;
-    //pageControl.enabled = YES;
-    //[self startTimersPaged];
-    //[scrollView setContentOffset:CGPointMake(scrollViewFrameWidth*pageControl.currentPage, 0.0f)];
     showAllViewBoardsAndSettingButton.enabled = YES;
     allowRotationLanscape = YES;
-}
-
-#pragma mark - UIPickerView datasource Delegate
-// returns the number of 'columns' to display.
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 2;
-}
-
-// returns the # of rows in each component..
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    return (0==component)?[provinces count]:[shops count];
-}
-#pragma mark - UIPickerView Delegate
-- (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component
-{
-    switch (component) {
-        case 0:
-            return 78.0f;  
-            break;
-        default:
-            return 208.0f;
-            break;
-    }
-}
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-
-    return (0==component)?[provinces objectAtIndex:row]:[[shops objectAtIndex:row]objectForKey:@"shopname"];
-}
-
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{   
-    switch (component) {
-        case 0:
-        {
-
-            self.shops = [provincesShops objectForKey:[provinces objectAtIndex:row]];
-            [picker reloadComponent:1];
-            break;
-        }  
-        default:
-            break;
-    }
-
 }
 
 #pragma mark - willInfoBoardUpdateUIOnPage: Delegate
@@ -704,4 +463,42 @@ UIInterfaceOrientation temp;
     [updateTimeStrArray replaceObjectAtIndex:page withObject:msg];
     pageRefreshTimeLabel.text = [updateTimeStrArray objectAtIndex:pageControl.currentPage];
 }
+
+#pragma mark - go back or forward
+-(void)needGoBackWithControllerTagStr:(NSString*)tagStr message:(id)msg
+{
+    if ([tagStr isEqualToString:@"login"]) {
+        exit(0);
+    }
+    else{
+        [settingController.view removeFromSuperview];
+    }
+}
+-(void)needGoForwardWithControllerTagStr:(NSString*)tagStr message:(id)msg
+{
+    if ([tagStr isEqualToString:@"login"]) {
+        hostAddr =  [[((NSDictionary*)msg)objectForKey:@"ipAddr"]retain];
+        NSString *_addrPrefix = [[NSString alloc]initWithFormat:@"http://%@/STMC/ScanData.json?methodName=Get",hostAddr];
+        self.addrPrefix = _addrPrefix;
+        [_addrPrefix release];
+        NSString* responseStr = [((NSDictionary*)msg)objectForKey:@"responseStr"];
+        if (responseStr) {
+            settingController = [[SDSettingViewController alloc]initWithNibName:@"SDSettingViewController" bundle:nil tagStr:@"setting"];
+            settingController.delegate = self;
+            [self.view addSubview:settingController.view];
+            [settingController reloadWithResponseStr:responseStr];
+        }
+    }else if([tagStr isEqualToString:@"setting"])
+    {
+        NSString* _addrPostfix = [[NSString alloc]initWithFormat:@"&shopId=%@",[msg objectForKey:@"selectedShopId"]];
+        self.addrPostfix = _addrPostfix;
+        [_addrPostfix release];
+        [showAllViewBoardsAndSettingButton setTitle:[msg objectForKey:@"province_shopStr"] forState:UIControlStateNormal];
+        [settingController.view removeFromSuperview];
+        [loginController.view removeFromSuperview];
+        [self loadAllViewBoardsWithAddrPrefix:self.addrPrefix AddrPostfix:addrPostfix];
+    }
+         
+}
+
 @end

@@ -223,7 +223,10 @@
     [agtAverageInfoRequest startAsynchronous];
     
 }
-
+- (void)requestData
+{
+    
+}
 - (void)requestFinished:(ASIHTTPRequest *)request
 {
     [super requestFinished:request];

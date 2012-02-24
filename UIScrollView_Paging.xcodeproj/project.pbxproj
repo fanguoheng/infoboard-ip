@@ -43,7 +43,6 @@
 		04E65D621443EFDC007993BA /* group.png in Resources */ = {isa = PBXBuildFile; fileRef = 04E65D611443EFDC007993BA /* group.png */; };
 		2C05129B146430B300AF5789 /* BussSearchInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C051299146430B300AF5789 /* BussSearchInfoController.m */; };
 		2C05129C146430B300AF5789 /* BussSearchInfoController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C05129A146430B300AF5789 /* BussSearchInfoController.xib */; };
-		2C07741514791F5E0037FFEE /* CVTableCellBGView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C07741414791F5E0037FFEE /* CVTableCellBGView.m */; };
 		2C07B4251483181E0035E99B /* MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C07B4241483181E0035E99B /* MD5.m */; };
 		2C08D03114872FB7002E43C7 /* allviews1112011143.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C08D03014872FB7002E43C7 /* allviews1112011143.png */; };
 		2C1EEF29146A160800958089 /* UnUsualRootTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1EEF28146A160800958089 /* UnUsualRootTableViewController.m */; };
@@ -54,6 +53,9 @@
 		2C9F0DAB149F2CE1007D37D3 /* carat-open.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C9F0DA9149F2CE1007D37D3 /* carat-open.png */; };
 		2C9F0DAC149F2CE1007D37D3 /* carat.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C9F0DAA149F2CE1007D37D3 /* carat.png */; };
 		2C9F4903149059960040337E /* SDInfoBoardController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C9F4902149059960040337E /* SDInfoBoardController.m */; };
+		2CA0809914EB8D4F008B2948 /* SDLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CA0809714EB8D4F008B2948 /* SDLoginViewController.m */; };
+		2CA0809A14EB8D4F008B2948 /* SDLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CA0809814EB8D4F008B2948 /* SDLoginViewController.xib */; };
+		2CA0809E14EB9140008B2948 /* SDBackForwardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CA0809D14EB9140008B2948 /* SDBackForwardViewController.m */; };
 		2CA26D14149F10960033920A /* pbg1_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 2CA26D13149F10950033920A /* pbg1_4.png */; };
 		2CA42E91146D420F00BE14B4 /* bgp.png in Resources */ = {isa = PBXBuildFile; fileRef = 2CA42E90146D420F00BE14B4 /* bgp.png */; };
 		2CACB546149F19B100C74BC1 /* ClickableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CACB545149F19B100C74BC1 /* ClickableView.m */; };
@@ -69,6 +71,9 @@
 		2CCAA01814959CBC00D3C8AD /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCAA01714959CBC00D3C8AD /* Reachability.m */; };
 		2CCCB0DC14A06380006FC6FB /* AgtTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCCB0DB14A0637F006FC6FB /* AgtTableViewCell.m */; };
 		2CCCB0DF14A063CC006FC6FB /* AgtTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CCCB0DE14A063CC006FC6FB /* AgtTableViewCell.xib */; };
+		2CCCFA6214F1D9B9002A4A2F /* NSDataAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCCFA6114F1D9B9002A4A2F /* NSDataAdditions.m */; };
+		2CCCFA6714F1FD2F002A4A2F /* SDSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCCFA6514F1FD2F002A4A2F /* SDSettingViewController.m */; };
+		2CCCFA6814F1FD2F002A4A2F /* SDSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CCCFA6614F1FD2F002A4A2F /* SDSettingViewController.xib */; };
 		2CCFAC7C14A999D800883FF5 /* DetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCFAC7B14A999D700883FF5 /* DetailHeaderView.m */; };
 		2CD55BEA14BC26A100356372 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2CD55BE914BC26A100356372 /* Icon.png */; };
 		2CE0F6831463919600099316 /* UnusualInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE0F6811463919600099316 /* UnusualInfoController.m */; };
@@ -222,8 +227,6 @@
 		2C051298146430B300AF5789 /* BussSearchInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BussSearchInfoController.h; sourceTree = "<group>"; };
 		2C051299146430B300AF5789 /* BussSearchInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BussSearchInfoController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		2C05129A146430B300AF5789 /* BussSearchInfoController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BussSearchInfoController.xib; sourceTree = "<group>"; };
-		2C07741314791F5E0037FFEE /* CVTableCellBGView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CVTableCellBGView.h; sourceTree = "<group>"; };
-		2C07741414791F5E0037FFEE /* CVTableCellBGView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CVTableCellBGView.m; sourceTree = "<group>"; };
 		2C07B4231483181E0035E99B /* MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MD5.h; sourceTree = "<group>"; };
 		2C07B4241483181E0035E99B /* MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MD5.m; sourceTree = "<group>"; };
 		2C08D03014872FB7002E43C7 /* allviews1112011143.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = allviews1112011143.png; sourceTree = "<group>"; };
@@ -239,6 +242,11 @@
 		2C9F0DAA149F2CE1007D37D3 /* carat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = carat.png; sourceTree = "<group>"; };
 		2C9F4901149059960040337E /* SDInfoBoardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDInfoBoardController.h; sourceTree = "<group>"; };
 		2C9F4902149059960040337E /* SDInfoBoardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDInfoBoardController.m; sourceTree = "<group>"; };
+		2CA0809614EB8D4F008B2948 /* SDLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLoginViewController.h; sourceTree = "<group>"; };
+		2CA0809714EB8D4F008B2948 /* SDLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLoginViewController.m; sourceTree = "<group>"; };
+		2CA0809814EB8D4F008B2948 /* SDLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SDLoginViewController.xib; sourceTree = "<group>"; };
+		2CA0809C14EB9140008B2948 /* SDBackForwardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDBackForwardViewController.h; sourceTree = "<group>"; };
+		2CA0809D14EB9140008B2948 /* SDBackForwardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDBackForwardViewController.m; sourceTree = "<group>"; };
 		2CA26D13149F10950033920A /* pbg1_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pbg1_4.png; sourceTree = "<group>"; };
 		2CA42E90146D420F00BE14B4 /* bgp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bgp.png; sourceTree = "<group>"; };
 		2CACB544149F19B100C74BC1 /* ClickableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClickableView.h; sourceTree = "<group>"; };
@@ -269,6 +277,11 @@
 		2CCCB0DA14A0637F006FC6FB /* AgtTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgtTableViewCell.h; sourceTree = "<group>"; };
 		2CCCB0DB14A0637F006FC6FB /* AgtTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgtTableViewCell.m; sourceTree = "<group>"; };
 		2CCCB0DE14A063CC006FC6FB /* AgtTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AgtTableViewCell.xib; sourceTree = "<group>"; };
+		2CCCFA6014F1D9B9002A4A2F /* NSDataAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDataAdditions.h; sourceTree = "<group>"; };
+		2CCCFA6114F1D9B9002A4A2F /* NSDataAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDataAdditions.m; sourceTree = "<group>"; };
+		2CCCFA6414F1FD2F002A4A2F /* SDSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDSettingViewController.h; sourceTree = "<group>"; };
+		2CCCFA6514F1FD2F002A4A2F /* SDSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDSettingViewController.m; sourceTree = "<group>"; };
+		2CCCFA6614F1FD2F002A4A2F /* SDSettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SDSettingViewController.xib; sourceTree = "<group>"; };
 		2CCFAC7A14A999D700883FF5 /* DetailHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailHeaderView.h; sourceTree = "<group>"; };
 		2CCFAC7B14A999D700883FF5 /* DetailHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailHeaderView.m; sourceTree = "<group>"; };
 		2CD55BE914BC26A100356372 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
@@ -439,10 +452,18 @@
 				04A017CB13961AA100B942E1 /* UIScrollView_PagingViewController.h */,
 				04A017CC13961AA100B942E1 /* UIScrollView_PagingViewController.m */,
 				04A017CE13961AA100B942E1 /* UIScrollView_PagingViewController.xib */,
+				2CA0809C14EB9140008B2948 /* SDBackForwardViewController.h */,
+				2CA0809D14EB9140008B2948 /* SDBackForwardViewController.m */,
+				2CA0809614EB8D4F008B2948 /* SDLoginViewController.h */,
+				2CA0809714EB8D4F008B2948 /* SDLoginViewController.m */,
+				2CA0809814EB8D4F008B2948 /* SDLoginViewController.xib */,
+				2CCCFA6414F1FD2F002A4A2F /* SDSettingViewController.h */,
+				2CCCFA6514F1FD2F002A4A2F /* SDSettingViewController.m */,
+				2CCCFA6614F1FD2F002A4A2F /* SDSettingViewController.xib */,
 				2C07B4231483181E0035E99B /* MD5.h */,
 				2C07B4241483181E0035E99B /* MD5.m */,
-				2C07741314791F5E0037FFEE /* CVTableCellBGView.h */,
-				2C07741414791F5E0037FFEE /* CVTableCellBGView.m */,
+				2CCCFA6014F1D9B9002A4A2F /* NSDataAdditions.h */,
+				2CCCFA6114F1D9B9002A4A2F /* NSDataAdditions.m */,
 				2C9F4901149059960040337E /* SDInfoBoardController.h */,
 				2C9F4902149059960040337E /* SDInfoBoardController.m */,
 				2CDA32F2149997D400138BD2 /* SDInfoBoardUIUpdate.h */,
@@ -702,6 +723,8 @@
 				2CE236A314A02448002E54C7 /* 201112191737.png in Resources */,
 				2CCCB0DF14A063CC006FC6FB /* AgtTableViewCell.xib in Resources */,
 				2CD55BEA14BC26A100356372 /* Icon.png in Resources */,
+				2CA0809A14EB8D4F008B2948 /* SDLoginViewController.xib in Resources */,
+				2CCCFA6814F1FD2F002A4A2F /* SDSettingViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -732,7 +755,6 @@
 				2C05129B146430B300AF5789 /* BussSearchInfoController.m in Sources */,
 				2C1EEF29146A160800958089 /* UnUsualRootTableViewController.m in Sources */,
 				2C1EEF2D146A19C300958089 /* UnUsualLeafTableViewController.m in Sources */,
-				2C07741514791F5E0037FFEE /* CVTableCellBGView.m in Sources */,
 				2C07B4251483181E0035E99B /* MD5.m in Sources */,
 				2C9F4903149059960040337E /* SDInfoBoardController.m in Sources */,
 				2CCAA00E14959C0700D3C8AD /* ASIAuthenticationDialog.m in Sources */,
@@ -751,6 +773,10 @@
 				2CCCB0DC14A06380006FC6FB /* AgtTableViewCell.m in Sources */,
 				43B61D5214A329AA00CCB52F /* BSTableHeadView.m in Sources */,
 				2CCFAC7C14A999D800883FF5 /* DetailHeaderView.m in Sources */,
+				2CA0809914EB8D4F008B2948 /* SDLoginViewController.m in Sources */,
+				2CA0809E14EB9140008B2948 /* SDBackForwardViewController.m in Sources */,
+				2CCCFA6214F1D9B9002A4A2F /* NSDataAdditions.m in Sources */,
+				2CCCFA6714F1FD2F002A4A2F /* SDSettingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
