@@ -177,8 +177,9 @@
                 [AllShops release];
                 [provincesShops setObject:shopsOfTheProvice forKey:provinceName];
             }
+            [provinceName release];
         }
-        self.provinces = [[NSMutableArray alloc]initWithArray:[provincesShops allKeys]];
+        provinces = [[NSMutableArray alloc]initWithArray:[provincesShops allKeys]];
         [provinces insertObject:@"全国" atIndex:0];
         NSDictionary *nationwideShopsDic = [[NSDictionary alloc]initWithObjectsAndKeys:@"all",@"shopid",@"所有站点",@"shopname", nil];
         NSArray *nationwideShopsArray = [[NSArray alloc]initWithObjects:nationwideShopsDic, nil];

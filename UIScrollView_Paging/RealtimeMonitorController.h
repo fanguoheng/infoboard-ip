@@ -81,7 +81,6 @@
 @property (retain) NSArray *barPlotData;
 @property (nonatomic, retain) NSMutableArray *customLabels;
 
-@property (nonatomic) NSInteger refreshInterval;
 @property (nonatomic, retain) NSTimer *timer;
 @property (nonatomic, retain) NSDictionary *dataDictionary;
 

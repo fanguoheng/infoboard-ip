@@ -7,7 +7,6 @@
 //
 
 #import "UnUsualRootTableViewController.h"
-#import "CVTableCellBGView.h"
 
 @implementation UnUsualRootTableViewController
 

@@ -478,9 +478,7 @@ UIInterfaceOrientation temp;
 {
     if ([tagStr isEqualToString:@"login"]) {
         hostAddr =  [[((NSDictionary*)msg)objectForKey:@"ipAddr"]retain];
-        NSString *_addrPrefix = [[NSString alloc]initWithFormat:@"http://%@/STMC/ScanData.json?methodName=Get",hostAddr];
-        self.addrPrefix = _addrPrefix;
-        [_addrPrefix release];
+        addrPrefix = [[NSString alloc]initWithFormat:@"http://%@/STMC/ScanData.json?methodName=Get",hostAddr];
         NSString* responseStr = [((NSDictionary*)msg)objectForKey:@"responseStr"];
         if (responseStr) {
             settingController = [[SDSettingViewController alloc]initWithNibName:@"SDSettingViewController" bundle:nil tagStr:@"setting"];
@@ -488,8 +486,7 @@ UIInterfaceOrientation temp;
             [self.view addSubview:settingController.view];
             [settingController reloadWithResponseStr:responseStr];
         }
-    }else if([tagStr isEqualToString:@"setting"])
-    {
+    }else if([tagStr isEqualToString:@"setting"]){
         NSString* _addrPostfix = [[NSString alloc]initWithFormat:@"&shopId=%@",[msg objectForKey:@"selectedShopId"]];
         self.addrPostfix = _addrPostfix;
         [_addrPostfix release];

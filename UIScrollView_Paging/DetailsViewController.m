@@ -19,7 +19,7 @@
 @synthesize allGrpInfoWebAddr,mAgtInfoWebAddr,agtCallInfoWebAddr,webAddr;
 @synthesize selectedGrpId;
 
-@synthesize timer,refreshInterval;
+@synthesize timer;
 
 
 @synthesize workStatusResultStr;
@@ -178,9 +178,8 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
         
-    NSString *headerTitle = [[NSString alloc]initWithFormat:@"   监控数: %d个（点击查看座席列表）",[allGrpInfoDictArray count]];
+    NSString *headerTitle = [NSString stringWithFormat:@"   监控数: %d个（点击查看座席列表）",[allGrpInfoDictArray count]];
     return [[[DetailHeaderView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 30.0) title:headerTitle delegate:self] autorelease];
-    [headerTitle release];
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 35.0;
@@ -264,13 +263,12 @@
 {
     if (ifLoading) {
         [self showWaiting];
-        //NSLog(@"%d showWaing",ifLoading);
         ifLoading=NO;
     }
-    //NSLog(@"%d ifLoading in requestData",ifLoading);
-    
+
     ASIHTTPRequest *allGrpInfoRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:webAddr]];
     [allGrpInfoRequest setDelegate:self];
+    [allGrpInfoRequest setTimeOutSeconds:6];
     [allGrpInfoRequest startAsynchronous];    
 }
 

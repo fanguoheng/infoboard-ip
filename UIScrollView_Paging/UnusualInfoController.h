@@ -36,7 +36,6 @@
 @property (nonatomic,retain) UnUsualRootTableViewController *rootTableViewController;
 @property (nonatomic,retain) UnUsualLeafTableViewController *leafTableViewController;
 
-@property (nonatomic) NSInteger refreshInterval;
 @property (nonatomic, copy) NSString *addrPrefix;
 @property (nonatomic, copy) NSString *addrPostfix;
 @property (nonatomic, copy) NSString *rootWebAddr;

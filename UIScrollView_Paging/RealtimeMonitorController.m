@@ -16,7 +16,7 @@
 @synthesize addrPrefix;
 @synthesize addrPostfix;
 @synthesize webAddr;
-@synthesize timer,refreshInterval;
+@synthesize timer;
 @synthesize dataDictionary;
 
 @synthesize barChartView;   
@@ -61,7 +61,7 @@
     //self.webAddr = [[NSString alloc ]initWithString:@"http://121.32.133.59:8502/FlexBoard/JsonFiles/AgtTotalInfo.json"];
     self.addrPrefix = newAddrPrefix;
     self.addrPostfix = newAddrPostfix;
-    self.webAddr = [[NSString alloc ]initWithFormat:@"%@AgttotalInfo%@",addrPrefix,addrPostfix];
+    webAddr = [[NSString alloc ]initWithFormat:@"%@AgttotalInfo%@",addrPrefix,addrPostfix];
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil AddrPrefix:(NSString*)newAddrPrefix AddrPostfix:(NSString*)newAddrPostfix
 {
@@ -416,82 +416,21 @@
 	barChart.plotAreaFrame.paddingRight = 2.0;
 	barChart.plotAreaFrame.paddingBottom = 2.0;
     
-    // Graph title
-    //barChartLandscape.title = @"客户满意度";
-    //CPTMutableTextStyle *textStyle = [CPTTextStyle textStyle];
-    //textStyle.color = [CPTColor whiteColor];
-    //textStyle.fontSize = 16.0f;
-	//textStyle.textAlignment = CPTTextAlignmentCenter;
-    //barChartLandscape.titleTextStyle = textStyle;
-    //barChartLandscape.titleDisplacement = CGPointMake(0.0f, -20.0f);
-    //barChartLandscape.titlePlotAreaFrameAnchor = CPTRectAnchorTop;
-	
 	// Add plot space for horizontal bar charts
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChart.defaultPlotSpace;
-    
-    //plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f)];
-    //plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat(8.0f)];
-    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f+1.0)];
+    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f+1.0)];
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat(5.0f)];
     
 	CPTXYAxisSet *axisSet = (CPTXYAxisSet *)barChart.axisSet;
     CPTXYAxis *x = axisSet.xAxis;
     x.axisLineStyle = nil;
     x.labelingPolicy = CPTAxisLabelingPolicyNone;
-    //x.majorTickLineStyle = nil;
-    //x.minorTickLineStyle = nil;
-    //x.majorIntervalLength = CPTDecimalFromString(@"2");
-    //x.orthogonalCoordinateDecimal = CPTDecimalFromString(@"-0.5");
-	//x.title = nil;//@"X Axis";
-    //x.titleLocation = CPTDecimalFromFloat(5.0f);
-	//x.titleOffset = 15.0f;
-	
-    /*
-     // Define some custom labels for the data elements
-     x.labelRotation = M_PI/4;
-     x.labelingPolicy = CPTAxisLabelingPolicyNone;
-     CPTMutableTextStyle *xLabelTextStyle = [CPTTextStyle textStyle];
-     xLabelTextStyle.color = [CPTColor whiteColor];
-     xLabelTextStyle.fontSize = 10.0f;
-     xLabelTextStyle.textAlignment = CPTTextAlignmentCenter;
-     x.labelTextStyle = xLabelTextStyle;
-     NSArray *customTickLocations = [NSArray arrayWithObjects:[NSDecimalNumber numberWithFloat:0.7f], [NSDecimalNumber numberWithFloat:1.7f], [NSDecimalNumber numberWithFloat:2.7f], [NSDecimalNumber numberWithFloat:3.7f],[NSDecimalNumber numberWithFloat:4.7f], nil];
-     NSArray *xAxisLabels = [NSArray arrayWithObjects:@"非常满意", @"满   意", @"一   般", @"不   满", @"非常不满", nil];
-     NSUInteger labelLocation = 0;
-     NSMutableArray *customLabels = [NSMutableArray arrayWithCapacity:[xAxisLabels count]];
-     for (NSNumber *tickLocation in customTickLocations) {
-     CPTAxisLabel *newLabel = [[CPTAxisLabel alloc] initWithText: [xAxisLabels objectAtIndex:labelLocation++] textStyle:x.labelTextStyle];
-     newLabel.tickLocation = [tickLocation decimalValue];
-     newLabel.offset = x.labelOffset + x.majorTickLength;
-     newLabel.rotation = M_PI/4;
-     [customLabels addObject:newLabel];
-     [newLabel release];
-     }
-     
-     x.axisLabels =  [NSSet setWithArray:customLabels];
-     */
-    
-    //CPTMutableLineStyle *majorGridLineStyle = [CPTMutableLineStyle lineStyle];
-    //majorGridLineStyle.lineWidth = 1.0f;
-    //majorGridLineStyle.lineColor = [[CPTColor whiteColor] colorWithAlphaComponent:0.3];
     
 	CPTXYAxis *y = axisSet.yAxis;
     y.labelingPolicy = CPTAxisLabelingPolicyNone;
     y.axisLineStyle = nil;
-    //y.majorTickLineStyle = nil;
-    //y.minorTickLineStyle = nil;
-    //y.majorGridLineStyle = nil;
-    //y.majorIntervalLength = CPTDecimalFromString(@"10");
-    //y.orthogonalCoordinateDecimal = CPTDecimalFromString(@"-5");
-    //y.visibleRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.5f) length:plotSpace.yRange.length];
-    //y.labelingPolicy = CPTAxisLabelingPolicyNone;
-	//y.title = nil;//@"Y Axis";
-	//y.titleOffset = 5.0f;
-    //y.titleLocation = CPTDecimalFromFloat(150.0f);
-	
+    
     // bar plot
-    // bar plot
-    //Create a bar line style
 	CPTMutableLineStyle *barLineStyle = [[[CPTMutableLineStyle alloc] init] autorelease];
 	barLineStyle.lineWidth = 2.0;
 	barLineStyle.lineColor = [CPTColor blackColor];
@@ -500,15 +439,9 @@
     barPlot.barWidth = CPTDecimalFromFloat(0.618f);
     barPlot.lineStyle = barLineStyle;
     barPlot.barCornerRadius = 3.0f;
-
-    //barPlot.barBasesVary = NO;
-    //barPlot.baseValue = CPTDecimalFromString(@"0.5");
-    //barPlot.barWidth = CPTDecimalFromFloat(0.618f);
     barPlot.dataSource = self;
-    //barPlot.barOffset = CPTDecimalFromFloat(0.5f);
     barPlot.identifier = @"BarPlot";
     [barChart addPlot:barPlot toPlotSpace:plotSpace];
-    
 }
 - (void)createBarChartInLandscapeView 
 {
@@ -538,21 +471,10 @@
 	barChartLandscape.plotAreaFrame.paddingTop = 10.0f;
 	barChartLandscape.plotAreaFrame.paddingRight = 20.0f;
 	barChartLandscape.plotAreaFrame.paddingBottom = 10.0f;
-    
-    // Graph title
-    //barChartLandscape.title = @"客户满意度";
-    //CPTMutableTextStyle *textStyle = [CPTTextStyle textStyle];
-    //textStyle.color = [CPTColor whiteColor];
-    //textStyle.fontSize = 16.0f;
-	//textStyle.textAlignment = CPTTextAlignmentCenter;
-    //barChartLandscape.titleTextStyle = textStyle;
-    //barChartLandscape.titleDisplacement = CGPointMake(0.0f, -20.0f);
-    //barChartLandscape.titlePlotAreaFrameAnchor = CPTRectAnchorTop;
 	
 	// Add plot space for horizontal bar charts
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
-    //plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat(90.0f)];
-    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f+1.0)];
+    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f+1.0)];
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat(5.0f)];
     
     // Create grid line styles

@@ -11,20 +11,18 @@
 
 @interface BussSearchInfoController : UIViewController<UITableViewDelegate, UITableViewDataSource,CPTPlotDataSource>
 {
+ @private
     NSInteger refreshInterval;
-    
     NSInteger ordercntNum;
     NSInteger cuscompcntNum;
     NSInteger sitcompcntNum;
     NSInteger searchcntNum;
-    
     NSInteger maxSearchNum;
     NSInteger requestFailedCount;
 }
 @property (nonatomic, assign) id <SDInfoBoardUpdateUI> delegate;
 @property (nonatomic, copy) NSString* bussinessInfoCashResponseStr;
 @property (nonatomic, copy) NSString* bussSearchInfoCashResponseStr;
-@property (nonatomic) NSInteger refreshInterval;
 @property (nonatomic, copy) NSString *addrPrefix;
 @property (nonatomic, copy) NSString *addrPostfix;
 @property (nonatomic, copy) NSString *bussinessInfoWebAddr;

@@ -8,7 +8,6 @@
 
 #import "GroupTableViewController.h"
 #import "CustomCellPortrait.h"
-#import "CVTableCellBGView.h"
 #import "BSTableHeadView.h"
 @implementation GroupTableViewController
 @synthesize dataDictArray;

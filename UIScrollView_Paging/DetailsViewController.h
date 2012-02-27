@@ -14,14 +14,12 @@
 @class AgtTableViewController;
 
 @interface DetailsViewController : UIViewController <UITableViewDelegate,UINavigationControllerDelegate,ClickableViewDelegate>{
+    
     NSString *allGrpInfoWebAddr;
     NSString *agtInfoWebAddr;
-    
     NSTimer *timer;
     NSInteger refreshInterval;
-    
     NSMutableArray *magtInfoDictArray;
-    
     UIView *originView;
     UIView *landscapeView;
     NSMutableArray *lists;
@@ -40,7 +38,6 @@
 @property (nonatomic, copy) NSString *agtCallInfoWebAddr;
 @property (nonatomic, copy) NSString *selectedGrpId;
 @property (nonatomic, retain) NSTimer *timer;
-@property (nonatomic) NSInteger refreshInterval;
 
 @property (copy) NSString *workStatusResultStr;
 @property (copy) NSString *loginStr;

@@ -297,7 +297,8 @@
     NSString *responseString = [[NSString alloc] initWithData:[request responseData] encoding:NSUTF8StringEncoding];    
     NSDictionary *msgDict = [[NSDictionary alloc]initWithObjectsAndKeys:username,@"username",password,@"password", ipAddr,@"ipAddr",responseString,@"responseStr",nil];
     [responseString release];
-    [self.delegate needGoForwardWithControllerTagStr:self.tagStr message:msgDict];    
+    [self.delegate needGoForwardWithControllerTagStr:self.tagStr message:msgDict];   
+    [msgDict release];
 }
 
 -(void)didFailAllShopsRequest:(ASIHTTPRequest *)request

@@ -76,9 +76,6 @@
 
 - (void)setAddrWithAddrPrefix:(NSString*)newAddrPrefix AddrPostfix:(NSString*)newAddrPostfix
 {
-    
-    //self.agtTotalInfoWebAddr =  [[NSString alloc ]initWithString:@"http://121.32.133.59:8502/FlexBoard/JsonFiles/AgtTotalInfo.json"];
-    //self.agtAverageInfoWebAddr = [[NSString alloc ]initWithString:@"http://121.32.133.59:8502/FlexBoard/JsonFiles/AgtAverageInfo.json"];
     [super setAddrWithAddrPrefix:newAddrPrefix AddrPostfix:newAddrPostfix];
     NSString *addr1 = [[NSString alloc ]initWithFormat:@"%@AgttotalInfo%@",addrPrefix,addrPostfix];
     self.agtTotalInfoWebAddr = addr1;
@@ -138,11 +135,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
 
-    self.refreshInterval = 60;
- 
     [self createBarChartAndPiePlotInOriginView];
     [self createBarChartAndPiePlotInLandscapeView];
-    
     loadingOrigin=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:
              UIActivityIndicatorViewStyleWhiteLarge];
     loadingOrigin.center=CGPointMake(160,200);
@@ -203,10 +197,8 @@
     [super requestDataFromAddrArray];
     if (ifLoading) {
         [self showWaiting];
-        //NSLog(@"%d showWaing",ifLoading);
         ifLoading=NO;
     }
-    //NSLog(@"%d ifLoading in requestData",ifLoading);
     
     ASIHTTPRequest *agtTotalInfoRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:self.agtTotalInfoWebAddr]];
     [agtTotalInfoRequest setDelegate:self];
@@ -219,7 +211,18 @@
 }
 - (void)requestData
 {
+    if (ifLoading) {
+        [self showWaiting];
+        ifLoading=NO;
+    }
     
+    ASIHTTPRequest *agtTotalInfoRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:self.agtTotalInfoWebAddr]];
+    [agtTotalInfoRequest setDelegate:self];
+    [agtTotalInfoRequest startAsynchronous];
+    
+    ASIHTTPRequest *agtAverageInfoRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:self.agtAverageInfoWebAddr]];
+    [agtAverageInfoRequest setDelegate:self];
+    [agtAverageInfoRequest startAsynchronous];
 }
 - (void)requestFinished:(ASIHTTPRequest *)request
 {
@@ -356,27 +359,13 @@
 	//barChart.plotAreaFrame.paddingTop = 2.0;
 	//barChart.plotAreaFrame.paddingRight = 2.0;
 	//barChart.plotAreaFrame.paddingBottom = 2.0;
-    
-    /*
-     // Graph title
-     barChart.title = @"客户满意度";
-     CPTMutableTextStyle *textStyle = [CPTTextStyle textStyle];
-     textStyle.color = [CPTColor whiteColor];
-     //textStyle.fontSize = 16.0f;
-     textStyle.textAlignment = CPTTextAlignmentCenter;
-     barChart.titleTextStyle = textStyle;
-     barChart.titleDisplacement = CGPointMake(0.0f, -10.0f);
-     barChart.titlePlotAreaFrameAnchor = CPTRectAnchorTop;
-     */
+
     
 	// Add plot space for horizontal bar charts
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChart.defaultPlotSpace;
-    //plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat(50.0f)];
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f+1.0)];
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat(5.0f)];
     
-    
-	
 	CPTXYAxisSet *axisSet = (CPTXYAxisSet *)barChart.axisSet;
     CPTXYAxis *x = axisSet.xAxis;
     x.axisLineStyle = nil;
@@ -403,9 +392,7 @@
     //y.titleLocation = CPTDecimalFromFloat(150.0f);
 	
     
-    // First bar plot
-    
-    // Create a bar line style
+    //bar plot
 	CPTMutableLineStyle *barLineStyle = [[[CPTMutableLineStyle alloc] init] autorelease];
 	barLineStyle.lineWidth = 2.0;
 	barLineStyle.lineColor = [CPTColor blackColor];
@@ -433,15 +420,8 @@
 	pieChart.paddingTop = 0.0f;
 	pieChart.paddingRight = 0.0f;
 	pieChart.paddingBottom = 0.0f;
-	
 	pieChart.axisSet = nil;
-	
-    /*
-     pieChart.titleTextStyle.color = [CPTColor whiteColor];
-     pieChart.title = @"从呼叫到接听服务";
-     pieChart.titleDisplacement = CGPointMake(0.0f, -10.0f);
-     */
-    // Add pie chart
+    
     self.piePlot = [[CPTPieChart alloc] init];
     piePlot.dataSource = self;
 	piePlot.pieRadius = 58.0;
@@ -450,7 +430,7 @@
 	piePlot.startAngle = 0.0f;
 	piePlot.sliceDirection = CPTPieDirectionCounterClockwise;
 	piePlot.centerAnchor = CGPointMake(0.5, 0.45);
-	piePlot.borderLineStyle = barLineStyle;//[CPTLineStyle lineStyle];
+	piePlot.borderLineStyle = barLineStyle;
     // Overlay gradient for pie chart
     CPTGradient *overlayGradient = [[[CPTGradient alloc] init]autorelease];
     overlayGradient.gradientType = CPTGradientTypeRadial;
@@ -470,9 +450,6 @@
     barChartViewLandscape.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin| UIViewAutoresizingFlexibleRightMargin;
     [self.landscapeView addSubview:self.barChartViewLandscape];
     barChartLandscape = [[CPTXYGraph alloc] initWithFrame:CGRectZero];
-//	CPTTheme *barChartTheme = [CPTTheme themeNamed:kCPTDarkGradientTheme];
-//    CPTTheme 统计图主题
-//    [barChartLandscape applyTheme:barChartTheme];
 	CPTGraphHostingView *barChartHostingView = (CPTGraphHostingView *)self.barChartViewLandscape;
     barChartHostingView.hostedGraph = barChartLandscape;
     
@@ -496,22 +473,9 @@
 	pieChart.titleTextStyle = whiteText;
     barChartLandscape.titleTextStyle=whiteText;
     
-    // Graph title
-    /*
-     barChart.title = @"客户满意度";
-     CPTMutableTextStyle *textStyle = [CPTTextStyle textStyle];
-     textStyle.color = [CPTColor whiteColor];
-     //textStyle.fontSize = 16.0f;
-     textStyle.textAlignment = CPTTextAlignmentCenter;
-     barChart.titleTextStyle = textStyle;
-     //barChart.titleDisplacement = CGPointMake(0.0f, -20.0f);
-     barChart.titlePlotAreaFrameAnchor = CPTRectAnchorTop;
-     */
-    
 	// Add plot space for horizontal bar charts
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
-    //plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat(90.0f)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)] objectAtIndex:4] intValue]*1.2f+1.0)];//y轴的数值范围
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)] objectAtIndex:4] intValue]*1.2f+1.0)];//y轴的数值范围
     //compare：默认排序方式，从小到大
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat(5.0f)];
     
@@ -700,7 +664,7 @@
         }
 
         CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChart.defaultPlotSpace;
-        plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f+1.0)];
+        plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f+1.0)];
         [barPlot reloadData];
         [piePlot reloadData];
         
@@ -770,7 +734,7 @@
             //self.percentSign.textColor = [UIColor colorWithRed:0.8f green:0.0f blue:0.25f alpha:1.0f];
         }
         CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChart.defaultPlotSpace;
-        plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f+1.0)];
+        plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f+1.0)];
         [barPlot reloadData];
         [piePlot reloadData];
     }
@@ -816,7 +780,7 @@
     //当nil==request时强制更新UI
     if (!request || [request.url.absoluteString isEqualToString:agtTotalInfoWebAddr]) {
         CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
-        plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f+1.0)];
+        plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:4]intValue]*1.2f+1.0)];
         [barChartLandscape reloadData];
         [piePlotLandscape reloadData];
     }

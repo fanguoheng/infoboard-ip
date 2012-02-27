@@ -14,7 +14,7 @@
 @implementation BussSearchInfoController
 @synthesize addrPrefix;
 @synthesize addrPostfix;
-@synthesize bussinessInfoWebAddr,bussSearchInfoWebAddr,timer,refreshInterval,cashDict_1, bussinessInfoDataDict,bussSearchInfoDataDict,bussSearchInfoDataDictArray,originView,landscapeView,tableViewPortrait;
+@synthesize bussinessInfoWebAddr,bussSearchInfoWebAddr,timer,cashDict_1, bussinessInfoDataDict,bussSearchInfoDataDict,bussSearchInfoDataDictArray,originView,landscapeView,tableViewPortrait;
 @synthesize barChartViewLandscape,barChartLandscape,barPlotLandscape,barPlotData,pieChartViewLandscape,pieChartLandscape,piePlotLandscape,answerRatePersent;
 @synthesize delegate,bussinessInfoCashResponseStr,bussSearchInfoCashResponseStr;
 @synthesize loadingOrigin,loadingLandscape;
@@ -217,7 +217,9 @@
                 [bussSearchInfoDataDict setObject:searchTypeValue forKey:searchType];
                 [newNumber release];
                 [searchType release];
-            }}
+                [searchTypeValue release];
+            }
+        }
             self.bussSearchInfoDataDictArray = [[bussSearchInfoDataDict allValues]sortedArrayUsingSelector:@selector(myCompareMethodWithDict:)];                
             if ([delegate respondsToSelector:@selector(willInfoBoardUpdateUIOnPage:WithMessage:)]) {
                 NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -295,8 +297,7 @@
     
 	// Add plot space for horizontal bar charts
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
-    //plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat(90.0f)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:2]intValue]*1.2f+1.0)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:2]intValue]*1.2f+1.0)];
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat(3.0f)];
     
     // Create grid line styles
@@ -358,15 +359,12 @@
     y.majorGridLineStyle = majorGridLineStyle;
     y.minorGridLineStyle = minorGridLineStyle;
     y.minorTicksPerInterval = 2;
-	y.title = nil;//@"Y Axis";
-	//y.titleOffset = 5.0f;
-    //y.titleLocation = CPTDecimalFromFloat(150.0f);
+	y.title = nil;
 	
     // First bar plot
     CPTMutableLineStyle *barLineStyle = [[[CPTMutableLineStyle alloc] init] autorelease];
 	barLineStyle.lineWidth = 1.0;
 	barLineStyle.lineColor = [CPTColor blackColor];
-    //barPlotLandscape = [CPTBarPlot tubularBarPlotWithColor:[CPTColor blueColor] horizontalBars:NO];
     barPlotLandscape = [[CPTBarPlot alloc]init];
     barPlotLandscape.lineStyle = barLineStyle;
     barPlotLandscape.labelOffset = 0.2f;
@@ -424,22 +422,6 @@
 	piePlotLandscape.delegate = self;
     [pieChartLandscape addPlot:piePlotLandscape];
     [piePlotLandscape release];
-    
-    /*
-     // Add legend
-     //CPTLegend *theLegend = [CPTLegend legendWithGraph:pieChartLandscape];
-     CPTLegend *theLegend = [[CPTLegend alloc ]initWithGraph:pieChartLandscape];
-     theLegend.numberOfColumns = 2;
-     //theLegend.fill = [CPTFill fillWithColor:[CPTColor grayColor]];
-     //theLegend.borderLineStyle = [CPTLineStyle lineStyle];
-     theLegend.borderLineStyle = barLineStyle;
-     theLegend.cornerRadius = 5.0;
-     
-     pieChartLandscape.legend = theLegend;
-     
-     //pieChartLandscape.legendAnchor = CPTRectAnchorRight;
-     pieChartLandscape.legendDisplacement = CGPointMake(0.0, 20.0);
-     */
 }
 
 - (void)updateOriginView:(ASIHTTPRequest *)request
@@ -456,7 +438,7 @@
                         nil ];
     
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:2]intValue]*1.2f+1.0)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:2]intValue]*1.2f+1.0)];
     NSString *newPieTitle = [[NSString alloc]initWithFormat:@"查单量:%d",searchcntNum];
     pieChartLandscape.title = newPieTitle;
     CPTMutableTextStyle *whiteText = [CPTMutableTextStyle textStyle];

@@ -9,7 +9,8 @@
 #import "SDBackForwardViewController.h"
 
 @implementation SDBackForwardViewController
-@synthesize tagStr,delegate;
+@synthesize tagStr;
+@synthesize delegate;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];

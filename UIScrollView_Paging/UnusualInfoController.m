@@ -14,7 +14,7 @@
 @implementation UnusualInfoController
 
 @synthesize navController,rootTableViewController,leafTableViewController;
-@synthesize webAddr,rootWebAddr, leafVeryBadAndBadWebAddr,leafAgtLostWebAddr,timer,refreshInterval,dataDictArray,originView,landscapeView;
+@synthesize webAddr,rootWebAddr, leafVeryBadAndBadWebAddr,leafAgtLostWebAddr,timer,dataDictArray,originView,landscapeView;
 @synthesize barChartViewLandscape,barChartLandscape,barPlotLandscape,barPlotData;
 @synthesize addrPrefix,addrPostfix;
 @synthesize delegate,rootCashResponseStr,leafVeryBadAndBadCashResponseStr,leafAgtLostCashResponseStr;
@@ -325,21 +325,10 @@
 	barChartLandscape.plotAreaFrame.paddingTop = 10.0f;
 	barChartLandscape.plotAreaFrame.paddingRight = 15.0f;
 	barChartLandscape.plotAreaFrame.paddingBottom = 25.0f;
-    
-    // Graph title
-    //barChartLandscape.title = @"客户满意度";
-    //CPTMutableTextStyle *textStyle = [CPTTextStyle textStyle];
-    //textStyle.color = [CPTColor whiteColor];
-    //textStyle.fontSize = 16.0f;
-	//textStyle.textAlignment = CPTTextAlignmentCenter;
-    //barChartLandscape.titleTextStyle = textStyle;
-    //barChartLandscape.titleDisplacement = CGPointMake(0.0f, -20.0f);
-    //barChartLandscape.titlePlotAreaFrameAnchor = CPTRectAnchorTop;
 	
 	// Add plot space for horizontal bar charts
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
-    //plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat(90.0f)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f+1.0)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f+1.0)];
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat(5.0f)];
     
     // Create grid line styles
@@ -509,9 +498,8 @@
                             nil];
         
         CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)barChartLandscape.defaultPlotSpace;
-        plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-0.5f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f+1.0)];
+        plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.0f) length:CPTDecimalFromFloat([[[barPlotData sortedArrayUsingSelector:@selector(compare:)]objectAtIndex:([barPlotData count]-1)]intValue]*1.2f+1.0)];
     }
-
 }
 
 - (void)cleanUI
@@ -632,7 +620,6 @@
 
 -(CPTLayer *)dataLabelForPlot:(CPTPlot *)plot recordIndex:(NSUInteger)index 
 {
-    //CPTTextLayer *label = [[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%lu", index]];
     CPTTextLayer *label = [[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%@",[barPlotData objectAtIndex:index]]];
     CPTMutableTextStyle *textStyle = [label.textStyle mutableCopy];
     textStyle.color = [CPTColor whiteColor];
@@ -644,19 +631,6 @@
 
 -(CPTFill *)barFillForBarPlot:(CPTBarPlot *)barPlot recordIndex:(NSUInteger)index
 {
-    /*
-     CPTColor *areaColor = [CPTColor colorWithComponentRed:0.3 green:1.0 blue:0.3 alpha:0.8];
-     CPTGradient *areaGradient = [CPTGradient gradientWithBeginningColor:areaColor endingColor:[CPTColor clearColor]];
-     areaGradient.angle = -90.0;
-     CPTFill* areaGradientFill = [CPTFill fillWithGradient:areaGradient];
-     return areaGradientFill;
-     
-     渐变1       #fc5165——#df2029
-     渐变2       #e33bc1——#cb0a89
-     渐变3       #f8b932——#e97122
-     渐变4       #6de243——#137d08
-     渐变5       #47ddee——#48b3e4
-     */
     switch (index) {
         case 0:
         {
@@ -699,7 +673,6 @@
         {
             CPTColor *areaColor = [CPTColor colorWithComponentRed:0xdf/255.0f green:0x20/255.0f  blue:0x29/255.0f  alpha:0.7f];
             CPTColor *areaColor_2 = [CPTColor colorWithComponentRed:0xfc/255.0f green:0x51/255.0f  blue:0x56/255.0f  alpha:1.0f];
-            //CPTGradient *areaGradient = [CPTGradient gradientWithBeginningColor:areaColor endingColor:[CPTColor clearColor]];
             CPTGradient *areaGradient = [CPTGradient gradientWithBeginningColor:areaColor endingColor:areaColor_2];
             areaGradient.angle = -90.0;
             CPTFill* areaGradientFill = [CPTFill fillWithGradient:areaGradient];
@@ -743,8 +716,6 @@
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
     if (viewController == rootTableViewController) {
-        //NSString *rootWebAddr = [[NSString alloc ]initWithString:@"http://121.32.133.59:8502/FlexBoard/JsonFiles/UnusualInfo.json"];
-        //NSString *rootWebAddr = [[NSString alloc ]initWithFormat:@"%@UnusualInfo%@",addrPrefix,addrPostfix];
         [navController setNavigationBarHidden:YES];
     }
     else
@@ -752,7 +723,6 @@
         [navController setNavigationBarHidden:NO];
         [leafTableViewController setDataDictArray:nil];
         [leafTableViewController.tableView reloadData];
-        //navController.navigationBar.topItem.leftBarButtonItem.title = @"返回";
         [self requestData];
     }
 }
